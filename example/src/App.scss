@@ -1,0 +1,11 @@
+.App {
+  .Bottom {
+    margin-top: 150px;
+  
+    button {
+      &.selected {
+        background: yellow;
+      }
+    }
+  }
+}
