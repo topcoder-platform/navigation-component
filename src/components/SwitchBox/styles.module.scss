@@ -1,0 +1,52 @@
+@import "../../assets/sass/_global/fonts";
+
+.switch-box {
+  background-color: #C0C0C0;
+  border-radius: 14px;
+  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  width: 48px;
+  height: 25px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.75;
+  }
+  .label-on,
+  .label-off {
+    color: #FAFAFB;
+    @include Roboto-Regular;
+    font-size: 12px;
+    line-height: 14px;
+    line-height: 26px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .label-on {
+    margin-left: 7px;
+    display: none;
+  }
+  .label-off {
+    margin-right: 7px;
+  }
+  .dot {
+    background-color: #FFFFFF;
+    border-radius: 100%;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.35);
+    width: 17px;
+    height: 17px;
+    margin-top: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+  &.checked {
+    background-color: #0681FF;
+    .label-on {
+      display: block;
+    }
+    .label-off {
+      display: none;
+    }
+  }
+}

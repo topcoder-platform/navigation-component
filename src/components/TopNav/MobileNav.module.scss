@@ -1,0 +1,39 @@
+@import "../../assets/sass/_global/fonts";
+@import "../../assets/sass/_global/utils";
+
+.mobileNav {
+  height: 60px;
+  background: $gray-90;
+  padding: 0 $base-unit * 4 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include mobile-only;
+
+  .leftMenuContainer {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .menuBtn {
+      @include button-reset;
+      cursor: pointer;
+
+      img {
+        display: block;
+      }
+    }
+  }
+
+  .rightMenu {
+    @include Roboto-Bold;
+    cursor: pointer;
+
+    color: $white;
+    font-size: 16px;
+    line-height: 30px;
+  }
+}

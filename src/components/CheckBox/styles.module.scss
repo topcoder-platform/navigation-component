@@ -1,0 +1,22 @@
+@import "../../assets/sass/_global/variables";
+
+.checkbox {
+  flex: 0 0 15%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  .check-icon {
+    background: url(#{$img-path}/e-remove.svg) left center no-repeat;
+    background-size: 7px;
+    width: 12px;
+    height: 7px;
+    cursor: pointer;
+    &.checked {
+      background: url(#{$img-path}/flat-icon-checked.svg) left center no-repeat;
+      background-size: 10px;
+      width: 9px;
+      height: 7px;
+      margin-left: -5px;
+    }
+  }
+}

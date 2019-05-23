@@ -1,0 +1,322 @@
+@import "../../assets/sass/_global/fonts";
+@import "../../assets/sass/_global/common_ui";
+@import "../../assets/sass/_global/utils";
+
+.settings-dialog {
+  display: none;
+  background-color: $gray-10;
+  overflow: auto;
+
+  @include fullscreen-dialog;
+
+  &.open {
+    display: block;
+  }
+
+  .header-nav-ui {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    color: $gray-90;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .settings-nav {
+      background: $gray-90;
+      color: $white;
+      height: 60px;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .tc-logo {
+        margin: 0 30px;
+        justify-self: flex-start;
+        cursor: pointer;
+      }
+      a,
+      .title {
+        color: #EDEDF2;
+        font-size: 20px;
+      }
+      .close-btn {
+        background-color: #808080;
+        border-radius: 29px;
+        width: 30px;
+        height: 30px;
+        margin-right: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        @include screen-md {
+          background-color: initial;
+        }
+        
+        img {
+          transform: scale(0.9);
+        }
+      }
+    }
+  }
+
+  .settings-panel {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px 0 #D5D5D5;
+    width: 720px;
+    margin: 26px auto 26px auto;
+    @include Roboto-Regular;
+    padding: 30px 20px;
+
+    .title {
+      color: #151516;
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 35px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .panel-content {
+      margin-bottom: 60px;
+      .section-title {
+        background-color: #EBEBEB;
+        border-radius: 4px 4px 0 0;
+        height: 50px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        .left {
+          color: #151516;
+          @include Roboto-Bold;
+          font-size: 15px;
+          line-height: 30px;
+          flex: 0 0 63%;
+        }
+        div {
+          color: #151516;
+          @include Roboto-Regular;
+          font-size: 13px;
+          line-height: 35px;
+          &.website {
+            flex: 0 0 15%;
+            display: flex;
+            justify-content: center;
+            span {
+              background: url(#{$img-path}/bell-black.svg) left center no-repeat;
+              background-size: 17px;
+              padding-left: 22px;
+              em {
+                font-style: normal;
+              }
+            }
+          }
+          &.as-email {
+            flex: 0 0 22%;
+            display: flex;
+            justify-content: center;
+            span {
+              background: url(#{$img-path}/icon-email.svg) left center no-repeat;
+              background-size: 17px;
+              padding-left: 22px;
+              em {
+                font-style: normal;
+              }
+            }
+          }
+        }
+      }
+      
+      // .section-list
+      .section-list {
+        padding-left: 0;
+        margin-top: 0;
+        li {
+          min-height: 50px;
+          padding: 0 10px;
+          box-shadow: 0 1px 0 0 #E0E0E0;
+          padding-bottom: 10px;
+          padding-top: 10px;
+          display: block;
+          &:hover {
+            background-color: #FAFAFB;
+          }
+          .list-item {
+            display: flex;
+            align-items: center;
+            .left {
+              flex: 0 0 63%;
+              .title {
+                color: #151516;
+                @include Roboto-Regular;
+                font-size: 15px;
+                line-height: 30px;
+                text-align: left;
+                margin-bottom: auto;
+              }
+              .description {
+                color: #808080;
+                @include Roboto-Regular;
+                font-size: 12px;
+                line-height: 20px;
+                margin-right: 40px;
+              }
+            }
+            div {
+              color: #151516;
+              @include Roboto-Regular;
+              font-size: 13px;
+              line-height: 30px;
+              &.website {
+                flex: 0 0 15%;
+                display: flex;
+                justify-content: center;
+                margin-top: 12px;
+                .check-icon {
+                  background: url(#{$img-path}/e-remove.svg) left center no-repeat;
+                  background-size: 7px;
+                  width: 12px;
+                  height: 7px;
+                  cursor: pointer;
+                  &.checked {
+                    background: url(#{$img-path}/flat-icon-checked.svg) left center no-repeat;
+                    background-size: 10px;
+                    width: 9px;
+                    height: 7px;
+                    margin-left: -5px;
+                  }
+                }
+              }
+              &.as-email {
+                flex: 0 0 22%;
+                display: flex;
+                justify-content: center;
+                margin-top: 12px;
+                .check-icon {
+                  background: url(#{$img-path}/e-remove.svg) left center no-repeat;
+                  background-size: 7px;
+                  width: 12px;
+                  height: 10px;
+                  &.checked {
+                    background: url(#{$img-path}/flat-icon-checked.svg) left center no-repeat;
+                    background-size: 10px;
+                    width: 9px;
+                    height: 7px;
+                    cursor: pointer;
+                    margin-left: -5px;
+                  }
+                }
+              }
+            }
+          }
+          .description-mobile {
+            display: none;
+          }
+        }
+      }
+    }
+    
+    .bottom-btn {
+      text-align: center;
+      .btn-gray {
+        
+      }
+    }
+  }
+}
+
+@include mobile {
+  .settings-panel.settings-panel.settings-panel {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    width: 100%;
+    padding: 12px 0 32px 0;
+    & > .title {
+      display: none;
+    }
+    .panel-content {
+      .section-title {
+        .left {
+          flex: 0 0 45%;
+        }
+        div {
+          &.website {
+            flex: 0 0 10%;
+            span {
+              padding-left: 0;
+              width: 22px;
+              height: 22px;
+              em {
+                display: none;
+              }
+            }
+          }
+          &.as-email {
+            flex: 0 0 45%;
+            span {
+              padding-left: 0;
+              width: 22px;
+              height: 22px;
+              em {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+      
+      // .section-list
+      .section-list {
+        padding-left: 0;
+        li {
+          .list-item {
+            .left {
+              flex: 0 0 45%;
+              align-self: flex-start;
+              padding-top: 5px;
+              .title {
+                line-height: 20px;
+              }
+              .description {
+                display: none;
+              }
+            }
+            div {
+              &.website {
+                flex: 0 0 10%;
+                align-self: flex-start;
+                margin-top: 0;
+              }
+              &.as-email {
+                flex: 0 0 45%;
+                align-self: flex-start;
+                margin-top: 0;
+                .check-icon {
+                  margin-top: 12px;
+                  &.checked {
+                    margin-top: 13px;
+                  }
+                }
+                .switch-box {
+                  margin-top: 2px;
+                }
+              }
+            }
+          }
+          .description-mobile {
+            display: block;
+            color: #808080;
+            @include Roboto-Regular;
+            font-size: 12px;
+            line-height: 20px;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}

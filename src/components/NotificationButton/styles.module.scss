@@ -1,0 +1,40 @@
+@import "../../assets/sass/_global/variables";
+
+.notificationButton {
+  position: relative;
+  padding: 10px;
+
+  img {
+    display: block;
+  }
+
+  &.none {
+    opacity: 0.5;
+  }
+
+  &.new {
+    line-height: 36px;
+  
+    &:hover {
+      background-color: $gray-hover-profile-icon;
+      border-radius: 50%;
+    }
+  }
+
+  &.new::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    position: absolute;
+    top: 6px;
+    right: 5px;
+    background: $red;
+    border-radius: 6px;
+    display: block;
+  }
+
+  &.new.isNotificationsPopupOpen {
+    background-color: $gray-hover-profile-icon;
+    border-radius: 50%;
+  }  
+}
