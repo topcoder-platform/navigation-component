@@ -1,0 +1,231 @@
+@import "../../assets/sass/_global/fonts";
+@import "../../assets/sass/_global/themes";
+@import "../../assets/sass/_global/transform";
+@import "../../assets/sass/_global/utils";
+
+.mobileOnly {
+  @include mobile-only;
+}
+
+.primaryNavContainer {
+  display: flex;
+
+  @include hide-mobile;
+
+  &.primaryNavContainerOpen {
+    display: flex;
+  }
+}
+
+.primaryNav {
+  background: $gray-90;
+  color: $white;
+  height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+  flex-grow: 1;
+
+  .moreInit & {
+    overflow: hidden;
+  }
+
+  @include mobile {
+    height: 60px;
+    justify-content: space-around;
+  }
+}
+
+.primaryNavRight {
+  background: $gray-90;
+  color: $white;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+
+  @include hide-mobile;
+
+  .primaryLevel1 {
+    margin-right: 20px;
+  }
+}
+
+.tcLogo {
+  margin: 0 50px 0 $base-unit * 6;
+  cursor: pointer;
+
+  @include hide-mobile;
+
+  &.tcLogoPush {
+    margin-right: auto;
+  }
+
+  & > * {
+    display: block;
+  }
+}
+
+.primaryLevel1Separator {
+  display: block;
+  height: 30px;
+  width: 1px;
+  background: $gray-70;
+
+  @include mobile-only;
+
+  &:first-of-type {
+    display: none;
+  }
+}
+
+.primaryLevel1 {
+  @include Roboto-Bold;
+  font-size: 18px;
+  line-height: 30px;
+  margin: 0 $base-unit * 6;
+  padding-right: 5px;
+  position: relative;
+  cursor: pointer;
+
+  @include screen-md {
+    margin: 0 $base-unit * 4;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    left: -$base-unit * 6;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: $gray-70;
+
+    @include hide-mobile;
+  }
+
+  &.primaryLevel1Open {
+    color: $turquoise;
+  }
+}
+
+.primaryLevel2Container {
+  display: flex;
+  white-space: nowrap;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  @include hide-mobile;
+
+  &.primaryLevel2ContainerOpen {
+    overflow: unset;
+    margin-right: auto;    
+    width: auto;
+    opacity: 1;
+    transition: opacity 400ms ease-in 100ms;
+  }
+
+  .moreInit & {
+    overflow: hidden;
+  }
+}
+
+.primaryLevel2 {
+  @include Roboto-Bold;
+  margin-left: $base-unit * 6;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: flex-start;
+  cursor: pointer;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &.primaryLevel2Open {
+    color: $turquoise;
+  }
+}
+
+.moreBtnContainer {
+  position: relative;
+  
+  .moreBtn {
+    @include button-reset;
+    position: relative;
+    color: $white;
+    margin-left: $base-unit * 4;
+    width: 74px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .moreBtnMask {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    img {
+      margin-left: 8px;
+    }
+  }
+
+  .moreContentContainer {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    background: $gray-90;
+    min-width: 110px;
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    z-index: 2;
+
+    a {
+      margin: 10px 0 0;
+      text-align: left;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 30px;
+      white-space: nowrap;
+
+      &:first-child {
+        margin: 0;
+      }
+    }
+  }
+
+  &.moreOpen {
+    @include backdrop;
+
+    .moreContentContainer {
+      display: flex;
+    }
+
+    .moreBtnMask {
+      background-color: $gray-70;
+      border-radius: 15px;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    img {
+      @include transformVertical;
+    }
+  }
+}

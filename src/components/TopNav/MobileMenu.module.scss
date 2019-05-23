@@ -1,0 +1,41 @@
+@import "../../assets/sass/_global/fonts";
+@import "../../assets/sass/_global/themes";
+
+.secondaryNavMobile {
+  display: flex;
+  flex-direction: column;
+  padding: $base-unit * 3 $base-unit * 4;
+  z-index: 1;
+
+  @include themify($themes) {
+    background: themed('secondaryBackgroundColor');
+  }
+
+  .secondaryNavMobileItem {
+    @include themify($themes) {
+      color: themed('secondaryTextColor');
+    }
+
+    font-size: 18px;
+    line-height: 40px;
+    height: 40px;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &.secondaryNavMobileItemOpen {
+      @include Roboto-Bold;
+
+      &::before {
+        content: "";
+        height: 30px;
+        width: 3px;
+        border-radius: 1.5px;
+        background: $turquoise;
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+  }
+}

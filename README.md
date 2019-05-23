@@ -1,22 +1,38 @@
-# Topcoder - Navigation Component
+# Topcoder Navigation React
 
-## Install dependencies
+## Demo
 
-Run `npm install` to install the dependencies
+### Build the components
 
-## Build module
+Enter `navigation-component` and run:
 
-To build the module, run `npm run build`
+- `npm install`
+- `npm run build:lib`
 
-## Usage 
+### Run the demo
 
-```shell
-# Go to other project which depends on the community-nav-prototype, config its package.json so 
-# that the 'community-nav-prototype' points to the local foler path of community-nav-prototype:
-#
-# "dependencies": {
-#   "community-nav-prototype": "<local-path-to-community-nav-prototype>",
-#   ......
-# }
-#
+Run the following in the `navigation-component-demo` folder:
+
+- `yarn`
+- `yarn start`
+
+### Troubleshooting
+
+If you encounter invalid hook call error while running the demo, then:
+
+  - delete navigation-component-demo/node_modules/navigation-component/node_modules/react
+  - delete navigation-component-demo/node_modules/navigation-component/node_modules/react-dom
+
+and try again.
+
+## Getting Started
+
+### Install
+
 ```
+npm i -D navigation-component
+```
+
+### Assets
+
+Copy `dist/font` and `dist/img` to web server root folder. You can put them nested in sub folder, but be sure to update `$font-path` and `$img-path` SASS variables in the `src/assets/sass/_global/_variables.scss`.

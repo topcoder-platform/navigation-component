@@ -1,0 +1,81 @@
+@import "../../assets/sass/_global/utils";
+
+.userInfoContainer {
+  margin-left: 33px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+
+  .avatarContainer {
+    position: relative;
+    
+    .avatar {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+
+    &.newNotifications::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      background: $red;
+      border-radius: 6px;
+      display: block;
+
+      @include mobile-only;
+    }
+  }
+
+  .handleContainer {
+    display: flex;
+    align-items: center;
+
+    .handle {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 30px;
+      margin-left: 5px;
+      white-space: nowrap;
+
+      @include hide-mobile;
+    }
+
+    .dropdownIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 12px;
+
+      img {
+        transition: all 0.5s;
+      }
+    }
+  }
+
+  &:hover,
+  &.isUserPopupOpen {
+    @include not-mobile {
+      background-color: $gray-hover-profile-icon;
+    }
+
+    .handleContainer .handle {
+      display: block;
+
+      @include hide-mobile;
+    }
+  }
+
+  &.isUserPopupOpen .handleContainer {
+
+    .dropdownIcon {
+      transform: rotate(180deg);
+    }
+  }
+}

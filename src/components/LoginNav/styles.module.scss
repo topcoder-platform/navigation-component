@@ -1,0 +1,12 @@
+@import "../../assets/sass/_global/variables";
+@import "../../assets/sass/_global/utils";
+
+.loginContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .notificationButton {
+    @include hide-mobile;
+  }
+}

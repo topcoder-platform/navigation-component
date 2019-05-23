@@ -1,0 +1,75 @@
+@import "../../assets/sass/_global/variables";
+
+@mixin mobile-only {
+  @media (min-width: $screen-sm + 1px) {
+    display: none;
+  }
+}
+
+@mixin hide-not-mobile {
+  @media (min-width: $screen-sm + 1px) {
+    display: none;
+  }
+}
+
+@mixin hide-mobile {
+  @media (max-width: $screen-sm) {
+    display: none;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $screen-sm) {
+    @content;
+  }
+}
+
+@mixin not-mobile {
+  @media (min-width: $screen-sm + 1px) {
+    @content;
+  }
+}
+
+@mixin screen-md {
+  @media (max-width: $screen-md) {
+    @content;
+  }
+}
+
+@mixin backdrop {
+  .backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+@mixin fullscreen-dialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
+@mixin button-reset {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.mobile-only {
+  @include mobile-only;
+}
+
+.hide-not-mobile {
+  @include hide-not-mobile;
+}
