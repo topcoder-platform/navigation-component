@@ -9,14 +9,14 @@ import AccountMenu from '../AccountMenu'
 
 const LoginNav = ({
   loggedIn,
-  avatarSrc,
-  username,
   notificationButtonState,
   notifications,
   accountMenu,
   switchText,
   onSwitch,
-  onClickLogin
+  showNotification,
+  profile,
+  authURLs
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
@@ -25,9 +25,9 @@ const LoginNav = ({
 
   const handleClickUserInfo = () => setOpenAccountMenu(x => !x)
 
-  return (
-    <div className={styles.loginContainer}>
-      {loggedIn ? ([
+  const renderLoginPanel = () => {
+    if (showNotification) {
+      return ([
         <NotificationButton
           className={styles.notificationButton}
           state={notificationButtonState}
@@ -36,14 +36,37 @@ const LoginNav = ({
           key='notification-button'
         />,
         <UserInfo
-          avatarSrc={avatarSrc}
-          username={username}
+          profile={profile}
           newNotifications={notificationButtonState === 'new'}
           onClick={handleClickUserInfo}
           key='user-info'
         />
-      ]) : (
-        <span onClick={onClickLogin}>LOGIN</span>
+      ])
+    }
+
+    return (
+      <UserInfo
+        profile={profile}
+        newNotifications={notificationButtonState === 'new'}
+        onClick={handleClickUserInfo}
+        key='user-info'
+      />
+    )
+  }
+
+  return (
+    <div className={styles.loginContainer}>
+      {loggedIn ? renderLoginPanel() : (
+        <a
+          href={authURLs.href}
+          onClick={(event) => {
+            const retUrl = encodeURIComponent(window.location.href)
+            window.location = authURLs.location.replace('%S', retUrl)
+            event.preventDefault()
+          }}
+        >
+          LOGIN
+        </a>
       )}
       <NotificationsPopup
         open={openNotifications}
@@ -51,6 +74,7 @@ const LoginNav = ({
         onClose={() => setOpenNotifications(false)}
       />
       <AccountMenu
+        profile={profile}
         open={openAccountMenu}
         menu={accountMenu}
         switchText={switchText}
@@ -65,14 +89,14 @@ const LoginNav = ({
 
 LoginNav.propTypes = {
   loggedIn: PropTypes.bool,
-  avatarSrc: PropTypes.string,
-  username: PropTypes.node,
   notificationButtonState: PropTypes.string,
   notifications: PropTypes.array,
   accountMenu: PropTypes.array,
-  switchText: PropTypes.string,
   onSwitch: PropTypes.func,
-  onClickLogin: PropTypes.func
+  showNotification: PropTypes.bool,
+  profile: PropTypes.shape(),
+  switchText: PropTypes.shape(),
+  authURLs: PropTypes.shape()
 }
 
 export default LoginNav

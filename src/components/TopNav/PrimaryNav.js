@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
 import ChosenArrow from '../ChosenArrow'
+import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
 import styles from './PrimaryNav.module.scss'
 
 const PrimaryNav = ({
@@ -79,7 +80,7 @@ const PrimaryNav = ({
                   >
                     <div className={styles.moreBtnMask} />
                     <span>More</span>
-                    <img src='/img/arrow-small-down.svg' alt='dropdown-icon' />
+                    <IconArrowSmalldown />
                   </button>
                   <div className={styles.moreContentContainer}>
                     {moreMenu.map((menu, i) => (

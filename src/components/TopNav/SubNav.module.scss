@@ -3,7 +3,7 @@
 @import "../../assets/sass/_global/utils";
 
 .secondaryNav {
-  display: flex;
+  display: none;
   justify-content: stretch;
   align-items: center;
   font-size: 13px;
@@ -21,6 +21,7 @@
   }
 
   &.secondaryNavOpen {
+    display: flex;
     transform: translateY(0px);
   }
 
@@ -40,8 +41,8 @@
     height: 30px;
 
     .secondaryNavItem {
-      cursor: pointer;      
-      
+      cursor: pointer;
+
       &.secondaryNavItemOpen {
         @include Roboto-Bold;
       }

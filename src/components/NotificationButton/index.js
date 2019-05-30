@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
+import IconBell from '../../assets/images/icon-bell.svg'
 import styles from './styles.module.scss'
 
 const NotificationButton = ({ className, state, onClick, notificationsPopupOpen }) => (
@@ -8,7 +9,7 @@ const NotificationButton = ({ className, state, onClick, notificationsPopupOpen 
     className={cn(styles.notificationButton, styles[state], notificationsPopupOpen && styles.isNotificationsPopupOpen, className)}
     onClick={onClick}
   >
-    <img src='/img/icon-bell.svg' alt='notification' />
+    <IconBell />
   </div>
 )
 

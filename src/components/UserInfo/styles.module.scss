@@ -8,11 +8,12 @@
 
   .avatarContainer {
     position: relative;
-    
+
     .avatar {
       width: 30px;
       height: 30px;
       display: block;
+      border-radius: 50%;
     }
 
     &.newNotifications::after {

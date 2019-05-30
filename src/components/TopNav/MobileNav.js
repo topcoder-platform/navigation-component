@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './MobileNav.module.scss'
+import IconClose from '../../assets/images/icon-close.svg'
+import IconMenu from '../../assets/images/icon-menu.svg'
 
 const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (
   <div className={styles.mobileNav}>
     <div className={styles.leftMenuContainer}>
       <button className={styles.menuBtn} onClick={onClickLeftMenu}>
         {showLeftMenu ? (
-          <img src='/img/icon-close.svg' alt='close' />
+          <IconClose />
         ) : (
-          <img src='/img/icon-menu.svg' width='20' alt='menu' />
+          <IconMenu />
         )}
       </button>
     </div>

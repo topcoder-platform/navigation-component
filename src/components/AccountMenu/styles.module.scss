@@ -57,14 +57,12 @@
 
     .avatar {
       margin-right: 10px;
+      border-radius: 50%;
     }
   }
 
   .switch-to-business-container {
     background: $gray-90;
-    color: $white;
-    font-size: 14px;
-    line-height: 30px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -73,6 +71,12 @@
 
     .switch-icon {
       margin: 0 10px 0 22px;
+    }
+
+    a {
+      color: $white;
+      font-size: 14px;
+      line-height: 30px;
     }
   }
 
@@ -166,7 +170,7 @@
         }
 
         .description {
-          font-size: 12;
+          font-size: 12px;
         }
       }
 
