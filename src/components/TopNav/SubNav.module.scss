@@ -42,7 +42,28 @@
 
     .secondaryNavItem {
       cursor: pointer;
+      height: 100%;
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      justify-content: center;
 
+      .indicator {
+        display: none;
+        position: absolute;
+        bottom: -1px;
+        width: 15px;
+        height: 3px;
+        border-radius: 1.5px;
+        background: $gray-60;
+        align-self: center;
+      }
+
+      &:hover {
+        .indicator {
+          display: inline;
+        }
+      }
       &.secondaryNavItemOpen {
         @include Roboto-Bold;
       }
