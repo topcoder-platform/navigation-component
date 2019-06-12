@@ -122,6 +122,7 @@ const TopNav = ({
   }
 
   const createHandleClickLevel1 = useCallback(menuId => () => {
+    setOpenMore(false)
     setCollapsed(false)
     setActiveLevel1Id(menuId)
     onChangeLevel1Id(menuId)
@@ -151,6 +152,7 @@ const TopNav = ({
   }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick])
 
   const createHandleClickLevel2 = menuId => () => {
+    setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setChosenArrowPos(menuId)
