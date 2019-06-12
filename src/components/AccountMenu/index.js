@@ -84,20 +84,6 @@ class AccountMenu extends React.Component {
 
           <div className={styles.menu}>
 
-            <div className={styles['notification-mobile']} onClick={onClickNotifications}>
-              <div className={styles['left-notifi']}>
-                <span className={styles['title']}>
-                  Notifications
-                </span>&nbsp;
-                <span className={styles['red-number']}>
-              ({numNotifications})
-                </span>
-              </div>
-              <span className={styles['notification-right-arrow']} />
-            </div>
-
-            <span className={cn(styles.separator, styles['hide-not-mobile'])} />
-
             {menu.map((item, i) => (
               item.separator ? (
                 <span className={styles.separator} key={`separator-${i}`} />
