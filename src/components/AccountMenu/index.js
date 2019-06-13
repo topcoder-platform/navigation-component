@@ -7,6 +7,7 @@ import IconAvatar from '../../assets/images/img-vic-tor-avatar.svg'
 import IconCloseDark from '../../assets/images/icon-close-dark.svg'
 import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
 import styles from './styles.module.scss'
+import moment from 'moment'
 
 class AccountMenu extends React.Component {
   renderLink (menu, i) {
@@ -57,7 +58,7 @@ class AccountMenu extends React.Component {
               }
               <div className={styles['handle-container']}>
                 <span className={styles['handle']}>@{_.isEmpty(profile) ? '' : profile.handle}</span>
-                <span className={styles['description']}>{_.isEmpty(profile) ? '' : profile.description}</span>
+                <span className={styles['description']}>{_.isEmpty(profile) ? '' : `Member since ${moment(profile.createdAt).format('MMMM, YYYY')}`}</span>
               </div>
             </div>
             <span role='button' className={styles['icon-close']} onClick={onClose}>
