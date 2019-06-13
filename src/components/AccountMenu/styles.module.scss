@@ -67,7 +67,6 @@
     display: flex;
     align-items: center;
 
-    @include hide-mobile;
 
     .switch-icon {
       margin: 0 10px 0 22px;
