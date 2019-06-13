@@ -169,7 +169,9 @@
         }
 
         .description {
+          @include Roboto-Regular;
           font-size: 12px;
+          color: $gray-joining-date;
         }
       }
 
