@@ -40,7 +40,8 @@ const TopNav = ({
   logo,
   theme,
   currentLevel1Id,
-  onChangeLevel1Id
+  onChangeLevel1Id,
+  path
 }) => {
   const [cache] = useState({
     refs: {},
@@ -157,17 +158,23 @@ const TopNav = ({
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
-      if (menu && menu.title !== 'WORK' && menu.subMenu) {
+      if (menu && menu.title !== 'Tracks' && menu.subMenu) {
         // select first level 3 item
         setActiveLevel3Id(menu.subMenu[0].id)
         // this requires the item element to be mounted first
         setIconSelectPos(menu.subMenu[0].id)
       }
-      if (menu && menu.title === 'WORK' && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[1].id)
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[1].id)
+      if (menu && menu.title === 'Tracks' && menu.subMenu) {
+        let index = _.findIndex(menu.subMenu, (item) => {
+            return item.href.indexOf(path) > -1
+        })
+        if (index > -1) {
+          setActiveLevel3Id(menu.subMenu[index].id)
+          setIconSelectPos(menu.subMenu[index].id)
+        } else {
+          setActiveLevel3Id(menu.subMenu[0].id)
+          setIconSelectPos(menu.subMenu[0].id)
+        }
       }
     })
     !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
@@ -404,7 +411,9 @@ TopNav.propTypes = {
 
   currentLevel1Id: PropTypes.any,
 
-  onChangeLevel1Id: PropTypes.func
+  onChangeLevel1Id: PropTypes.func,
+
+  path: PropTypes.string
 }
 
 export default TopNav
