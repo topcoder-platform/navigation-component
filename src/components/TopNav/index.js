@@ -40,7 +40,9 @@ const TopNav = ({
   logo,
   theme,
   currentLevel1Id,
-  onChangeLevel1Id
+  onChangeLevel1Id,
+  setOpenMore,
+  openMore
 }) => {
   const [cache] = useState({
     refs: {},
@@ -67,7 +69,6 @@ const TopNav = ({
   const [showMobileSubMenu, setShowMobileSubMenu] = useState()
 
   const [moreMenu, setMoreMenu] = useState()
-  const [openMore, setOpenMore] = useState()
 
   const regenerateMoreMenu = () => setMoreMenu([])
 
@@ -400,7 +401,11 @@ TopNav.propTypes = {
 
   currentLevel1Id: PropTypes.any,
 
-  onChangeLevel1Id: PropTypes.func
+  onChangeLevel1Id: PropTypes.func,
+
+  setOpenMore: PropTypes.func,
+
+  openMore: PropTypes.bool,
 }
 
 export default TopNav
