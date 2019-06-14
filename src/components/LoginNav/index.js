@@ -14,6 +14,7 @@ const LoginNav = ({
   accountMenu,
   switchText,
   onSwitch,
+  onMenuOpen,
   showNotification,
   profile,
   authURLs
@@ -23,7 +24,12 @@ const LoginNav = ({
 
   const handleClickNotifications = () => setOpenNotifications(x => !x)
 
-  const handleClickUserInfo = () => setOpenAccountMenu(x => !x)
+  const handleClickUserInfo = () => {
+    if (!openAccountMenu) {
+      onMenuOpen()
+    }
+    setOpenAccountMenu(x => !x)
+  }
 
   const renderLoginPanel = () => {
     if (showNotification) {
@@ -93,6 +99,7 @@ LoginNav.propTypes = {
   notifications: PropTypes.array,
   accountMenu: PropTypes.array,
   onSwitch: PropTypes.func,
+  onMenuOpen: PropTypes.func,
   showNotification: PropTypes.bool,
   profile: PropTypes.shape(),
   switchText: PropTypes.shape(),
