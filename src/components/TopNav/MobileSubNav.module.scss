@@ -38,7 +38,7 @@
     cursor: pointer;
 
     span {
-      @include Barlow-Condensed-SemiBold;
+      @include Roboto-Regular;
       color: $white;
       font-size: 28px;
       line-height: 40px;
