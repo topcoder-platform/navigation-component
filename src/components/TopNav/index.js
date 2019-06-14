@@ -40,7 +40,9 @@ const TopNav = ({
   logo,
   theme,
   currentLevel1Id,
-  onChangeLevel1Id
+  onChangeLevel1Id,
+  setOpenMore,
+  openMore
 }) => {
   const [cache] = useState({
     refs: {},
@@ -67,7 +69,6 @@ const TopNav = ({
   const [showMobileSubMenu, setShowMobileSubMenu] = useState()
 
   const [moreMenu, setMoreMenu] = useState()
-  const [openMore, setOpenMore] = useState()
 
   const regenerateMoreMenu = () => setMoreMenu([])
 
@@ -122,6 +123,7 @@ const TopNav = ({
   }
 
   const createHandleClickLevel1 = useCallback(menuId => () => {
+    setOpenMore(false)
     setCollapsed(false)
     setActiveLevel1Id(menuId)
     onChangeLevel1Id(menuId)
@@ -151,6 +153,7 @@ const TopNav = ({
   }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick])
 
   const createHandleClickLevel2 = menuId => () => {
+    setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setChosenArrowPos(menuId)
@@ -398,7 +401,11 @@ TopNav.propTypes = {
 
   currentLevel1Id: PropTypes.any,
 
-  onChangeLevel1Id: PropTypes.func
+  onChangeLevel1Id: PropTypes.func,
+
+  setOpenMore: PropTypes.func,
+
+  openMore: PropTypes.bool,
 }
 
 export default TopNav
