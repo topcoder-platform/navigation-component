@@ -172,8 +172,7 @@ const TopNav = ({
           setActiveLevel3Id(menu.subMenu[index].id)
           setIconSelectPos(menu.subMenu[index].id)
         } else {
-          setActiveLevel3Id(menu.subMenu[0].id)
-          setIconSelectPos(menu.subMenu[0].id)
+          setShowIconSelect(false)
         }
       }
     })
@@ -213,8 +212,16 @@ const TopNav = ({
     setShowLeftMenu(false)
     setActiveLevel2Id(menuId)
     const menu = findLevel2Menu(activeLevel1Id, menuId)
-    if (menu && menu.subMenu) {
+    if (menu && menu.title !== 'Tracks' && menu.subMenu) {
       setActiveLevel3Id(menu.subMenu[0].id)
+    }
+    if (menu && menu.title === 'Tracks' && menu.subMenu) {
+      let index = _.findIndex(menu.subMenu, (item) => {
+          return item.href.indexOf(path) > -1
+      })
+      if (index > -1) {
+        setActiveLevel3Id(menu.subMenu[index].id)
+      }
     }
   }
 
