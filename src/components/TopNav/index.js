@@ -161,16 +161,11 @@ const TopNav = ({
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
-      if (menu && menu.title !== 'Tracks' && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[0].id)
-      }
-      if (menu && menu.title === 'Tracks' && menu.subMenu) {
+      if (menu && menu.subMenu) {
         let index = _.findIndex(menu.subMenu, (item) => {
             return item.href.indexOf(path) > -1
         })
+        // check if url matches else do not show submenu selected
         if (index > -1) {
           setActiveLevel3Id(menu.subMenu[index].id)
           setIconSelectPos(menu.subMenu[index].id)
@@ -215,13 +210,11 @@ const TopNav = ({
     setShowLeftMenu(false)
     setActiveLevel2Id(menuId)
     const menu = findLevel2Menu(activeLevel1Id, menuId)
-    if (menu && menu.title !== 'Tracks' && menu.subMenu) {
-      setActiveLevel3Id(menu.subMenu[0].id)
-    }
-    if (menu && menu.title === 'Tracks' && menu.subMenu) {
+    if (menu && menu.subMenu) {
       let index = _.findIndex(menu.subMenu, (item) => {
           return item.href.indexOf(path) > -1
       })
+      // check if url matches else do not show submenu selected
       if (index > -1) {
         setActiveLevel3Id(menu.subMenu[index].id)
       }
