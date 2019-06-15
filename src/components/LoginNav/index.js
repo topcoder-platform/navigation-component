@@ -27,6 +27,7 @@ const LoginNav = ({
   const handleClickUserInfo = () => {
     if (!openAccountMenu) {
       onMenuOpen()
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     }
     setOpenAccountMenu(x => !x)
   }
@@ -87,7 +88,10 @@ const LoginNav = ({
         numNotifications={(notifications || []).length}
         onClickNotifications={handleClickNotifications}
         onSwitch={onSwitch}
-        onClose={() => setOpenAccountMenu(false)}
+        onClose={() => {
+          setOpenAccountMenu(false)
+          document.getElementsByTagName('body')[0].style.overflow = '';
+        }}
       />
     </div>
   )
