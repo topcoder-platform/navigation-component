@@ -158,6 +158,7 @@ const TopNav = ({
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setChosenArrowPos(menuId)
+    setShowIconSelect(true)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
