@@ -15,8 +15,8 @@ const moreId = 'more'
 
 let id = 1
 
-const initMenuId = menu => {
-  return menu
+const initMenuId = (menu, profileHandle) => {
+  menu = menu
     .map(level1 => ({
       ...level1,
       id: level1.id || id++,
@@ -25,10 +25,17 @@ const initMenuId = menu => {
         id: level2.id || id++,
         subMenu: level2.subMenu && level2.subMenu.map(level3 => ({
           ...level3,
-          id: level3.id || id++
+          id: level3.id || id++,
+          // set user profile link
+          href: level3.id !== 'myprofile' ? (level3.href || '#')
+            : (profileHandle ? `/members/${profileHandle}` : '/')
         }))
       }))
     }))
+  // remove profile menu if user is not logged in
+  if (!profileHandle && menu[0] && menu[0].subMenu[0] &&
+  menu[0].subMenu[0].id === 'profile') menu[0].subMenu.splice(0, 1)
+  return menu
 }
 
 /**
@@ -42,7 +49,9 @@ const TopNav = ({
   currentLevel1Id,
   onChangeLevel1Id,
   setOpenMore,
-  openMore
+  openMore,
+  loggedIn,
+  profileHandle
 }) => {
   const [cache] = useState({
     refs: {},
@@ -61,7 +70,7 @@ const TopNav = ({
   const [showIconSelect, setShowIconSelect] = useState()
   const [iconSelectX, setIconSelectX] = useState()
 
-  const menuWithId = useMemo(() => initMenuId(_menu), [_menu])
+  const menuWithId = useMemo(() => initMenuId(_menu, profileHandle), [_menu, profileHandle])
 
   const [leftNav, setLeftNav] = useState(menuWithId)
 
@@ -114,15 +123,22 @@ const TopNav = ({
   }
 
   const handleClickLogo = () => {
-    setCollapsed(true)
-    setActiveLevel1Id()
-    setShowLevel3(false)
-    setShowChosenArrow(false)
-    startSlide()
-    onChangeLevel1Id()
+
   }
 
-  const createHandleClickLevel1 = useCallback(menuId => () => {
+  const expandLevel1Menu = (menuId) => {
+    // level1ClickHandler(menuId)
+    setCollapsed(false)
+    setActiveLevel1Id(menuId)
+    onChangeLevel1Id(menuId)
+    setActiveLevel2Id()
+    setShowLevel3(false)
+    setShowChosenArrow(true)
+    startSlide()
+  }
+
+  const level1ClickHandler = (menuId) => {
+    // if(!collapsed) return
     setOpenMore(false)
     setCollapsed(false)
     setActiveLevel1Id(menuId)
@@ -138,6 +154,10 @@ const TopNav = ({
     // trigger the execution of useLayoutEffect below, this is necessary because
     // the other dependencies don't change
     setChosenArrowTick(x => x + 1)
+  }
+
+  const createHandleClickLevel1 = useCallback(menuId => () => {
+    level1ClickHandler(menuId)
   }, [collapsed, onChangeLevel1Id, startSlide])
 
   useEffect(() => {
@@ -146,13 +166,25 @@ const TopNav = ({
     }
   }, [currentLevel1Id, activeLevel1Id, createHandleClickLevel1])
 
+  // update menu
   useLayoutEffect(() => {
     // get final menu pos before it slide. Do this before sliding start, or
     // we'll get incorrect pos
-    activeLevel1Id && setChosenArrowPos(activeLevel1Id)
-  }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick])
+    if (!activeLevel1Id) return
+    // get active (or first) sub menu(Level2Menu) item
+    var subMenu = activeLevel2Id ? findLevel2Menu(activeLevel1Id, activeLevel2Id)
+      : findLevel1Menu(activeLevel1Id).subMenu[0]
+    if (!subMenu) return
+    // select active (or first) sub menu
+    // we use offsetParent to check if level2Menu item is visible (it's on desktop)
+    if (cache.refs[subMenu.id].offsetParent !== null) level2SelectOrClickHandler(subMenu.id, false)
+    else {
+      setChosenArrowPos(activeLevel1Id)
+      setActiveLevel2Id(subMenu.id)
+    }
+  }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick, showLeftMenu])
 
-  const createHandleClickLevel2 = menuId => () => {
+  const level2SelectOrClickHandler = (menuId, isClicked) => {
     setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
@@ -168,6 +200,10 @@ const TopNav = ({
       }
     })
     !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
+  }
+
+  const createHandleClickLevel2 = menuId => () => {
+    level2SelectOrClickHandler(menuId, true)
   }
 
   const createHandleClickLevel3 = menuId => () => {
@@ -300,10 +336,22 @@ const TopNav = ({
 
   useEffect(() => {
     // trigger more menu generation on resize
-    const onResize = _.debounce(() => regenerateMoreMenu([]), 100)
+    const onResize = _.debounce(() => {
+      regenerateMoreMenu([])
+      // tick to update menu (reposition arrow)
+      setChosenArrowTick(x => x + 1)
+    }, 100)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  // expand first Level1Menu(like work/business) on login / logout. also regenerate menu to add/delete profile menu.
+  useEffect(() => {
+    if (loggedIn && _menu[0]) {
+      expandLevel1Menu(_menu[0].id)
+      setLeftNav(menuWithId)
+    }
+  }, [loggedIn])
 
   return (
     <div className={cn(styles.themeWrapper, `theme-${theme}`)}>
@@ -406,6 +454,10 @@ TopNav.propTypes = {
   setOpenMore: PropTypes.func,
 
   openMore: PropTypes.bool,
+
+  loggedIn: PropTypes.bool,
+
+  profileHandle: PropTypes.string
 }
 
 export default TopNav
