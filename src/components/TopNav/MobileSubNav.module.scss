@@ -70,6 +70,8 @@
 
       &.mobileSubNavChildOpen {
         @include Roboto-Bold;
+        pointer-events: none;
+        cursor: default;
 
         &::before {
           content: "";

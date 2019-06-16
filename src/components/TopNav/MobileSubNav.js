@@ -20,7 +20,7 @@ const MobileSubNav = ({ open, menu, activeChildId, onClick, createHandleClickIte
             className={cn(styles.mobileSubNavChild, level3.id === activeChildId && styles.mobileSubNavChildOpen)}
             href={level3.href}
             key={`level3-${i}`}
-            onClick={createHandleClickItem(level3.id)}
+            onClick={level3.id === activeChildId ? e => e.preventDefault() : createHandleClickItem(level3.id)}
           >
             {level3.title}
           </a>

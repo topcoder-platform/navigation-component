@@ -45,6 +45,9 @@
 
       &.secondaryNavItemOpen {
         @include Roboto-Bold;
+
+        pointer-events: none;
+        cursor: default;
       }
     }
   }

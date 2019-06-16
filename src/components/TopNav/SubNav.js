@@ -25,7 +25,7 @@ const SubNav = ({
                 className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
                 key={`level3-${i}`}
                 to={level3.link}
-                onClick={createHandleClickItem(level3.id)}
+                onClick={level3.id === activeChildId ? e => e.preventDefault() : createHandleClickItem(level3.id)}
               >
                 <span ref={createSetRef(level3.id)}>{level3.title}</span>
               </Link>
@@ -36,7 +36,7 @@ const SubNav = ({
               className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
               href={level3.href}
               key={`level3-${i}`}
-              onClick={createHandleClickItem(level3.id)}
+              onClick={level3.id === activeChildId ? e => e.preventDefault() : createHandleClickItem(level3.id)}
               ref={createSetRef(level3.id)}
             >
               {level3.title}

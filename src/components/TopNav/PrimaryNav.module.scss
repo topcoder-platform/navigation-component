@@ -110,6 +110,13 @@
 
   &.primaryLevel1Open {
     color: $turquoise;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &.primaryLevel1Active {
+    pointer-events: none;
+    cursor: default;
   }
 }
 
@@ -154,6 +161,8 @@
 
   &.primaryLevel2Open {
     color: $turquoise;
+    pointer-events: none;
+    cursor: default;
   }
 }
 

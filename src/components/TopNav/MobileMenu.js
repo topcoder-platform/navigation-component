@@ -10,7 +10,7 @@ const MobileMenu = ({ menu, activeChildId, createHandleClickItem }) => (
         className={cn(styles.secondaryNavMobileItem, level2.id === activeChildId && styles.secondaryNavMobileItemOpen)}
         href={level2.href}
         key={`level2-${i}`}
-        onClick={createHandleClickItem(level2.id)}
+        onClick={level2.id === activeChildId ? e => e.preventDefault() : createHandleClickItem(level2.id)}
       >
         {level2.title}
       </a>
