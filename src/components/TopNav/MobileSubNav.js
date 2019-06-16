@@ -11,7 +11,7 @@ const MobileSubNav = ({ open, menu, activeChildId, onClick, createHandleClickIte
   >
     <div className={styles.mobileSubNavMask} />
     <button className={styles.mobileSubNavHeader} onClick={onClick}>
-      <span>{menu.title}</span> &nbsp;&nbsp;
+      <span>{menu.title}</span>
       {open && <IconArrowSmallup />}
       {!open && <IconArrowSmalldown />}
     </button>
