@@ -158,7 +158,6 @@ const TopNav = ({
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setChosenArrowPos(menuId)
-    setShowIconSelect(true)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
@@ -170,12 +169,12 @@ const TopNav = ({
         if (index > -1) {
           setActiveLevel3Id(menu.subMenu[index].id)
           setIconSelectPos(menu.subMenu[index].id)
+          setShowIconSelect(true)
         } else {
           setShowIconSelect(false)
         }
       }
     })
-    !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
   }
 
   const createHandleClickLevel3 = menuId => () => {
