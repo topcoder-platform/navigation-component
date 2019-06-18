@@ -51,7 +51,7 @@ class AccountMenu extends React.Component {
 
   render () {
     const {
-      onClose, onClickNotifications, numNotifications, open, menu, switchText, onSwitch, profile
+      onClose, open, menu, switchText, onSwitch, profile
     } = this.props
 
     return (
@@ -130,8 +130,6 @@ AccountMenu.propTypes = {
   onClose: PropTypes.func,
   menu: PropTypes.array,
   switchText: PropTypes.shape(),
-  numNotifications: PropTypes.number,
-  onClickNotifications: PropTypes.func,
   onSwitch: PropTypes.func,
   profile: PropTypes.shape()
 }
