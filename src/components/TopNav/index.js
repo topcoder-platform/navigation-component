@@ -40,7 +40,10 @@ const TopNav = ({
   logo,
   theme,
   currentLevel1Id,
+  currentLevel2Id,
   onChangeLevel1Id,
+  onChangeLevel2Id,
+  showSubnav,
   setOpenMore,
   openMore
 }) => {
@@ -72,7 +75,7 @@ const TopNav = ({
 
   const regenerateMoreMenu = () => setMoreMenu([])
 
-  const createSetRef = id => el => {
+  const createSetRef = id => el => {    
     cache.refs[id] = el
   }
 
@@ -116,10 +119,12 @@ const TopNav = ({
   const handleClickLogo = () => {
     setCollapsed(true)
     setActiveLevel1Id()
+    setActiveLevel2Id()
     setShowLevel3(false)
     setShowChosenArrow(false)
     startSlide()
     onChangeLevel1Id()
+    onChangeLevel2Id()
   }
 
   const createHandleClickLevel1 = useCallback(menuId => () => {
@@ -149,17 +154,24 @@ const TopNav = ({
   useLayoutEffect(() => {
     // get final menu pos before it slide. Do this before sliding start, or
     // we'll get incorrect pos
-    activeLevel1Id && setChosenArrowPos(activeLevel1Id)
-  }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick])
+    (activeLevel1Id && !activeLevel2Id) && setChosenArrowPos(activeLevel1Id)
+  }, [activeLevel1Id, activeLevel2Id, setChosenArrowPos, chosenArrowTick])
 
-  const createHandleClickLevel2 = menuId => () => {
+  useLayoutEffect(() => {
+    // get final menu pos before it slide. Do this before sliding start, or
+    // we'll get incorrect pos
+    (activeLevel1Id && activeLevel2Id) && setChosenArrowPos(activeLevel2Id)
+  }, [activeLevel1Id, activeLevel2Id, setChosenArrowPos, chosenArrowTick])
+
+  const createHandleClickLevel2 = (menuId, parentMenuId) => () => {    
     setOpenMore(false)
     setActiveLevel2Id(menuId)
+    onChangeLevel2Id(menuId)
     setShowLevel3(true)
     setChosenArrowPos(menuId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
-      const menu = findLevel2Menu(activeLevel1Id, menuId)
+      const menu = findLevel2Menu(parentMenuId || activeLevel1Id || currentLevel1Id, menuId)      
       if (menu && menu.subMenu) {
         // select first level 3 item
         setActiveLevel3Id(menu.subMenu[0].id)
@@ -169,6 +181,12 @@ const TopNav = ({
     })
     !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
   }
+
+  useEffect(() => {
+    if (currentLevel1Id && currentLevel2Id !== activeLevel2Id) {
+      createHandleClickLevel2(currentLevel2Id, currentLevel1Id)()
+    }
+  }, [currentLevel1Id, currentLevel2Id, activeLevel2Id, createHandleClickLevel2])
 
   const createHandleClickLevel3 = menuId => () => {
     setActiveLevel3Id(menuId)
@@ -354,7 +372,7 @@ const TopNav = ({
 
         {/* Level 3 menu */}
         <SubNav
-          open={showLevel3}
+          open={showLevel3 && showSubnav}
           menu={activeMenu2}
           activeChildId={activeLevel3Id}
           showIndicator={showIconSelect}
@@ -379,7 +397,8 @@ const TopNav = ({
 
 TopNav.defaultProps = {
   theme: 'light',
-  onChangeLevel1Id: () => null
+  onChangeLevel1Id: () => null,
+  onChangeLevel2Id: () => null
 }
 
 TopNav.propTypes = {
@@ -401,11 +420,17 @@ TopNav.propTypes = {
 
   currentLevel1Id: PropTypes.any,
 
+  currentLevel2Id: PropTypes.any,
+
   onChangeLevel1Id: PropTypes.func,
+
+  onChangeLevel2Id: PropTypes.func,
+
+  showSubnav: PropTypes.bool,
 
   setOpenMore: PropTypes.func,
 
-  openMore: PropTypes.bool,
+  openMore: PropTypes.bool
 }
 
 export default TopNav
