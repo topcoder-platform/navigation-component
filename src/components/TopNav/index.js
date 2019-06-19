@@ -34,7 +34,7 @@ const initMenuId = (menu, profileHandle) => {
     }))
   // remove profile menu if user is not logged in
   if (!profileHandle && menu[0] && menu[0].subMenu[0] &&
-  menu[0].subMenu[0].id === 'profile') menu[0].subMenu.splice(0, 1)
+  menu[0].subMenu[0].id === 'dashboardl2') menu[0].subMenu.splice(0, 1)
   return menu
 }
 
