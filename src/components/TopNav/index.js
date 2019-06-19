@@ -41,6 +41,7 @@ const TopNav = ({
   theme,
   currentLevel1Id,
   onChangeLevel1Id,
+  path,
   setOpenMore,
   openMore
 }) => {
@@ -161,13 +162,19 @@ const TopNav = ({
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
       if (menu && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[0].id)
+        let index = _.findIndex(menu.subMenu, (item) => {
+            return item.href.indexOf(path) > -1
+        })
+        // check if url matches else do not show submenu selected
+        if (index > -1) {
+          setActiveLevel3Id(menu.subMenu[index].id)
+          setIconSelectPos(menu.subMenu[index].id)
+          setShowIconSelect(true)
+        } else {
+          setShowIconSelect(false)
+        }
       }
     })
-    !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
   }
 
   const createHandleClickLevel3 = menuId => () => {
@@ -204,7 +211,13 @@ const TopNav = ({
     setActiveLevel2Id(menuId)
     const menu = findLevel2Menu(activeLevel1Id, menuId)
     if (menu && menu.subMenu) {
-      setActiveLevel3Id(menu.subMenu[0].id)
+      let index = _.findIndex(menu.subMenu, (item) => {
+          return item.href.indexOf(path) > -1
+      })
+      // check if url matches else do not show submenu selected
+      if (index > -1) {
+        setActiveLevel3Id(menu.subMenu[index].id)
+      }
     }
   }
 
@@ -403,9 +416,10 @@ TopNav.propTypes = {
 
   onChangeLevel1Id: PropTypes.func,
 
+  path: PropTypes.string,
   setOpenMore: PropTypes.func,
 
-  openMore: PropTypes.bool,
+  openMore: PropTypes.bool
 }
 
 export default TopNav
