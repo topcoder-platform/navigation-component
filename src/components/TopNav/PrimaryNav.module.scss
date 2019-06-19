@@ -108,13 +108,10 @@
     @include hide-mobile;
   }
 
-  &.primaryLevel1Open, &.primaryLevel1Active {
-    @include not-clickable;
-  }
-
   &.primaryLevel1Open {
+    @include not-clickable;
     color: $turquoise;
-  }  
+  }
 }
 
 .primaryLevel2Container {
