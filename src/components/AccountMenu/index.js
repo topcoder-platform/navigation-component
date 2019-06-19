@@ -9,6 +9,25 @@ import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
 import styles from './styles.module.scss'
 import moment from 'moment'
 
+// The roles of managers/copilots/admins.
+const MANAGE_ROLES = [
+  'administrator',
+  'admin',
+  'copilot',
+  'connect copilot',
+  'manager',
+  'global manager',
+  'client manager',
+  'connect manager'
+]
+
+const hasAccess = roles => {
+  if (!roles) {
+    return false
+  }
+  return roles.some(v => MANAGE_ROLES.indexOf(v.toLowerCase()) !== -1)
+}
+
 class AccountMenu extends React.Component {
   renderLink (menu, i) {
     const { onClose } = this.props
@@ -66,22 +85,26 @@ class AccountMenu extends React.Component {
             </span>
           </div>
 
-          <div
-            role='button'
-            className={styles['switch-to-business-container']}
-            onClick={onSwitch}
-          >
-            <IconSwitchBusiness className={styles['switch-icon']} />
-            {
-              _.isEmpty(switchText.href) ? (
-                <Link to={switchText.link} onClick={onClose}>
-                  <span className={styles['switch-to-busniness']}>{switchText.title}</span>
-                </Link>
-              ) : (
-                <a href={switchText.href} className={styles['switch-to-busniness']} onClick={onClose}>{switchText.title}</a>
-              )
-            }
-          </div>
+          {
+            !_.isEmpty(profile) && hasAccess(profile.roles) && (
+              <div
+                role='button'
+                className={styles['switch-to-business-container']}
+                onClick={onSwitch}
+              >
+                <IconSwitchBusiness className={styles['switch-icon']} />
+                {
+                  _.isEmpty(switchText.href) ? (
+                    <Link to={switchText.link} onClick={onClose}>
+                      <span className={styles['switch-to-busniness']}>{switchText.title}</span>
+                    </Link>
+                  ) : (
+                    <a href={switchText.href} className={styles['switch-to-busniness']} onClick={onClose}>{switchText.title}</a>
+                  )
+                }
+              </div>
+            )
+          }
 
           <div className={styles.menu}>
 

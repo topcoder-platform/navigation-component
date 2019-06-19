@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
+import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
 import styles from './MobileSubNav.module.scss'
 
 const MobileSubNav = ({ open, menu, activeChildId, onClick, createHandleClickItem }) => (
@@ -11,7 +12,8 @@ const MobileSubNav = ({ open, menu, activeChildId, onClick, createHandleClickIte
     <div className={styles.mobileSubNavMask} />
     <button className={styles.mobileSubNavHeader} onClick={onClick}>
       <span>{menu.title}</span>
-      <IconArrowSmalldown />
+      {open && <IconArrowSmallup />}
+      {!open && <IconArrowSmalldown />}
     </button>
     {open && (
       <div className={styles.mobileSubNavContent}>
