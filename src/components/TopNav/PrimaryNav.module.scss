@@ -108,9 +108,13 @@
     @include hide-mobile;
   }
 
+  &.primaryLevel1Open, &.primaryLevel1Active {
+    @include not-clickable;
+  }
+
   &.primaryLevel1Open {
     color: $turquoise;
-  }
+  }  
 }
 
 .primaryLevel2Container {
@@ -153,6 +157,8 @@
   }
 
   &.primaryLevel2Open {
+    @include not-clickable;
+
     color: $turquoise;
   }
 }

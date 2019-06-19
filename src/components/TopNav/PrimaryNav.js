@@ -43,7 +43,8 @@ const PrimaryNav = ({
           <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
           /* Level 1 menu item */
           <a
-            className={cn(styles.primaryLevel1, !activeLevel2Id && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
+            className={cn(styles.primaryLevel1, !activeLevel2Id && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly,
+              level1.id === activeLevel1Id && styles.primaryLevel1Active)}
             href={level1.href}
             key={`level1-${i}`}
             onClick={createHandleClickLevel1(level1.id)}
