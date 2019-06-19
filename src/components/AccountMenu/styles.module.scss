@@ -192,7 +192,7 @@
 
       .separator {
         background: $gray-05;
-        width: calc(100% - 80px);
+        width: calc(100% - 46px);
         margin: $base-unit * 3 0;
         height: 1px;
         align-self: center;
@@ -236,6 +236,7 @@
           }
         }
       }
+
     }
   }
 }
