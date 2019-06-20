@@ -45,6 +45,7 @@
 
       &.secondaryNavItemOpen {
         @include Roboto-Bold;
+        @include not-clickable;
       }
     }
   }

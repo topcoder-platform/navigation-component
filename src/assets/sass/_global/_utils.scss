@@ -73,3 +73,8 @@
 .hide-not-mobile {
   @include hide-not-mobile;
 }
+
+@mixin not-clickable {
+  pointer-events: none;
+  cursor: default;
+}

@@ -74,6 +74,7 @@
 
       &.mobileSubNavChildOpen {
         @include Roboto-Bold;
+        @include not-clickable;
 
         &::before {
           content: "";
