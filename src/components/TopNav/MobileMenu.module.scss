@@ -1,5 +1,6 @@
 @import "../../assets/sass/_global/fonts";
 @import "../../assets/sass/_global/themes";
+@import "../../assets/sass/_global/utils";
 
 .secondaryNavMobile {
   display: flex;
@@ -26,6 +27,7 @@
 
     &.secondaryNavMobileItemOpen {
       @include Roboto-Bold;
+      @include not-clickable;
 
       &::before {
         content: "";
