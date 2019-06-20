@@ -9,6 +9,7 @@ import styles from './SubNav.module.scss'
 const SubNav = ({
   open,
   menu,
+  isSecondaryMenu,
   activeChildId,
   showIndicator,
   indicatorX,
@@ -18,7 +19,7 @@ const SubNav = ({
   <Router>
     <div className={cn(styles.secondaryNav, open && styles.secondaryNavOpen)}>
       <div className={styles.secondaryNavLinkContainer}>
-        {menu && menu.subMenu && menu.subMenu.map((level3, i) => {
+        {menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => {
           if (!_.isEmpty(level3.link)) {
             return (
               <Link
@@ -52,6 +53,7 @@ const SubNav = ({
 SubNav.propTypes = {
   open: PropTypes.bool,
   menu: PropTypes.object,
+  isSecondaryMenu: PropTypes.bool,
   activeChildId: PropTypes.any,
   showIndicator: PropTypes.bool,
   indicatorX: PropTypes.number,
