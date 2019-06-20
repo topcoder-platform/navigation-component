@@ -142,10 +142,9 @@ const TopNav = ({
     setShowLevel3(true)
     startSlide()
     setTimeout(() => {
-      // wait for sliding to end before showing arrow for the first time
       setShowChosenArrow(true)
-      updateLevel3Indicator(menuId, null)
     }, collapsed ? 250 : 0)
+    setChosenArrowTick(x => x + 1)
   }
 
   const createHandleClickLevel1 = useCallback(menuId => () => {
@@ -156,7 +155,6 @@ const TopNav = ({
     setActiveLevel2Id()
     setShowLevel3(true)
     startSlide()
-    setShowIconSelect(false)
     setTimeout(() => {
       // wait for sliding to end before showing arrow for the first time
       setShowChosenArrow(true)
@@ -349,9 +347,11 @@ const TopNav = ({
 
   // expand first Level1Menu(like work/business) on login / logout. also regenerate menu to add/delete profile menu.
   useEffect(() => {
-    if (loggedIn && profileHandle && _menu[0]) {
-      expandLevel1Menu(_menu[0].id)
+    if (loggedIn && profileHandle && menuWithId[0]) {
       setLeftNav(menuWithId)
+      setTimeout(() => {
+        if (collapsed) expandLevel1Menu(menuWithId[0].id)
+      })
     }
   }, [loggedIn, profileHandle])
 
