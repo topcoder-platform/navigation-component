@@ -49,7 +49,7 @@
       justify-content: center;
 
       .indicator {
-        display: none;
+        visibility: hidden;
         position: absolute;
         bottom: -1px;
         width: 15px;
@@ -62,7 +62,7 @@
 
       &:hover {
         .indicator {
-          display: block
+          visibility: visible;
         }
       }
       &.secondaryNavItemOpen {
