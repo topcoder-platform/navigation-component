@@ -15,7 +15,9 @@ const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (
         )}
       </button>
     </div>
-    {logo}
+    <a href='/'>
+      {logo}
+    </a>
     {rightMenu && (
       <div className={styles.rightMenu}>
         {rightMenu}
