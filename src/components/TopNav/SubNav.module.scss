@@ -58,8 +58,8 @@
         height: 3px;
         border-radius: 1.5px;
         background: $gray-10;
-        -webkit-align-self: center;
-        align-self: center;
+        left: 50%;
+        transform: translate(-50%,-50%);
       }
 
       &:hover {
