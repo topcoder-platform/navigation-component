@@ -109,6 +109,8 @@
   }
 
   &.primaryLevel1Open {
+    @include not-clickable;
+
     color: $turquoise;
   }
 }
@@ -153,6 +155,8 @@
   }
 
   &.primaryLevel2Open {
+    @include not-clickable;
+
     color: $turquoise;
   }
 }

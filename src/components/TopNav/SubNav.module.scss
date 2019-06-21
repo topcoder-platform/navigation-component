@@ -13,7 +13,9 @@
   transition: transform 250ms linear;
   transform: translateY(-60px);
 
-  @include hide-mobile;
+  @media (max-width: 768px) {
+    display: none !important;
+  }
 
   @include themify($themes) {
     background: themed('secondaryBackgroundColor');
@@ -68,6 +70,7 @@
       }
       &.secondaryNavItemOpen {
         @include Roboto-Bold;
+        @include not-clickable;
       }
     }
   }

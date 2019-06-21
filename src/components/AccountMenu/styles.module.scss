@@ -151,6 +151,7 @@
       .left-content {
         display: flex;
         align-items: center;
+        margin-bottom: 2px;
 
         img {
           border: 3px solid $gray-15;
@@ -161,6 +162,7 @@
         .handle-container {
           display: flex;
           flex-direction: column;
+          padding-top: 15px;
         }
 
         .handle {
@@ -190,7 +192,7 @@
 
       .separator {
         background: $gray-05;
-        width: calc(100% - 80px);
+        width: calc(100% - 46px);
         margin: $base-unit * 3 0;
         height: 1px;
         align-self: center;
@@ -234,6 +236,7 @@
           }
         }
       }
+
     }
   }
 }

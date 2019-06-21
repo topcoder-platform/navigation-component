@@ -15,8 +15,8 @@ const moreId = 'more'
 
 let id = 1
 
-const initMenuId = menu => {
-  return menu
+const initMenuId = (menu, profileHandle, loggedIn) => {
+  menu = menu
     .map(level1 => ({
       ...level1,
       id: level1.id || id++,
@@ -27,8 +27,21 @@ const initMenuId = menu => {
           ...level3,
           id: level3.id || id++
         }))
+      })),
+      secondaryMenu: ((loggedIn && profileHandle) ? level1.secondaryMenuForLoggedInUser : level1.secondaryMenuForGuest)
+    }))
+  menu = menu
+    .map(level1 => ({
+      ...level1,
+      secondaryMenu: level1.secondaryMenu && level1.secondaryMenu.map(levelsec => ({
+        ...levelsec,
+        id: levelsec.id || id++,
+        // set user profile link
+        href: levelsec.id !== 'myprofile' ? (levelsec.href || '#')
+          : (profileHandle ? `/members/${profileHandle}` : '/')
       }))
     }))
+  return menu
 }
 
 /**
@@ -41,8 +54,11 @@ const TopNav = ({
   theme,
   currentLevel1Id,
   onChangeLevel1Id,
+  path,
   setOpenMore,
-  openMore
+  openMore,
+  loggedIn,
+  profileHandle
 }) => {
   const [cache] = useState({
     refs: {},
@@ -61,7 +77,7 @@ const TopNav = ({
   const [showIconSelect, setShowIconSelect] = useState()
   const [iconSelectX, setIconSelectX] = useState()
 
-  const menuWithId = useMemo(() => initMenuId(_menu), [_menu])
+  const menuWithId = useMemo(() => initMenuId(_menu, profileHandle, loggedIn), [_menu, profileHandle, loggedIn])
 
   const [leftNav, setLeftNav] = useState(menuWithId)
 
@@ -114,12 +130,21 @@ const TopNav = ({
   }
 
   const handleClickLogo = () => {
-    setCollapsed(true)
-    setActiveLevel1Id()
-    setShowLevel3(false)
-    setShowChosenArrow(false)
+
+  }
+
+  const expandLevel1Menu = (menuId) => {
+    setOpenMore(false)
+    setCollapsed(false)
+    setActiveLevel1Id(menuId)
+    onChangeLevel1Id(menuId)
+    setActiveLevel2Id()
+    setShowLevel3(true)
     startSlide()
-    onChangeLevel1Id()
+    setTimeout(() => {
+      setShowChosenArrow(true)
+    }, collapsed ? 250 : 0)
+    setChosenArrowTick(x => x + 1)
   }
 
   const createHandleClickLevel1 = useCallback(menuId => () => {
@@ -128,12 +153,12 @@ const TopNav = ({
     setActiveLevel1Id(menuId)
     onChangeLevel1Id(menuId)
     setActiveLevel2Id()
-    setShowLevel3(false)
+    setShowLevel3(true)
     startSlide()
-    setShowIconSelect(false)
     setTimeout(() => {
       // wait for sliding to end before showing arrow for the first time
       setShowChosenArrow(true)
+      updateLevel3Indicator(menuId, null)
     }, collapsed ? 250 : 0)
     // trigger the execution of useLayoutEffect below, this is necessary because
     // the other dependencies don't change
@@ -150,7 +175,7 @@ const TopNav = ({
     // get final menu pos before it slide. Do this before sliding start, or
     // we'll get incorrect pos
     activeLevel1Id && setChosenArrowPos(activeLevel1Id)
-  }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick])
+  }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick, showLeftMenu])
 
   const createHandleClickLevel2 = menuId => () => {
     setOpenMore(false)
@@ -159,15 +184,29 @@ const TopNav = ({
     setChosenArrowPos(menuId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
-      const menu = findLevel2Menu(activeLevel1Id, menuId)
-      if (menu && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[0].id)
-      }
+      updateLevel3Indicator(activeLevel1Id, menuId)
     })
-    !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
+  }
+
+  const updateLevel3Indicator = (menu1Id, menu2Id) => {
+    const activeMenuL1 = findLevel1Menu(menu1Id)
+    const activeMenuL2 = findLevel2Menu(menu1Id, menu2Id)
+    const menu = activeMenuL2 || activeMenuL1
+    if (!menu) return
+    const submenu = activeMenuL2 ? menu.subMenu : menu.secondaryMenu
+    if (menu && submenu) {
+      let index = _.findIndex(submenu, (item) => {
+        return item.href.indexOf(path) > -1
+      })
+      // check if url matches else do not show submenu selected
+      if (index > -1) {
+        setActiveLevel3Id(submenu[index].id)
+        setIconSelectPos(submenu[index].id)
+        setShowIconSelect(true)
+      } else {
+        setShowIconSelect(false)
+      }
+    }
   }
 
   const createHandleClickLevel3 = menuId => () => {
@@ -202,10 +241,7 @@ const TopNav = ({
   const createHandleClickLevel2Mobile = menuId => () => {
     setShowLeftMenu(false)
     setActiveLevel2Id(menuId)
-    const menu = findLevel2Menu(activeLevel1Id, menuId)
-    if (menu && menu.subMenu) {
-      setActiveLevel3Id(menu.subMenu[0].id)
-    }
+    updateLevel3Indicator(activeLevel1Id, menuId)
   }
 
   const createHandleClickLevel3Mobile = menuId => () => {
@@ -300,10 +336,24 @@ const TopNav = ({
 
   useEffect(() => {
     // trigger more menu generation on resize
-    const onResize = _.debounce(() => regenerateMoreMenu([]), 100)
+    const onResize = _.debounce(() => {
+      regenerateMoreMenu([])
+      // tick to update menu (reposition arrow)
+      setChosenArrowTick(x => x + 1)
+    }, 100)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  // expand first Level1Menu(like work/business) on login / logout. also regenerate menu to add/delete profile menu.
+  useEffect(() => {
+    if (loggedIn && profileHandle && menuWithId[0]) {
+      setLeftNav(menuWithId)
+      setTimeout(() => {
+        if (collapsed) expandLevel1Menu(menuWithId[0].id)
+      })
+    }
+  }, [loggedIn, profileHandle])
 
   return (
     <div className={cn(styles.themeWrapper, `theme-${theme}`)}>
@@ -318,10 +368,11 @@ const TopNav = ({
         />
 
         {/* Mobile sub navigation (active level 2 menu) */}
-        {!showLeftMenu && activeMenu2 && (
+        {!showLeftMenu && (activeMenu2 || activeMenu1) && (
           <MobileSubNav
             open={showMobileSubMenu}
-            menu={activeMenu2}
+            menu={activeMenu2 || activeMenu1}
+            isSecondaryMenu={!activeMenu2}
             activeChildId={activeLevel3Id}
             onClick={handleClickSubMenu}
             createHandleClickItem={createHandleClickLevel3Mobile}
@@ -355,7 +406,8 @@ const TopNav = ({
         {/* Level 3 menu */}
         <SubNav
           open={showLevel3}
-          menu={activeMenu2}
+          menu={activeMenu2 || activeMenu1}
+          isSecondaryMenu={!activeMenu2}
           activeChildId={activeLevel3Id}
           showIndicator={showIconSelect}
           indicatorX={iconSelectX}
@@ -403,9 +455,15 @@ TopNav.propTypes = {
 
   onChangeLevel1Id: PropTypes.func,
 
+  path: PropTypes.string,
+
   setOpenMore: PropTypes.func,
 
   openMore: PropTypes.bool,
+
+  loggedIn: PropTypes.bool,
+
+  profileHandle: PropTypes.string
 }
 
 export default TopNav

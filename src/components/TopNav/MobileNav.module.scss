@@ -4,9 +4,9 @@
 .mobileNav {
   height: 60px;
   background: $gray-90;
-  padding: 0 $base-unit * 4 0 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
   align-items: center;
 
   @include mobile-only;
@@ -17,6 +17,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
 
     .menuBtn {
       @include button-reset;
@@ -35,5 +38,8 @@
     color: $white;
     font-size: 16px;
     line-height: 30px;
+    padding-right: $base-unit * 4;
+    position: absolute;
+    right: 0;
   }
 }

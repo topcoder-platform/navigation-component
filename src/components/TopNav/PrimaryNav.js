@@ -33,12 +33,13 @@ const PrimaryNav = ({
   return (
     <div className={cn(styles.primaryNavContainer, showLeftMenu && styles.primaryNavContainerOpen)}>
       <div className={styles.primaryNav} ref={createSetRef('primaryNav')}>
-        <div
+        <a
           className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
           onClick={onClickLogo}
+          href='/'
         >
           {logo}
-        </div>
+        </a>
         {menu.map((level1, i) => ([
           <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
           /* Level 1 menu item */
