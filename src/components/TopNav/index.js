@@ -14,8 +14,10 @@ import SubNav from './SubNav'
 const moreId = 'more'
 
 let id = 1
+let idForSecondary = 1000
 
 const initMenuId = (menu, profileHandle, loggedIn) => {
+  id = 1
   menu = menu
     .map(level1 => ({
       ...level1,
@@ -35,7 +37,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
       ...level1,
       secondaryMenu: level1.secondaryMenu && level1.secondaryMenu.map(levelsec => ({
         ...levelsec,
-        id: levelsec.id || id++,
+        id: levelsec.id || idForSecondary++,
         // set user profile link
         href: levelsec.id !== 'myprofile' ? (levelsec.href || '#')
           : (profileHandle ? `/members/${profileHandle}` : '/')
@@ -68,7 +70,8 @@ const TopNav = ({
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
-  const [showLevel3, setShowLevel3] = useState()
+  const [showLevel3, setShowLevel3] = useState(false)
+  const [forceHideLevel3, setforceHideLevel3] = useState(false)
 
   const [showChosenArrow, setShowChosenArrow] = useState()
   const [chosenArrowX, setChosenArrowX] = useState()
@@ -147,13 +150,15 @@ const TopNav = ({
     setChosenArrowTick(x => x + 1)
   }
 
-  const createHandleClickLevel1 = useCallback(menuId => () => {
+  const createHandleClickLevel1 = useCallback((menuId, isClick) => () => {
     setOpenMore(false)
     setCollapsed(false)
     setActiveLevel1Id(menuId)
     onChangeLevel1Id(menuId)
     setActiveLevel2Id()
+    // isClick means that its clicked by user. !isClick is when we click programmatically
     setShowLevel3(true)
+    if (isClick) setforceHideLevel3(false)
     startSlide()
     setTimeout(() => {
       // wait for sliding to end before showing arrow for the first time
@@ -167,7 +172,7 @@ const TopNav = ({
 
   useEffect(() => {
     if (currentLevel1Id !== activeLevel1Id) {
-      createHandleClickLevel1(currentLevel1Id)()
+      createHandleClickLevel1(currentLevel1Id, false)()
     }
   }, [currentLevel1Id, activeLevel1Id, createHandleClickLevel1])
 
@@ -181,6 +186,7 @@ const TopNav = ({
     setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
+    setforceHideLevel3(false)
     setChosenArrowPos(menuId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
@@ -222,6 +228,7 @@ const TopNav = ({
     setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
+    setforceHideLevel3(false)
     setChosenArrowPos(moreId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
@@ -355,6 +362,21 @@ const TopNav = ({
     }
   }, [loggedIn, profileHandle])
 
+  // always expand menu on challenge list page and challenge details page
+  // also in challenge details page, level 3 menu shouldnt be visible
+  useEffect(() => {
+    if (path && path.indexOf('/challenges') > -1) {
+      setTimeout(() => {
+        if (collapsed) expandLevel1Menu(menuWithId[0].id)
+      })
+    }
+    if (path && path.match(/challenges\/[0-9]+/)) {
+      setforceHideLevel3(true)
+    } else {
+      setforceHideLevel3(false)
+    }
+  }, [path])
+
   return (
     <div className={cn(styles.themeWrapper, `theme-${theme}`)}>
       <div className={styles.headerNavUi}>
@@ -399,13 +421,13 @@ const TopNav = ({
           handleClickMore={handleClickMore}
           createHandleClickMoreItem={createHandleClickMoreItem}
           createSetRef={createSetRef}
-          showChosenArrow={showChosenArrow}
+          showChosenArrow={forceHideLevel3 ? false : showChosenArrow}
           chosenArrowX={chosenArrowX}
         />
 
         {/* Level 3 menu */}
         <SubNav
-          open={showLevel3}
+          open={forceHideLevel3 ? false : showLevel3}
           menu={activeMenu2 || activeMenu1}
           isSecondaryMenu={!activeMenu2}
           activeChildId={activeLevel3Id}
