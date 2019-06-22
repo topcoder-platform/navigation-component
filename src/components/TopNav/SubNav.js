@@ -41,6 +41,7 @@ const SubNav = ({
               ref={createSetRef(level3.id)}
             >
               {level3.title}
+              <span className={cn(styles.indicator)}></span>
             </a>
           )
         })}

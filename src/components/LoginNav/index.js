@@ -27,6 +27,10 @@ const LoginNav = ({
   const handleClickUserInfo = () => {
     if (!openAccountMenu) {
       onMenuOpen()
+      // prevent body from scrolling on handheld devices
+      if (window.innerWidth <= 768) {
+        document.body.style.position = 'fixed'
+      }
     }
     setOpenAccountMenu(x => !x)
   }
@@ -87,7 +91,10 @@ const LoginNav = ({
         numNotifications={(notifications || []).length}
         onClickNotifications={handleClickNotifications}
         onSwitch={onSwitch}
-        onClose={() => setOpenAccountMenu(false)}
+        onClose={() => {
+          setOpenAccountMenu(false)
+          document.body.style.position = ''
+        }}
       />
     </div>
   )
