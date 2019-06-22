@@ -47,7 +47,7 @@ const PrimaryNav = ({
             className={cn(styles.primaryLevel1, !activeLevel2Id && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
             href={level1.href}
             key={`level1-${i}`}
-            onClick={createHandleClickLevel1(level1.id)}
+            onClick={createHandleClickLevel1(level1.id, true)}
             ref={createSetRef(level1.id)}
           >
             {level1.title}
