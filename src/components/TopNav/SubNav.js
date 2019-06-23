@@ -28,6 +28,7 @@ const SubNav = ({
             onClick={createHandleClickItem(level3.id)}
           >
             <span ref={createSetRef(level3.id)}>{level3.title}</span>
+            <span className={cn(styles.indicator)}></span>
           </Link>
         )
       })}
