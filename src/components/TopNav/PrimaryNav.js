@@ -64,7 +64,7 @@ const PrimaryNav = ({
                   className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
                   href={level2.href}
                   key={`level2-${i}`}
-                  onClick={createHandleClickLevel2(level2.id)}
+                  onClick={createHandleClickLevel2(level2.id, true)}
                   ref={createSetRef(level2.id)}
                 >
                   {level2.title}

@@ -129,28 +129,26 @@ const TopNav = ({
   }, [setChosenArrowX, getMenuCenter])
 
   const setIconSelectPos = menuId => {
-    setIconSelectX(getMenuCenter(menuId))
+    // wait for menuId element to get positioned in its place
+    setTimeout(() => {
+      setIconSelectX(getMenuCenter(menuId))
+    }, 0)
   }
 
   const handleClickLogo = () => {
 
   }
 
-  const expandLevel1Menu = (menuId) => {
-    setOpenMore(false)
-    setCollapsed(false)
-    setActiveLevel1Id(menuId)
-    onChangeLevel1Id(menuId)
-    setActiveLevel2Id()
-    setShowLevel3(true)
-    startSlide()
+  const expandMenu = (menuId, menu2Id) => {
+    if (!menuId) return
+    createHandleClickLevel1(menuId, false)()
     setTimeout(() => {
-      setShowChosenArrow(true)
-    }, collapsed ? 250 : 0)
-    setChosenArrowTick(x => x + 1)
+      if (menu2Id) createHandleClickLevel2(menu2Id, false)()
+    }, 0)
   }
 
   const createHandleClickLevel1 = useCallback((menuId, isClick) => () => {
+    if (!menuId) return
     setOpenMore(false)
     setCollapsed(false)
     setActiveLevel1Id(menuId)
@@ -163,7 +161,6 @@ const TopNav = ({
     setTimeout(() => {
       // wait for sliding to end before showing arrow for the first time
       setShowChosenArrow(true)
-      updateLevel3Indicator(menuId, null)
     }, collapsed ? 250 : 0)
     // trigger the execution of useLayoutEffect below, this is necessary because
     // the other dependencies don't change
@@ -172,7 +169,7 @@ const TopNav = ({
 
   useEffect(() => {
     if (currentLevel1Id !== activeLevel1Id) {
-      createHandleClickLevel1(currentLevel1Id, false)()
+      !collapsed && currentLevel1Id && createHandleClickLevel1(currentLevel1Id, false)()
     }
   }, [currentLevel1Id, activeLevel1Id, createHandleClickLevel1])
 
@@ -182,38 +179,29 @@ const TopNav = ({
     activeLevel1Id && setChosenArrowPos(activeLevel1Id)
   }, [activeLevel1Id, setChosenArrowPos, chosenArrowTick, showLeftMenu])
 
-  const createHandleClickLevel2 = menuId => () => {
+  const createHandleClickLevel2 = (menuId, isClick) => () => {
     setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
-    setforceHideLevel3(false)
+    if (isClick) setforceHideLevel3(false)
     setChosenArrowPos(menuId)
-    // let the level 3 menu mounted first for sliding indicator to work
-    setTimeout(() => {
-      updateLevel3Indicator(activeLevel1Id, menuId)
-    })
   }
 
-  const updateLevel3Indicator = (menu1Id, menu2Id) => {
-    const activeMenuL1 = findLevel1Menu(menu1Id)
-    const activeMenuL2 = findLevel2Menu(menu1Id, menu2Id)
-    const menu = activeMenuL2 || activeMenuL1
-    if (!menu) return
-    const submenu = activeMenuL2 ? menu.subMenu : menu.secondaryMenu
-    if (menu && submenu) {
-      let index = _.findIndex(submenu, (item) => {
-        return item.href.indexOf(path) > -1
-      })
-      // check if url matches else do not show submenu selected
-      if (index > -1) {
-        setActiveLevel3Id(submenu[index].id)
-        setIconSelectPos(submenu[index].id)
+  useEffect(() => {
+    // update level3 select icon, show it only if current menu is as same as menu address in url
+    const { m1, m2, m3 } = getMenuIdsFromPath(menuWithId, path)
+    if (m3) {
+      // show level 3 icon if active menu menuLevel2 is as same as url
+      // or if level2 menu (in both menu and url) is null, and active menu level1 is as same as url
+      if (m2 === activeLevel2Id || (!m2 && !activeLevel2Id && (m1 === activeLevel1Id))) {
+        setActiveLevel3Id(m3)
+        setIconSelectPos(m3)
         setShowIconSelect(true)
       } else {
         setShowIconSelect(false)
       }
     }
-  }
+  }, [activeLevel1Id, activeLevel2Id, path])
 
   const createHandleClickLevel3 = menuId => () => {
     setActiveLevel3Id(menuId)
@@ -248,7 +236,6 @@ const TopNav = ({
   const createHandleClickLevel2Mobile = menuId => () => {
     setShowLeftMenu(false)
     setActiveLevel2Id(menuId)
-    updateLevel3Indicator(activeLevel1Id, menuId)
   }
 
   const createHandleClickLevel3Mobile = menuId => () => {
@@ -352,30 +339,48 @@ const TopNav = ({
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  // expand first Level1Menu(like work/business) on login / logout. also regenerate menu to add/delete profile menu.
-  useEffect(() => {
-    if (loggedIn && profileHandle && menuWithId[0]) {
-      setLeftNav(menuWithId)
-      setTimeout(() => {
-        if (collapsed) expandLevel1Menu(menuWithId[0].id)
+  const getMenuIdsFromPath = (menuWithId_, path_) => {
+    let found = { m1: null, m2: null, m3: null }
+    menuWithId_.forEach(level1 => {
+      if (level1.href && level1.href.indexOf(path_) > -1) found = { m1: level1.id, m2: null }
+      level1.subMenu && level1.subMenu.forEach(level2 => {
+        if (level2.href && level2.href.indexOf(path_) > -1) found = { m1: level1.id, m2: level2.id }
+        level2.subMenu && level2.subMenu.forEach(level3 => {
+          if (level3.href && level3.href.indexOf(path_) > -1) { found = { m1: level1.id, m2: level2.id, m3: level3.id } }
+        })
       })
-    }
-  }, [loggedIn, profileHandle])
+      level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
+        if (level3.href && level3.href.indexOf(path_) > -1) found = { m1: level1.id, m3: level3.id }
+      })
+    })
+    return found
+  }
 
-  // always expand menu on challenge list page and challenge details page
-  // also in challenge details page, level 3 menu shouldnt be visible
   useEffect(() => {
-    if (path && path.indexOf('/challenges') > -1) {
-      setTimeout(() => {
-        if (collapsed) expandLevel1Menu(menuWithId[0].id)
-      })
+    if (!path || !menuWithId[0]) return
+    setLeftNav(menuWithId)
+    // always expand menu on challenge list page and challenge details page
+    // also in challenge details page, level 3 menu shouldnt be visible    if (!path || !menuWithId[0]) return
+    const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
+    let forceExpand = false
+    let forceM2 = null
+    if (path.indexOf('/challenges') > -1) {
+      forceExpand = true
     }
-    if (path && path.match(/challenges\/[0-9]+/)) {
+    if (path.match(/challenges\/[0-9]+/)) {
       setforceHideLevel3(true)
+      forceExpand = true
+      forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
     } else {
       setforceHideLevel3(false)
     }
-  }, [path])
+    // expand first Level1Menu(like work/business) on login / logout.
+    if ((loggedIn && profileHandle) || forceExpand) {
+      setTimeout(() => {
+        if (collapsed) expandMenu(m1 || menuWithId[0].id, m2 || forceM2)
+      })
+    }
+  }, [path, loggedIn, profileHandle])
 
   return (
     <div className={cn(styles.themeWrapper, `theme-${theme}`)}>
