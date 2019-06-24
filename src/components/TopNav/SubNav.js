@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import IconSelect from '../IconSelect'
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { Link } from 'topcoder-react-utils'
 import styles from './SubNav.module.scss'
 
 const SubNav = ({
@@ -16,39 +16,25 @@ const SubNav = ({
   createHandleClickItem,
   createSetRef
 }) => (
-  <Router>
-    <div className={cn(styles.secondaryNav, open && styles.secondaryNavOpen)}>
-      <div className={styles.secondaryNavLinkContainer}>
-        {menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => {
-          if (!_.isEmpty(level3.link)) {
-            return (
-              <Link
-                className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
-                key={`level3-${i}`}
-                to={level3.link}
-                onClick={createHandleClickItem(level3.id)}
-              >
-                <span ref={createSetRef(level3.id)}>{level3.title}</span>
-              </Link>
-            )
-          }
-          return (
-            <a
-              className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
-              href={level3.href}
-              key={`level3-${i}`}
-              onClick={createHandleClickItem(level3.id)}
-              ref={createSetRef(level3.id)}
-            >
-              {level3.title}
-              <span className={cn(styles.indicator)}></span>
-            </a>
-          )
-        })}
-        <IconSelect show={showIndicator} x={indicatorX} />
-      </div>
+  <div className={cn(styles.secondaryNav, open && styles.secondaryNavOpen)}>
+    <div className={styles.secondaryNavLinkContainer}>
+      {menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => {
+        const to = _.isEmpty(level3.link) ? level3.href : level3.link
+        return (
+          <Link
+            className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
+            key={`level3-${i}`}
+            to={to}
+            onClick={createHandleClickItem(level3.id)}
+          >
+            <span ref={createSetRef(level3.id)}>{level3.title}</span>
+            <span className={cn(styles.indicator)} />
+          </Link>
+        )
+      })}
+      <IconSelect show={showIndicator} x={indicatorX} />
     </div>
-  </Router>
+  </div>
 )
 
 SubNav.propTypes = {
