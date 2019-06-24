@@ -26,7 +26,7 @@
   flex-direction: row;
   align-items: center;
   z-index: 1;
-  flex-grow: 1;
+  width: 90%;
 
   .moreInit & {
     overflow: hidden;
@@ -46,6 +46,7 @@
   flex-direction: row;
   align-items: center;
   z-index: 1;
+  flex-grow: 1;
 
   @include hide-mobile;
 
