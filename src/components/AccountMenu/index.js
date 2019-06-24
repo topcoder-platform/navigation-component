@@ -31,7 +31,7 @@ const hasAccess = roles => {
 class AccountMenu extends React.Component {
   renderLink (menu, i) {
     const { onClose } = this.props
-    const to = _.isEmpty(menu.link) ? menu.href : menu.link;
+    const to = _.isEmpty(menu.link) ? menu.href : menu.link
     return (
       <Link to={to} key={`item-${i}`} onClick={onClose}>
         {menu.title}
