@@ -31,21 +31,11 @@ const hasAccess = roles => {
 class AccountMenu extends React.Component {
   renderLink (menu, i) {
     const { onClose } = this.props
-    if (!_.isEmpty(menu.link)) {
-      return (
-        <Link to={menu.link} key={`item-${i}`}>
-          {menu.title}
-        </Link>
-      )
-    }
+    const to = _.isEmpty(menu.link) ? menu.href : menu.link;
     return (
-      <a
-        href={menu.href}
-        key={`item-${i}`}
-        onClick={onClose}
-      >
+      <Link to={to} key={`item-${i}`} onClick={onClose}>
         {menu.title}
-      </a>
+      </Link>
     )
   }
 
@@ -93,13 +83,9 @@ class AccountMenu extends React.Component {
             >
               <IconSwitchBusiness className={styles['switch-icon']} />
               {
-                _.isEmpty(switchText.href) ? (
-                  <Link to={switchText.link} onClick={onClose}>
-                    <span className={styles['switch-to-busniness']}>{switchText.title}</span>
-                  </Link>
-                ) : (
-                  <a href={switchText.href} className={styles['switch-to-busniness']} onClick={onClose}>{switchText.title}</a>
-                )
+                <Link to={_.isEmpty(switchText.href) ? switchText.link : switchText.href} onClick={onClose}>
+                  <span className={styles['switch-to-busniness']}>{switchText.title}</span>
+                </Link>
               }
             </div>
           )
