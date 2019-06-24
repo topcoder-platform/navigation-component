@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { Link } from 'topcoder-react-utils'
 import IconAvatar from '../../assets/images/img-vic-tor-avatar.svg'
 import IconCloseDark from '../../assets/images/icon-close-dark.svg'
 import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
@@ -31,21 +31,11 @@ const hasAccess = roles => {
 class AccountMenu extends React.Component {
   renderLink (menu, i) {
     const { onClose } = this.props
-    if (!_.isEmpty(menu.link)) {
-      return (
-        <Link to={menu.link} key={`item-${i}`}>
-          {menu.title}
-        </Link>
-      )
-    }
+    const to = _.isEmpty(menu.link) ? menu.href : menu.link
     return (
-      <a
-        href={menu.href}
-        key={`item-${i}`}
-        onClick={onClose}
-      >
+      <Link to={to} key={`item-${i}`} onClick={onClose}>
         {menu.title}
-      </a>
+      </Link>
     )
   }
 
@@ -55,68 +45,60 @@ class AccountMenu extends React.Component {
     } = this.props
 
     return (
-      <Router>
-        <div className={cn(styles['user-info-popup'], open && styles.open)}>
-          <div className={styles.backdrop} onClick={onClose} />
+      <div className={cn(styles['user-info-popup'], open && styles.open)}>
+        <div className={styles.backdrop} onClick={onClose} />
 
-          <Link to={_.isEmpty(profile) ? '/' : `/members/${profile.handle}`}>
-            <div className={styles['header']}>
-              {
-                _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
-              }
-              <div className={styles['handle-container']}>
-                <span className={styles['handle']}>{_.isEmpty(profile) ? '' : profile.handle}</span>
-                <span className={styles['email']}>{_.isEmpty(profile) ? '' : profile.email}</span>
-              </div>
+        <Link to={_.isEmpty(profile) ? '/' : `/members/${profile.handle}`}>
+          <div className={styles['header']}>
+            {
+              _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
+            }
+            <div className={styles['handle-container']}>
+              <span className={styles['handle']}>{_.isEmpty(profile) ? '' : profile.handle}</span>
+              <span className={styles['email']}>{_.isEmpty(profile) ? '' : profile.email}</span>
             </div>
-          </Link>
-          <div className={cn(styles['header'], styles['header-mobile'])}>
-            <div className={styles['left-content']}>
-              {
-                _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
-              }
-              <div className={styles['handle-container']}>
-                <span className={styles['handle']}>@{_.isEmpty(profile) ? '' : profile.handle}</span>
-                <span className={styles['description']}>{_.isEmpty(profile) ? '' : `Member since ${moment(profile.createdAt).format('MMMM, YYYY')}`}</span>
-              </div>
+          </div>
+        </Link>
+        <div className={cn(styles['header'], styles['header-mobile'])}>
+          <div className={styles['left-content']}>
+            {
+              _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
+            }
+            <div className={styles['handle-container']}>
+              <span className={styles['handle']}>@{_.isEmpty(profile) ? '' : profile.handle}</span>
+              <span className={styles['description']}>{_.isEmpty(profile) ? '' : `Member since ${moment(profile.createdAt).format('MMMM, YYYY')}`}</span>
             </div>
-            <span role='button' className={styles['icon-close']} onClick={onClose}>
-              <IconCloseDark />
-            </span>
           </div>
-
-          {
-            !_.isEmpty(profile) && hasAccess(profile.roles) && (
-              <div
-                role='button'
-                className={styles['switch-to-business-container']}
-                onClick={onSwitch}
-              >
-                <IconSwitchBusiness className={styles['switch-icon']} />
-                {
-                  _.isEmpty(switchText.href) ? (
-                    <Link to={switchText.link} onClick={onClose}>
-                      <span className={styles['switch-to-busniness']}>{switchText.title}</span>
-                    </Link>
-                  ) : (
-                    <a href={switchText.href} className={styles['switch-to-busniness']} onClick={onClose}>{switchText.title}</a>
-                  )
-                }
-              </div>
-            )
-          }
-
-          <div className={styles.menu}>
-
-            {menu.map((item, i) => (
-              item.separator ? (
-                <span className={styles.separator} key={`separator-${i}`} />
-              ) : (this.renderLink(item, i))
-            ))}
-
-          </div>
+          <span role='button' className={styles['icon-close']} onClick={onClose}>
+            <IconCloseDark />
+          </span>
         </div>
-      </Router>
+
+        {
+          !_.isEmpty(profile) && hasAccess(profile.roles) && (
+            <div
+              role='button'
+              className={styles['switch-to-business-container']}
+              onClick={onSwitch}
+            >
+              <IconSwitchBusiness className={styles['switch-icon']} />
+              <Link to={_.isEmpty(switchText.href) ? switchText.link : switchText.href} onClick={onClose}>
+                <span className={styles['switch-to-busniness']}>{switchText.title}</span>
+              </Link>
+            </div>
+          )
+        }
+
+        <div className={styles.menu}>
+
+          {menu.map((item, i) => (
+            item.separator ? (
+              <span className={styles.separator} key={`separator-${i}`} />
+            ) : (this.renderLink(item, i))
+          ))}
+
+        </div>
+      </div>
     )
   }
 }
