@@ -377,7 +377,7 @@ const TopNav = ({
     // expand first Level1Menu(like work/business) on login / logout.
     if ((loggedIn && profileHandle) || forceExpand) {
       setTimeout(() => {
-        if (collapsed) expandMenu(m1 || menuWithId[0].id, m2 || forceM2)
+        if (collapsed) expandMenu(m1 || 'community', m2 || forceM2)
       })
     }
   }, [path, loggedIn, profileHandle])
@@ -426,7 +426,7 @@ const TopNav = ({
           handleClickMore={handleClickMore}
           createHandleClickMoreItem={createHandleClickMoreItem}
           createSetRef={createSetRef}
-          showChosenArrow={forceHideLevel3 ? false : showChosenArrow}
+          showChosenArrow={showChosenArrow}
           chosenArrowX={chosenArrowX}
         />
 
