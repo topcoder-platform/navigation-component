@@ -116,7 +116,6 @@
 }
 
 .primaryLevel2Container {
-  display: flex;
   white-space: nowrap;
   width: 0;
   opacity: 0;
@@ -125,6 +124,7 @@
   @include hide-mobile;
 
   &.primaryLevel2ContainerOpen {
+    display: flex;
     overflow: unset;
     margin-right: auto;    
     width: auto;
