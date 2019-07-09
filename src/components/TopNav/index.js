@@ -387,6 +387,7 @@ const TopNav = ({
       setShowLevel3(true)
     } else {
       setShowLevel3(false)
+      setforceHideLevel3(true)
     }
 
     // expand first Level1Menu(like work/business) on login / logout.
