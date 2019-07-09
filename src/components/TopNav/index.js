@@ -342,16 +342,23 @@ const TopNav = ({
 
   const getMenuIdsFromPath = (menuWithId_, path_) => {
     let found = { m1: null, m2: null, m3: null }
+
+    // If haven't a path just return
+    if(!path_) return found
+
     menuWithId_.forEach(level1 => {
-      if (level1.href && level1.href.indexOf(path_) > -1) found = { m1: level1.id, m2: null }
+      if (level1.href && path_.indexOf(level1.href) > -1) found = { m1: level1.id, m2: null }
       level1.subMenu && level1.subMenu.forEach(level2 => {
-        if (level2.href && level2.href.indexOf(path_) > -1) found = { m1: level1.id, m2: level2.id }
+        if (level2.href && path_.indexOf(level2.href) > -1) found = { m1: level1.id, m2: level2.id }
         level2.subMenu && level2.subMenu.forEach(level3 => {
-          if (level3.href && level3.href.indexOf(path_) > -1) { found = { m1: level1.id, m2: level2.id, m3: level3.id } }
+          if (level3.href && path_.indexOf(level3.href) > -1) {
+            found = { m1: level1.id, m2: level2.id, m3: level3.id }
+            if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
+          }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
-        if (level3.href && level3.href.indexOf(path_) > -1) found = { m1: level1.id, m3: level3.id }
+        if (level3.href && path_.indexOf(level3.href) > -1) found = { m1: level1.id, m3: level3.id }
       })
     })
     return found
