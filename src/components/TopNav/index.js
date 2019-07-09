@@ -385,7 +385,7 @@ const TopNav = ({
     } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
-    } else {
+    } else if(!m2) {
       setShowLevel3(false)
       setforceHideLevel3(true)
     }
