@@ -66,7 +66,7 @@ const TopNav = ({
     refs: {},
     slide: {}
   })
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(loggedIn? false : true)
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
@@ -144,6 +144,7 @@ const TopNav = ({
     createHandleClickLevel1(menuId, false)()
     setTimeout(() => {
       if (menu2Id) createHandleClickLevel2(menu2Id, false)()
+      else setShowChosenArrow(false)()
     }, 0)
   }
 
@@ -341,16 +342,23 @@ const TopNav = ({
 
   const getMenuIdsFromPath = (menuWithId_, path_) => {
     let found = { m1: null, m2: null, m3: null }
+
+    // If haven't a path just return
+    if(!path_) return found
+
     menuWithId_.forEach(level1 => {
-      if (level1.href && level1.href.indexOf(path_) > -1) found = { m1: level1.id, m2: null }
+      if (level1.href && path_.indexOf(level1.href) > -1) found = { m1: level1.id, m2: null }
       level1.subMenu && level1.subMenu.forEach(level2 => {
-        if (level2.href && level2.href.indexOf(path_) > -1) found = { m1: level1.id, m2: level2.id }
+        if (level2.href && path_.indexOf(level2.href) > -1) found = { m1: level1.id, m2: level2.id }
         level2.subMenu && level2.subMenu.forEach(level3 => {
-          if (level3.href && level3.href.indexOf(path_) > -1) { found = { m1: level1.id, m2: level2.id, m3: level3.id } }
+          if (level3.href && path_.indexOf(level3.href) > -1) {
+            found = { m1: level1.id, m2: level2.id, m3: level3.id }
+            if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
+          }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
-        if (level3.href && level3.href.indexOf(path_) > -1) found = { m1: level1.id, m3: level3.id }
+        if (level3.href && path_.indexOf(level3.href) > -1) found = { m1: level1.id, m3: level3.id }
       })
     })
     return found
@@ -364,20 +372,28 @@ const TopNav = ({
     const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
     let forceExpand = false
     let forceM2 = null
+
     if (path.indexOf('/challenges') > -1) {
+      // If All Challenge page
       forceExpand = true
-    }
-    if (path.match(/challenges\/[0-9]+/)) {
+      if (path.match(/challenges\/[0-9]+/)) {
+        // If Challenge Details page
+        setforceHideLevel3(true)
+        forceExpand = true
+        forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
+      }
+    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
+      // If My Dashboard and My Profile page
+      setShowLevel3(true)
+    } else if(!m2) {
+      setShowLevel3(false)
       setforceHideLevel3(true)
-      forceExpand = true
-      forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
-    } else {
-      setforceHideLevel3(false)
     }
+
     // expand first Level1Menu(like work/business) on login / logout.
     if ((loggedIn && profileHandle) || forceExpand) {
       setTimeout(() => {
-        if (collapsed) expandMenu(m1 || 'community', m2 || forceM2)
+        expandMenu(m1 || 'community', m2 || forceM2)
       })
     }
   }, [path, loggedIn, profileHandle])
