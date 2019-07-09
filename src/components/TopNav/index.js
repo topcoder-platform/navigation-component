@@ -66,7 +66,7 @@ const TopNav = ({
     refs: {},
     slide: {}
   })
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(loggedIn? false : true)
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
@@ -144,6 +144,7 @@ const TopNav = ({
     createHandleClickLevel1(menuId, false)()
     setTimeout(() => {
       if (menu2Id) createHandleClickLevel2(menu2Id, false)()
+      else setShowChosenArrow(false)()
     }, 0)
   }
 
@@ -364,20 +365,27 @@ const TopNav = ({
     const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
     let forceExpand = false
     let forceM2 = null
+
     if (path.indexOf('/challenges') > -1) {
+      // If All Challenge page
       forceExpand = true
-    }
-    if (path.match(/challenges\/[0-9]+/)) {
-      setforceHideLevel3(true)
-      forceExpand = true
-      forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
+      if (path.match(/challenges\/[0-9]+/)) {
+        // If Challenge Details page
+        setforceHideLevel3(true)
+        forceExpand = true
+        forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
+      }
+    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
+      // If My Dashboard and My Profile page
+      setShowLevel3(true)
     } else {
-      setforceHideLevel3(false)
+      setShowLevel3(false)
     }
+
     // expand first Level1Menu(like work/business) on login / logout.
     if ((loggedIn && profileHandle) || forceExpand) {
       setTimeout(() => {
-        if (collapsed) expandMenu(m1 || 'community', m2 || forceM2)
+        expandMenu(m1 || 'community', m2 || forceM2)
       })
     }
   }, [path, loggedIn, profileHandle])
