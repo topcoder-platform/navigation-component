@@ -49,6 +49,7 @@ const LoginNav = ({
           profile={profile}
           newNotifications={notificationButtonState === 'new'}
           onClick={handleClickUserInfo}
+          open={openAccountMenu}
           key='user-info'
         />
       ])
@@ -59,6 +60,7 @@ const LoginNav = ({
         profile={profile}
         newNotifications={notificationButtonState === 'new'}
         onClick={handleClickUserInfo}
+        open={openAccountMenu}
         key='user-info'
       />
     )
