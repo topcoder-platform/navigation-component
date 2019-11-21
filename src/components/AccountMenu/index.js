@@ -75,14 +75,14 @@ class AccountMenu extends React.Component {
         </div>
 
         {
-          !_.isEmpty(profile) && hasAccess(profile.roles) && (
+          !_.isEmpty(profile) && (
             <div
               role='button'
               className={styles['switch-to-business-container']}
               onClick={onSwitch}
             >
               <IconSwitchBusiness className={styles['switch-icon']} />
-              <Link to={_.isEmpty(switchText.href) ? switchText.link : switchText.href} onClick={onClose}>
+              <Link to={hasAccess(profile.roles)? _.isEmpty(switchText.href) ? switchText.link : switchText.href : 'http://www.topcoder.com'} onClick={onClose}>
                 <span className={styles['switch-to-busniness']}>{switchText.title}</span>
               </Link>
             </div>
