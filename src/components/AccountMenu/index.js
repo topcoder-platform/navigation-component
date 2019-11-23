@@ -51,7 +51,7 @@ class AccountMenu extends React.Component {
         <Link to={_.isEmpty(profile) ? '/' : `/members/${profile.handle}`}>
           <div className={styles['header']}>
             {
-              _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
+              (_.isEmpty(profile) || _.isEmpty(profile.photoURL)) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
             }
             <div className={styles['handle-container']}>
               <span className={styles['handle']}>{_.isEmpty(profile) ? '' : profile.handle}</span>
@@ -75,14 +75,14 @@ class AccountMenu extends React.Component {
         </div>
 
         {
-          !_.isEmpty(profile) && hasAccess(profile.roles) && (
+          !_.isEmpty(profile) && (
             <div
               role='button'
               className={styles['switch-to-business-container']}
               onClick={onSwitch}
             >
               <IconSwitchBusiness className={styles['switch-icon']} />
-              <Link to={_.isEmpty(switchText.href) ? switchText.link : switchText.href} onClick={onClose}>
+              <Link to={hasAccess(profile.roles)? _.isEmpty(switchText.href) ? switchText.link : switchText.href : 'http://www.topcoder.com'} onClick={onClose}>
                 <span className={styles['switch-to-busniness']}>{switchText.title}</span>
               </Link>
             </div>
