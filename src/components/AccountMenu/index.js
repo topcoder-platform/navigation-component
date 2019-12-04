@@ -62,7 +62,7 @@ class AccountMenu extends React.Component {
         <div className={cn(styles['header'], styles['header-mobile'])}>
           <div className={styles['left-content']}>
             {
-              _.isEmpty(profile) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
+              (_.isEmpty(profile) || _.isEmpty(profile.photoURL)) ? (<IconAvatar width='60' className={styles['avatar']} />) : (<img src={profile.photoURL} width='60' className={styles['avatar']} alt='avatar' />)
             }
             <div className={styles['handle-container']}>
               <span className={styles['handle']}>@{_.isEmpty(profile) ? '' : profile.handle}</span>
