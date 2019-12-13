@@ -66,7 +66,7 @@ const TopNav = ({
     refs: {},
     slide: {}
   })
-  const [collapsed, setCollapsed] = useState(loggedIn? false : true)
+  const [collapsed, setCollapsed] = useState(false)
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
@@ -391,11 +391,9 @@ const TopNav = ({
     }
 
     // expand first Level1Menu(like work/business) on login / logout.
-    if ((loggedIn && profileHandle) || forceExpand) {
-      setTimeout(() => {
-        expandMenu(m1 || 'community', m2 || forceM2)
-      })
-    }
+    setTimeout(() => {
+      expandMenu(m1 || 'community', m2 || forceM2)
+    })
   }, [path, loggedIn, profileHandle])
 
   return (
