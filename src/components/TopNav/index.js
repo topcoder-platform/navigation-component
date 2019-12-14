@@ -351,14 +351,19 @@ const TopNav = ({
       level1.subMenu && level1.subMenu.forEach(level2 => {
         if (level2.href && path_.indexOf(level2.href) > -1) found = { m1: level1.id, m2: level2.id }
         level2.subMenu && level2.subMenu.forEach(level3 => {
-          if (level3.href && path_.indexOf(level3.href) > -1) {
+          if (level3.href && path_ === level3.href) {
             found = { m1: level1.id, m2: level2.id, m3: level3.id }
             if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
           }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
-        if (level3.href && path_.indexOf(level3.href) > -1) found = { m1: level1.id, m3: level3.id }
+        if (level3.href) {
+          // Check if path have parameters
+          const href = level3.href.indexOf("?") > -1 ? level3.href.split("?")[0] : level3.href;
+          
+          if (path_ === href) found = { m1: level1.id, m3: level3.id }
+        }
       })
     })
     return found
@@ -385,6 +390,9 @@ const TopNav = ({
     } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
+    } else if (path.indexOf('/community/learn') > -1 || path.indexOf('/thrive/tracks') > -1) {
+      // Show 3rd level menu to Community [ Overview - How It Works ]
+      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2;
     } else if(!m2) {
       setShowLevel3(false)
       setforceHideLevel3(true)
