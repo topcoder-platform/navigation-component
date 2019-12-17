@@ -352,7 +352,11 @@ const TopNav = ({
         if (level2.href && path_.indexOf(level2.href) > -1) found = { m1: level1.id, m2: level2.id }
         level2.subMenu && level2.subMenu.forEach(level3 => {
           if (level3.href && path_.indexOf(level3.href) > -1) {
-            found = { m1: level1.id, m2: level2.id, m3: level3.id }
+            if (found.m3) {
+              if (level3.href === path_) found = { m1: level1.id, m2: level2.id, m3: level3.id }
+            } else {
+              found = { m1: level1.id, m2: level2.id, m3: level3.id }
+            }
             if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
           }
         })
