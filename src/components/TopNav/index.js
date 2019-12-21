@@ -72,6 +72,7 @@ const TopNav = ({
   const [activeLevel3Id, setActiveLevel3Id] = useState()
   const [showLevel3, setShowLevel3] = useState(false)
   const [forceHideLevel3, setforceHideLevel3] = useState(false)
+  const [searchOpened, setSearchOpened] = useState(false)
 
   const [showChosenArrow, setShowChosenArrow] = useState()
   const [chosenArrowX, setChosenArrowX] = useState()
@@ -212,6 +213,11 @@ const TopNav = ({
   const handleClickMore = () => setOpenMore(x => !x)
 
   const handleCloseMore = () => setOpenMore(false)
+
+  const handleSearchPanel = (x) => {
+    setSearchOpened(x)
+    cache.refs.searchInputBox.value = ''
+  }
 
   const createHandleClickMoreItem = menuId => () => {
     setOpenMore(false)
@@ -453,6 +459,8 @@ const TopNav = ({
           createSetRef={createSetRef}
           showChosenArrow={showChosenArrow}
           chosenArrowX={chosenArrowX}
+          searchOpened={searchOpened}
+          toggleSearchOpen={handleSearchPanel}
         />
 
         {/* Level 3 menu */}
