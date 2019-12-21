@@ -350,7 +350,7 @@ const TopNav = ({
     let found = { m1: null, m2: null, m3: null }
 
     // If haven't a path just return
-    if(!path_) return found
+    if (!path_) return found
 
     menuWithId_.forEach(level1 => {
       if (level1.href && path_.indexOf(level1.href) > -1) found = { m1: level1.id, m2: null }
@@ -363,14 +363,14 @@ const TopNav = ({
             } else {
               found = { m1: level1.id, m2: level2.id, m3: level3.id }
             }
-            if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
+            if (!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
           }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
         if (level3.href) {
           // Check if path have parameters
-          const href = level3.href.indexOf("?") > -1 ? level3.href.split("?")[0] : level3.href;
+          const href = level3.href.indexOf('?') > -1 ? level3.href.split('?')[0] : level3.href
           if (path_.indexOf(href) > -1) found = { m1: level1.id, m3: level3.id }
         }
       })
@@ -384,25 +384,22 @@ const TopNav = ({
     // always expand menu on challenge list page and challenge details page
     // also in challenge details page, level 3 menu shouldnt be visible    if (!path || !menuWithId[0]) return
     const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
-    let forceExpand = false
     let forceM2 = null
 
     if (path.indexOf('/challenges') > -1) {
       // If All Challenge page
-      forceExpand = true
       if (path.match(/challenges\/[0-9]+/)) {
         // If Challenge Details page
         setforceHideLevel3(true)
-        forceExpand = true
         forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
       }
-    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
+    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
     } else if (path.indexOf('/community/learn') > -1 || path.indexOf('/thrive/tracks') > -1) {
       // Show 3rd level menu to Community [ Overview - How It Works ]
-      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2;
-    } else if(!m2) {
+      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2
+    } else if (!m2) {
       setShowLevel3(false)
       setforceHideLevel3(true)
     }
