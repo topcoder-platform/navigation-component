@@ -5,11 +5,6 @@
 @import "_global/transform";
 @import "_global/themes";
 
-body {
-  margin: 0;
-  background-color: lightgrey;
-}
-
 .header-nav-ui {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   color: $gray-90;
