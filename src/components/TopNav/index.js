@@ -43,6 +43,17 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
           : (profileHandle ? `/members/${profileHandle}` : '/')
       }))
     }))
+
+  let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
+  if (cacheMenu && cacheMenu.date + 8000 > (new Date()).getTime()) {
+    let menuItem = _.find(menu, (m) => {
+      return m.id === cacheMenu.id
+    })
+    if (menuItem) {
+      menuItem.subMenu = cacheMenu.subMenu
+    }
+  }
+
   return menu
 }
 
@@ -102,6 +113,27 @@ const TopNav = ({
     return menu1 && menu1.subMenu && menu1.subMenu.find(level2 => level2.id === level2Id)
   }
 
+  // if click level2 menu from 'more', exchange to the first place
+  const reArrangeLevel2Menu = (level1Id, menuId) => {
+    var menu1 = findLevel1Menu(level1Id)
+    if (menu1 && menu1.subMenu) {
+      let subMenu = menu1.subMenu
+      let pos = _.findIndex(subMenu, (level2) => {
+        return level2.id === menuId
+      })
+      let t = subMenu[0]
+      subMenu[0] = subMenu[pos]
+      subMenu[pos] = t
+
+      pos = _.findIndex(moreMenu, (level2) => {
+        return level2.id === menuId
+      })
+      moreMenu[pos] = t
+      window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, menu1)))
+      setMoreMenu(moreMenu)
+      setChosenArrowPos(menuId)
+    }
+  }
   const activeMenu1 = findLevel1Menu(activeLevel1Id)
   const activeMenu2 = findLevel2Menu(activeLevel1Id, activeLevel2Id)
 
@@ -207,6 +239,11 @@ const TopNav = ({
   const createHandleClickLevel3 = menuId => () => {
     setActiveLevel3Id(menuId)
     setIconSelectPos(menuId)
+
+    let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
+    if (cacheMenu) {
+      window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, cacheMenu, { date: (new Date().getTime()) })))
+    }
   }
 
   const handleClickMore = () => setOpenMore(x => !x)
@@ -218,9 +255,9 @@ const TopNav = ({
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setforceHideLevel3(false)
-    setChosenArrowPos(moreId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
+      reArrangeLevel2Menu(activeLevel1Id, menuId)
       const menu = findLevel2Menu(activeLevel1Id, menuId)
       if (menu && menu.subMenu) {
         // select first level 3 item
@@ -344,7 +381,7 @@ const TopNav = ({
     let found = { m1: null, m2: null, m3: null }
 
     // If haven't a path just return
-    if(!path_) return found
+    if (!path_) return found
 
     menuWithId_.forEach(level1 => {
       if (level1.href && path_.indexOf(level1.href) > -1) found = { m1: level1.id, m2: null }
@@ -357,14 +394,14 @@ const TopNav = ({
             } else {
               found = { m1: level1.id, m2: level2.id, m3: level3.id }
             }
-            if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
+            if (!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
           }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
         if (level3.href) {
           // Check if path have parameters
-          const href = level3.href.indexOf("?") > -1 ? level3.href.split("?")[0] : level3.href;
+          const href = level3.href.indexOf('?') > -1 ? level3.href.split('?')[0] : level3.href
           if (path_.indexOf(href) > -1) found = { m1: level1.id, m3: level3.id }
         }
       })
@@ -390,13 +427,13 @@ const TopNav = ({
         forceExpand = true
         forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
       }
-    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
+    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
     } else if (path.indexOf('/community/learn') > -1 || path.indexOf('/thrive/tracks') > -1) {
       // Show 3rd level menu to Community [ Overview - How It Works ]
-      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2;
-    } else if(!m2) {
+      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2
+    } else if (!m2) {
       setShowLevel3(false)
       setforceHideLevel3(true)
     }
