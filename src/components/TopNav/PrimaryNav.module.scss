@@ -234,7 +234,7 @@
   cursor: pointer;
   display: inline-block;
   height: 32px;
-  margin: 11px 4px 11px 6px;
+  margin: 11px 20px 11px 0px;
   padding-left: 12px;
   position: relative;
   border-left: 1px solid $gray-50;
@@ -274,7 +274,7 @@
 .searchField {
   background: $black;
   height: 0;
-  margin-top: -1px;
+  margin-top: -10px;
   opacity: 0.98;
   overflow: hidden;
   padding: 0 48px;
