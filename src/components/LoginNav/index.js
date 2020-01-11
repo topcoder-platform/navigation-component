@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styles from './styles.module.scss'
 
@@ -22,6 +22,16 @@ const LoginNav = ({
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
 
+  useEffect(() => {
+    // trigger when orientationChange in ipad
+    const onOrientationChange = () => {
+      setOpenNotifications(false)
+      setOpenAccountMenu(false)
+      document.body.style.position = ''
+    }
+    window.addEventListener('orientationchange', onOrientationChange)
+    return () => window.removeEventListener('orientationchange', onOrientationChange)
+  }, [])
   const handleClickNotifications = () => setOpenNotifications(x => !x)
 
   const handleClickUserInfo = () => {
