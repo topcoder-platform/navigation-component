@@ -5,7 +5,7 @@ import styles from './styles.module.scss'
 const IconSelect = ({ show, x }) => (
   <span
     className={styles.iconSelect}
-    style={{ transform: `translateX(calc(${x}px - 50%))` }}
+    style={{ transform: `translateX(${x}px)` }}
     hidden={!show}
   />
 )
