@@ -433,6 +433,7 @@ const TopNav = ({
 
         {/* Primary navigation (level 1 and level 2 menu) */}
         <PrimaryNav
+          loggedIn={loggedIn}
           collapsed={collapsed}
           showLeftMenu={showLeftMenu}
           logo={logo}

@@ -7,6 +7,7 @@ import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
 import styles from './PrimaryNav.module.scss'
 
 const PrimaryNav = ({
+  loggedIn,
   collapsed,
   showLeftMenu,
   logo,
@@ -36,7 +37,7 @@ const PrimaryNav = ({
         <a
           className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
           onClick={onClickLogo}
-          href='/'
+          href={loggedIn ? '/my-dashboard' : '/'}
         >
           {logo}
         </a>
@@ -119,6 +120,7 @@ const PrimaryNav = ({
 }
 
 PrimaryNav.propTypes = {
+  loggedIn: PropTypes.bool,
   collapsed: PropTypes.bool,
   showLeftMenu: PropTypes.bool,
   logo: PropTypes.node,
