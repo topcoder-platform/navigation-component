@@ -70,11 +70,12 @@ const LoginNav = ({
     <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
         <a
-          href={authURLs.href}
+          href='javascript:void(0)'
           onClick={(event) => {
             const retUrl = encodeURIComponent(window.location.href)
-            window.location = authURLs.location.replace('%S', retUrl)
+            window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
             event.preventDefault()
+            return false
           }}
         >
           LOGIN
