@@ -45,7 +45,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
     }))
 
   let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
-  if (cacheMenu && cacheMenu.date + 8000 > (new Date()).getTime()) {
+  if (cacheMenu && cacheMenu.date + 16000 > (new Date()).getTime()) {
     let menuItem = _.find(menu, (m) => {
       return m.id === cacheMenu.id
     })
