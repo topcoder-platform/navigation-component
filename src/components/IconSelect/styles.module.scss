@@ -8,8 +8,4 @@
   height: 3px;
   border-radius: 1.5px;
   background: $turquoise;
-  -webkit-transition: -webkit-transform 0.5s;
-  transition: transform 0.5s;
-  -webkit-transition-timing-function: cubic-bezier(1, 0.01, 0, 1.22);
-  transition-timing-function: cubic-bezier(1, 0.01, 0, 1.22);
 }
