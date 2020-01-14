@@ -10,6 +10,7 @@ const SubNav = ({
   open,
   menu,
   isSecondaryMenu,
+  isResize,
   activeChildId,
   showIndicator,
   indicatorX,
@@ -32,14 +33,14 @@ const SubNav = ({
           </Link>
         )
       })}
-      <IconSelect show={showIndicator} x={indicatorX} />
-    </div>
+      <IconSelect isResize={isResize} show={showIndicator} x={indicatorX} /> </div>
   </div>
 )
 
 SubNav.propTypes = {
   open: PropTypes.bool,
   menu: PropTypes.object,
+  isResize: PropTypes.bool,
   isSecondaryMenu: PropTypes.bool,
   activeChildId: PropTypes.any,
   showIndicator: PropTypes.bool,
