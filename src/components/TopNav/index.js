@@ -30,7 +30,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
           id: level3.id || id++
         }))
       })),
-      secondaryMenu: ((loggedIn && profileHandle) ? level1.secondaryMenuForLoggedInUser : level1.secondaryMenuForGuest)
+      secondaryMenu: ((loggedIn && profileHandle) ? _.filter(level1.secondaryMenu, item => item && item.logged) : _.filter(level1.secondaryMenu, item => item && !item.logged))
     }))
   menu = menu
     .map(level1 => ({
