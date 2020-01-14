@@ -144,7 +144,6 @@ const TopNav = ({
     createHandleClickLevel1(menuId, false)()
     setTimeout(() => {
       if (menu2Id) createHandleClickLevel2(menu2Id, false)()
-      else setShowChosenArrow(false)()
     }, 0)
   }
 
