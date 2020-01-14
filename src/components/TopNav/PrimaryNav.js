@@ -4,6 +4,7 @@ import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
 import ChosenArrow from '../ChosenArrow'
 import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
+import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
 import styles from './PrimaryNav.module.scss'
 
 const PrimaryNav = ({
@@ -81,7 +82,8 @@ const PrimaryNav = ({
                   >
                     <div className={styles.moreBtnMask} />
                     <span>More</span>
-                    <IconArrowSmalldown />
+                    {openMore && <IconArrowSmallup />}
+                    {!openMore && <IconArrowSmalldown />}
                   </button>
                   <div className={styles.moreContentContainer}>
                     {moreMenu.map((menu, i) => (
