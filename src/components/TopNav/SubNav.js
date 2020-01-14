@@ -22,7 +22,7 @@ const SubNav = ({
         const to = _.isEmpty(level3.link) ? level3.href : level3.link
         return (
           <Link
-            className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
+            className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen, level3.title === 'All Challenges' && styles.allChallengeClickable)}
             key={`level3-${i}`}
             to={to}
             onClick={createHandleClickItem(level3.id)}

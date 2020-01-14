@@ -72,6 +72,10 @@
         @include Roboto-Bold;
         @include not-clickable;
       }
+      &.allChallengeClickable {
+        cursor: pointer;
+        pointer-events: auto;
+      }
     }
   }
 }
