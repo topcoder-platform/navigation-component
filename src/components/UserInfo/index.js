@@ -21,7 +21,7 @@ const UserInfo = ({ profile, onClick, open, newNotifications }) => (
     <div className={styles.handleContainer}>
       <span className={styles.handle}>{_.isEmpty(profile) ? '' : profile.handle}</span>
       <span className={styles.dropdownIcon}>
-      { open? <IconArrowSmallup /> : <IconArrowSmalldown /> }
+        { open ? <IconArrowSmallup /> : <IconArrowSmalldown /> }
       </span>
     </div>
   </div>

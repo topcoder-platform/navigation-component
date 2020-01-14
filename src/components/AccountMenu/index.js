@@ -41,7 +41,7 @@ class AccountMenu extends React.Component {
 
   render () {
     const {
-      onClose, onClickNotifications, numNotifications, open, menu, switchText, onSwitch, profile
+      onClose, open, menu, switchText, onSwitch, profile
     } = this.props
 
     return (
@@ -82,7 +82,7 @@ class AccountMenu extends React.Component {
               onClick={onSwitch}
             >
               <IconSwitchBusiness className={styles['switch-icon']} />
-              <Link to={hasAccess(profile.roles)? _.isEmpty(switchText.href) ? switchText.link : switchText.href : 'http://www.topcoder.com'} onClick={onClose}>
+              <Link to={hasAccess(profile.roles) ? _.isEmpty(switchText.href) ? switchText.link : switchText.href : 'http://www.topcoder.com'} onClick={onClose}>
                 <span className={styles['switch-to-busniness']}>{switchText.title}</span>
               </Link>
             </div>
@@ -112,8 +112,6 @@ AccountMenu.propTypes = {
   onClose: PropTypes.func,
   menu: PropTypes.array,
   switchText: PropTypes.shape(),
-  numNotifications: PropTypes.number,
-  onClickNotifications: PropTypes.func,
   onSwitch: PropTypes.func,
   profile: PropTypes.shape()
 }
