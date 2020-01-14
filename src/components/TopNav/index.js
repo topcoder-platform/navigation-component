@@ -113,7 +113,7 @@ const TopNav = ({
       const rect = el.getBoundingClientRect()
       return {
         ...menu,
-        initialX: rect.x
+        initialX: rect.left
       }
     }))
   }, [cache.refs, cache.slide])
@@ -121,7 +121,7 @@ const TopNav = ({
   const getMenuCenter = useCallback(menuId => {
     const el = cache.refs[menuId]
     const rect = el.getBoundingClientRect()
-    return rect.x + rect.width / 2
+    return rect.left + rect.width / 2
   }, [cache.refs])
 
   const setChosenArrowPos = useCallback(menuId => {
@@ -263,7 +263,7 @@ const TopNav = ({
         cache.slide[menu.id] = false
         const el = cache.refs[menu.id]
         const rect = el.getBoundingClientRect()
-        const relativeX = menu.initialX - rect.x
+        const relativeX = menu.initialX - rect.left
         el.style.transform = `translateX(${relativeX}px)`
         setTimeout(() => {
           el.style.transition = 'transform 250ms ease-out'
