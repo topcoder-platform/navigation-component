@@ -96,6 +96,7 @@
   }
 
   &::before {
+    cursor: default;
     content: "";
     position: absolute;
     display: block;
