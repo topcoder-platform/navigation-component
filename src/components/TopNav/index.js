@@ -62,6 +62,14 @@ const TopNav = ({
   loggedIn,
   profileHandle
 }) => {
+  useEffect(() => {
+    // trigger when orientationChange in ipad
+    const onOrientationChange = () => {
+      setShowLeftMenu(false)
+    }
+    window.addEventListener('orientationchange', onOrientationChange)
+    return () => window.removeEventListener('orientationchange', onOrientationChange)
+  }, [])
   const [cache] = useState({
     refs: {},
     slide: {}
