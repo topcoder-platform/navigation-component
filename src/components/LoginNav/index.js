@@ -77,7 +77,7 @@ const LoginNav = ({
   }
 
   return (
-    <div className={styles.loginContainer}>
+    <div tabIndex='0' className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
         <a
           href='javascript:void(0)'
