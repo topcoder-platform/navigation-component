@@ -30,7 +30,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
           id: level3.id || id++
         }))
       })),
-      secondaryMenu: ((loggedIn && profileHandle) ? level1.secondaryMenuForLoggedInUser : level1.secondaryMenuForGuest)
+      secondaryMenu: ((loggedIn && profileHandle) ? _.filter(level1.secondaryMenu, item => item && item.logged) : _.filter(level1.secondaryMenu, item => item && !item.logged))
     }))
   menu = menu
     .map(level1 => ({
@@ -72,6 +72,7 @@ const TopNav = ({
   const [activeLevel3Id, setActiveLevel3Id] = useState()
   const [showLevel3, setShowLevel3] = useState(false)
   const [forceHideLevel3, setforceHideLevel3] = useState(false)
+  const [searchOpened, setSearchOpened] = useState(false)
 
   const [showChosenArrow, setShowChosenArrow] = useState()
   const [chosenArrowX, setChosenArrowX] = useState()
@@ -144,7 +145,6 @@ const TopNav = ({
     createHandleClickLevel1(menuId, false)()
     setTimeout(() => {
       if (menu2Id) createHandleClickLevel2(menu2Id, false)()
-      else setShowChosenArrow(false)()
     }, 0)
   }
 
@@ -212,6 +212,11 @@ const TopNav = ({
   const handleClickMore = () => setOpenMore(x => !x)
 
   const handleCloseMore = () => setOpenMore(false)
+
+  const handleSearchPanel = (x) => {
+    setSearchOpened(x)
+    cache.refs.searchInputBox.value = ''
+  }
 
   const createHandleClickMoreItem = menuId => () => {
     setOpenMore(false)
@@ -378,16 +383,13 @@ const TopNav = ({
     // always expand menu on challenge list page and challenge details page
     // also in challenge details page, level 3 menu shouldnt be visible    if (!path || !menuWithId[0]) return
     const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
-    let forceExpand = false
     let forceM2 = null
 
     if (path.indexOf('/challenges') > -1) {
       // If All Challenge page
-      forceExpand = true
       if (path.match(/challenges\/[0-9]+/)) {
         // If Challenge Details page
         setforceHideLevel3(true)
-        forceExpand = true
         forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
       }
     } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
@@ -453,6 +455,8 @@ const TopNav = ({
           createSetRef={createSetRef}
           showChosenArrow={showChosenArrow}
           chosenArrowX={chosenArrowX}
+          searchOpened={searchOpened}
+          toggleSearchOpen={handleSearchPanel}
         />
 
         {/* Level 3 menu */}
