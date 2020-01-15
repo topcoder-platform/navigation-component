@@ -70,6 +70,7 @@ const TopNav = ({
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
+  const [isResize, setResize] = useState(false)
   const [showLevel3, setShowLevel3] = useState(false)
   const [forceHideLevel3, setforceHideLevel3] = useState(false)
   const [searchOpened, setSearchOpened] = useState(false)
@@ -339,7 +340,7 @@ const TopNav = ({
     const onResize = _.debounce(() => {
       regenerateMoreMenu([])
       // tick to update menu (reposition arrow)
-      setChosenArrowTick(x => x + 1)
+      // setChosenArrowTick(x => x + 1)
     }, 100)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
@@ -376,6 +377,25 @@ const TopNav = ({
     })
     return found
   }
+
+  let timeId = 0
+  useEffect(() => {
+    // when scren change size, keep green indicator keep static
+    const onResize = _.debounce(() => {
+      if (timeId) { clearTimeout(timeId) }
+      const { m3 } = getMenuIdsFromPath(menuWithId, path)
+      activeLevel2Id && setChosenArrowPos(activeLevel2Id)
+      setIconSelectPos(m3)
+      setResize(true)
+      timeId = setTimeout(() => {
+        setResize(false)
+        timeId = 0
+      }, 1000)
+    }, 50)
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [getMenuIdsFromPath])
 
   useEffect(() => {
     if (!path || !menuWithId[0]) return
@@ -463,6 +483,7 @@ const TopNav = ({
         <SubNav
           open={forceHideLevel3 ? false : showLevel3}
           menu={activeMenu2 || activeMenu1}
+          isResize={isResize}
           isSecondaryMenu={!activeMenu2}
           activeChildId={activeLevel3Id}
           showIndicator={showIconSelect}
