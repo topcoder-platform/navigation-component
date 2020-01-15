@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './MobileNav.module.scss'
 import IconClose from '../../assets/images/icon-close.svg'
 import IconMenu from '../../assets/images/icon-menu.svg'
+import { config } from 'topcoder-react-utils'
 
 const MobileNav = ({ loggedIn, showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (
   <div className={styles.mobileNav}>
@@ -15,7 +16,7 @@ const MobileNav = ({ loggedIn, showLeftMenu, onClickLeftMenu, logo, rightMenu })
         )}
       </button>
     </div>
-    <a href={loggedIn ? '/my-dashboard' : '/'}>
+    <a href={loggedIn ? config.URL.DASH_BOARD : config.URL.BASE}>
       {logo}
     </a>
     {rightMenu && (

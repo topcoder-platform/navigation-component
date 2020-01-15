@@ -5,6 +5,7 @@ import ResizeDetector from 'react-resize-detector'
 import ChosenArrow from '../ChosenArrow'
 import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
 import styles from './PrimaryNav.module.scss'
+import { config } from 'topcoder-react-utils'
 
 const PrimaryNav = ({
   loggedIn,
@@ -37,7 +38,7 @@ const PrimaryNav = ({
         <a
           className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
           onClick={onClickLogo}
-          href={loggedIn ? '/my-dashboard' : '/'}
+          href={loggedIn ? config.URL.DASH_BOARD : config.URL.BASE}
         >
           {logo}
         </a>

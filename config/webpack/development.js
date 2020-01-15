@@ -1,5 +1,8 @@
 const configFactory = require('./lib-development')
 const path = require('path')
+const webpackMerge = require('webpack-merge')
+
+const defaultConfig = require('./default');
 
 const standardConfig = configFactory({
   context: path.resolve(__dirname, '../..'),
@@ -7,4 +10,4 @@ const standardConfig = configFactory({
   library: 'navigation-component'
 })
 
-module.exports = standardConfig
+module.exports = webpackMerge.smart(standardConfig, defaultConfig)
