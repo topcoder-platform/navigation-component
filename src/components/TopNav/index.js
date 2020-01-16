@@ -62,6 +62,13 @@ const TopNav = ({
   loggedIn,
   profileHandle
 }) => {
+  useEffect(() => {
+    const orientationchange = () => {
+      setOpenMore(false)
+    }
+    window.addEventListener('orientationchange', orientationchange)
+    return () => window.removeEventListener('orientationchange', orientationchange)
+  }, [])
   const [cache] = useState({
     refs: {},
     slide: {}
