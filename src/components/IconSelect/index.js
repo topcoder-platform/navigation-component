@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 
 const IconSelect = ({ show, x, isResize }) => {
   let styleObj = {
-    transform: `translateX(calc(${x}px - 50%))`
+    transform: `translateX(${x}px)`
 
   }
   // is window is on resize, stop animation
