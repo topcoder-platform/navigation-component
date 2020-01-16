@@ -229,8 +229,6 @@ const TopNav = ({
     setTimeout(() => {
       const menu = findLevel2Menu(activeLevel1Id, menuId)
       if (menu && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
         // this requires the item element to be mounted first
         setIconSelectPos(menu.subMenu[0].id)
       }
