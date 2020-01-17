@@ -349,7 +349,7 @@ const TopNav = ({
           prect = menuEl.parentElement.getBoundingClientRect()
         }
         // add the item if it's overflowing
-        if (rect.right > prect.right) {
+        if (rect.right > prect.right && rect.right - prect.right > 1) {
           newMoreMenu.unshift(menu)
         } else if (newMoreMenu.length && prect.right - rect.right < 100) {
           // make sure we have space for the 'more' menu
