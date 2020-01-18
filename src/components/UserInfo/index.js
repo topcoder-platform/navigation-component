@@ -7,8 +7,9 @@ import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
 import styles from './styles.module.scss'
 import _ from 'lodash'
 
-const UserInfo = ({ profile, onClick, open, newNotifications }) => (
+const UserInfo = ({ profile, onClick, open, newNotifications, domRef }) => (
   <div
+    ref={domRef}
     className={styles.userInfoContainer}
     role='button'
     onClick={onClick}
@@ -31,7 +32,8 @@ UserInfo.propTypes = {
   profile: PropTypes.shape(),
   onClick: PropTypes.func,
   open: PropTypes.bool,
-  newNotifications: PropTypes.bool
+  newNotifications: PropTypes.bool,
+  domRef: PropTypes.shape()
 }
 
 export default UserInfo
