@@ -354,7 +354,11 @@ const TopNav = ({
           break
         }
       }
-      newMoreMenu.length && setMoreMenu(newMoreMenu)
+      if (newMoreMenu.length) {
+        setMoreMenu(newMoreMenu)
+      } else {
+        window.localStorage.removeItem('__top_nav_bar_state')
+      }
     }
     setOverflow(true)
     generateMenu()
