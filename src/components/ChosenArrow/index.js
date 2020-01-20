@@ -5,7 +5,7 @@ import styles from './styles.module.scss'
 const ChosenArrow = ({ show, x }) => (
   <div
     className={styles.chosenArrow}
-    style={{ transform: `translateX(calc(${x}px - 50%))` }}
+    style={{ transform: `translateX(${x}px)` }}
     hidden={!show}
   >
     <svg width='40px' height='10px' viewBox='0 0 40 10'>
