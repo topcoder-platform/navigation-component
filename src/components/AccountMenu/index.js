@@ -18,7 +18,9 @@ const MANAGE_ROLES = [
   'manager',
   'global manager',
   'client manager',
-  'connect manager'
+  'connect manager',
+  'connect account manager',
+  'connect copilot manager'
 ]
 
 const hasAccess = roles => {
