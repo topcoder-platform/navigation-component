@@ -152,6 +152,7 @@ const TopNav = ({
       if (!cache.refs[menu.id]) return menu
       cache.slide[menu.id] = true
       const el = cache.refs[menu.id]
+      if (!el) return menu
       const rect = el.getBoundingClientRect()
       return {
         ...menu,
@@ -162,6 +163,7 @@ const TopNav = ({
 
   const getMenuCenter = useCallback(menuId => {
     const el = cache.refs[menuId]
+    if (!el) return
     const rect = el.getBoundingClientRect()
     return (rect.x || rect.left) + rect.width / 2
   }, [cache.refs])
@@ -311,6 +313,7 @@ const TopNav = ({
         if (!cache.slide[menu.id] || !cache.refs[menu.id]) return
         cache.slide[menu.id] = false
         const el = cache.refs[menu.id]
+        if (!el) return
         const rect = el.getBoundingClientRect()
         const relativeX = menu.initialX - (rect.x || rect.left)
         el.style.transform = `translateX(${relativeX}px)`
@@ -354,6 +357,7 @@ const TopNav = ({
         if (!menuEl) return
         const rect = menuEl.getBoundingClientRect()
         if (!prect) {
+          if (!menuEl.parentElement) return
           prect = menuEl.parentElement.getBoundingClientRect()
         }
         // add the item if it's overflowing
