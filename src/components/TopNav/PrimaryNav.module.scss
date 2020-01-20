@@ -75,10 +75,10 @@
   width: 1px;
   background: $gray-70;
 
-  @include mobile-only;
-
-  &:first-of-type {
-    display: none;
+  @include mobile {
+    &:first-of-type {
+      display: none;
+    }
   }
 }
 
@@ -95,18 +95,20 @@
     margin: 0 $base-unit * 4;
   }
 
-  &::before {
-    cursor: default;
-    content: "";
-    position: absolute;
-    display: block;
-    left: -$base-unit * 6;
-    top: 0;
-    width: 1px;
-    height: 100%;
-    background: $gray-70;
-
-    @include hide-mobile;
+  &.rightMenuPrimaryLevel1 {
+    &::before {
+      cursor: default;
+      content: "";
+      position: absolute;
+      display: block;
+      left: -$base-unit * 6;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: $gray-70;
+  
+      @include hide-mobile;
+    }
   }
 
   &.primaryLevel1Open {
