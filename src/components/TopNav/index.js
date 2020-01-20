@@ -74,12 +74,12 @@ const TopNav = ({
   profileHandle
 }) => {
   useEffect(() => {
-    // trigger when orientationChange in ipad
-    const onOrientationChange = () => {
+    const orientationchange = () => {
+      setOpenMore(false)
       setShowLeftMenu(false)
     }
-    window.addEventListener('orientationchange', onOrientationChange)
-    return () => window.removeEventListener('orientationchange', onOrientationChange)
+    window.addEventListener('orientationchange', orientationchange)
+    return () => window.removeEventListener('orientationchange', orientationchange)
   }, [])
   const [cache] = useState({
     refs: {},
