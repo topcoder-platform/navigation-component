@@ -43,11 +43,11 @@ class AccountMenu extends React.Component {
 
   render () {
     const {
-      onClose, open, menu, switchText, onSwitch, profile
+      onClose, open, menu, switchText, onSwitch, profile, domRef
     } = this.props
 
     return (
-      <div className={cn(styles['user-info-popup'], open && styles.open)}>
+      <div ref={domRef} className={cn(styles['user-info-popup'], open && styles.open)}>
         <div className={styles.backdrop} onClick={onClose} />
 
         <Link to={_.isEmpty(profile) ? '/' : `/members/${profile.handle}`}>
@@ -115,7 +115,8 @@ AccountMenu.propTypes = {
   menu: PropTypes.array,
   switchText: PropTypes.shape(),
   onSwitch: PropTypes.func,
-  profile: PropTypes.shape()
+  profile: PropTypes.shape(),
+  domRef: PropTypes.shape()
 }
 
 export default AccountMenu
