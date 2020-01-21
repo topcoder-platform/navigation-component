@@ -119,7 +119,7 @@ const PrimaryNav = ({
             onResize={onRightMenuResize}
           />
           {rightMenu && (
-            <div className={styles.primaryLevel1}>
+            <div className={cn(styles.primaryLevel1, styles.rightMenuPrimaryLevel1)}>
               {rightMenu}
             </div>
           )}
