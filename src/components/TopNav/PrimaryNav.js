@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
@@ -39,6 +39,17 @@ const PrimaryNav = ({
   const activeTrigger = {
     bottom: 50 // The main nav head bottom Y
   }
+  useEffect(() => {
+    const listener = event => {
+      if (event.code === 'Enter') {
+        event.target.click()
+      }
+    }
+    document.addEventListener('keydown', listener)
+    return () => {
+      document.removeEventListener('keydown', listener)
+    }
+  }, [])
   return (
     <div>
       <div className={cn(styles.primaryNavContainer, showLeftMenu && styles.primaryNavContainerOpen)}>

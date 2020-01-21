@@ -29,8 +29,17 @@ const LoginNav = ({
       setOpenAccountMenu(false)
       document.body.style.position = ''
     }
+    const listener = event => {
+      if (event.code === 'Enter') {
+        event.target.click()
+      }
+    }
+    document.addEventListener('keydown', listener)
     window.addEventListener('orientationchange', onOrientationChange)
-    return () => window.removeEventListener('orientationchange', onOrientationChange)
+    return () => {
+      document.removeEventListener('keydown', listener)
+      window.removeEventListener('orientationchange', onOrientationChange)
+    }
   }, [])
   const handleClickNotifications = () => setOpenNotifications(x => !x)
 
@@ -77,10 +86,11 @@ const LoginNav = ({
   }
 
   return (
-    <div tabIndex='0' className={styles.loginContainer}>
+    <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
         <a
           href='javascript:void(0)'
+          tabIndex='0'
           onClick={(event) => {
             const retUrl = encodeURIComponent(window.location.href)
             window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
