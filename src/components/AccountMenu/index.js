@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { Link } from 'topcoder-react-utils'
-import IconAvatar from '../../assets/images/img-vic-tor-avatar.svg'
+import IconAvatar from '../../assets/images/ico-user-default.svg'
 import IconCloseDark from '../../assets/images/icon-close-dark.svg'
 import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
 import styles from './styles.module.scss'
@@ -18,7 +18,9 @@ const MANAGE_ROLES = [
   'manager',
   'global manager',
   'client manager',
-  'connect manager'
+  'connect manager',
+  'connect account manager',
+  'connect copilot manager'
 ]
 
 const hasAccess = roles => {
@@ -41,11 +43,11 @@ class AccountMenu extends React.Component {
 
   render () {
     const {
-      onClose, open, menu, switchText, onSwitch, profile
+      onClose, open, menu, switchText, onSwitch, profile, domRef
     } = this.props
 
     return (
-      <div className={cn(styles['user-info-popup'], open && styles.open)}>
+      <div ref={domRef} className={cn(styles['user-info-popup'], open && styles.open)}>
         <div className={styles.backdrop} onClick={onClose} />
 
         <Link to={_.isEmpty(profile) ? '/' : `/members/${profile.handle}`}>
@@ -113,7 +115,8 @@ AccountMenu.propTypes = {
   menu: PropTypes.array,
   switchText: PropTypes.shape(),
   onSwitch: PropTypes.func,
-  profile: PropTypes.shape()
+  profile: PropTypes.shape(),
+  domRef: PropTypes.shape()
 }
 
 export default AccountMenu

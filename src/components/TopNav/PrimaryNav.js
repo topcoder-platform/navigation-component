@@ -67,7 +67,7 @@ const PrimaryNav = ({
             /* Level 1 menu item */
             <a
               tabIndex='0'
-              className={cn(styles.primaryLevel1, !activeLevel2Id && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
+              className={cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
               href={level1.href}
               key={`level1-${i}`}
               onClick={createHandleClickLevel1(level1.id, true)}
@@ -134,7 +134,7 @@ const PrimaryNav = ({
             onResize={onRightMenuResize}
           />
           {rightMenu && (
-            <div className={styles.primaryLevel1}>
+            <div className={cn(styles.primaryLevel1, styles.rightMenuPrimaryLevel1)}>
               {rightMenu}
             </div>
           )}
