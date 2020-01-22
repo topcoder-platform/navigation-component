@@ -266,7 +266,6 @@ const TopNav = ({
         setIconSelectPos(menu.subMenu[0].id)
       }
     })
-    !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
   }
 
   const handleClickLeftMenu = () => setShowLeftMenu(x => !x)
