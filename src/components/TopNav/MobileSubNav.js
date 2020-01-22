@@ -15,7 +15,7 @@ const MobileSubNav = ({ open, menu, isSecondaryMenu, activeChildId, onClick, cre
       {open && <IconArrowSmallup />}
       {!open && <IconArrowSmalldown />}
     </button>
-    {open && (
+    {open && menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).length && (
       <div className={styles.mobileSubNavContent}>
         {(isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => (
           <a
