@@ -100,7 +100,7 @@ const PrimaryNav = ({
             </div>
           )
         ]))}
-        <ChosenArrow show={showChosenArrow} x={chosenArrowX} />
+        <ChosenArrow show={showChosenArrow && !!activeLevel2Id} x={chosenArrowX} />
       </div>
 
       <div className={styles.primaryNavRight}>
