@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
@@ -39,11 +39,23 @@ const PrimaryNav = ({
   const activeTrigger = {
     bottom: 50 // The main nav head bottom Y
   }
+  useEffect(() => {
+    const listener = event => {
+      if (event.code === 'Enter') {
+        event.target.click()
+      }
+    }
+    document.addEventListener('keydown', listener)
+    return () => {
+      document.removeEventListener('keydown', listener)
+    }
+  }, [])
   return (
     <div>
       <div className={cn(styles.primaryNavContainer, showLeftMenu && styles.primaryNavContainerOpen)}>
         <div className={styles.primaryNav} ref={createSetRef('primaryNav')}>
           <a
+            tabIndex='0'
             className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
             onClick={onClickLogo}
             href='/'
@@ -54,6 +66,7 @@ const PrimaryNav = ({
             <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
             /* Level 1 menu item */
             <a
+              tabIndex='0'
               className={cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
               href={level1.href}
               key={`level1-${i}`}
@@ -71,6 +84,7 @@ const PrimaryNav = ({
               >
                 {level1.subMenu.filter(filterNotInMore).map((level2, i) => (
                   <a
+                    tabIndex='0'
                     className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
                     href={level2.href}
                     key={`level2-${i}`}
@@ -97,6 +111,7 @@ const PrimaryNav = ({
                     <div className={styles.moreContentContainer}>
                       {moreMenu.map((menu, i) => (
                         <a
+                          tabIndex='0'
                           className={cn(styles.primaryLevel2, menu.id === activeLevel2Id && styles.primaryLevel2Open)}
                           href={menu.href}
                           key={`more-item-${i}`}
