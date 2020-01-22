@@ -45,7 +45,7 @@ const PrimaryNav = ({
         <div className={styles.primaryNav} ref={createSetRef('primaryNav')}>
           <a
             className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
-            onClick={onClickLogo}
+            onClick={(e) => onClickLogo(e)}
             href='/'
           >
             {logo}

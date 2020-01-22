@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useLayoutEffect, useCallback } fro
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
+import { config } from 'topcoder-react-utils'
 
 import styles from './index.module.scss'
 
@@ -179,8 +180,9 @@ const TopNav = ({
     }, 0)
   }
 
-  const handleClickLogo = () => {
-
+  const handleClickLogo = (e) => {
+    e.preventDefault()
+    window.location = loggedIn ? config.URL.HOME : config.URL.BASE
   }
 
   const expandMenu = (menuId, menu2Id) => {
@@ -484,6 +486,7 @@ const TopNav = ({
         <MobileNav
           showLeftMenu={showLeftMenu}
           logo={logo}
+          onClickLogo={handleClickLogo}
           rightMenu={rightMenu}
           onClickLeftMenu={handleClickLeftMenu}
         />
