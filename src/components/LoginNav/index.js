@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styles from './styles.module.scss'
 
@@ -21,6 +21,37 @@ const LoginNav = ({
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
+  const accountMenuRef = useRef(null)
+  const userInfoRef = useRef(null)
+
+  useEffect(() => {
+    // trigger when orientationChange in ipad
+    const onOrientationChange = () => {
+      setOpenNotifications(false)
+      setOpenAccountMenu(false)
+      document.body.style.position = ''
+    }
+    window.addEventListener('orientationchange', onOrientationChange)
+    return () => window.removeEventListener('orientationchange', onOrientationChange)
+  }, [])
+
+  useEffect(() => {
+    // Internet Explorer 6-11
+    const isIE = /*@cc_on!@*/false || !!document.documentMode // eslint-disable-line spaced-comment
+    // Edge 20+
+    const isEdge = !isIE && !!window.StyleMedia
+    if (!(isIE || isEdge)) return
+
+    // trigger when click outside
+    const onClickOutside = (event) => {
+      if (!(userInfoRef.current.contains(event.target) || accountMenuRef.current.contains(event.target))) {
+        setOpenAccountMenu(false)
+        document.body.style.position = ''
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside, true)
+    return () => document.removeEventListener('mousedown', onClickOutside, true)
+  }, [])
 
   const handleClickNotifications = () => setOpenNotifications(x => !x)
 
@@ -51,6 +82,7 @@ const LoginNav = ({
           onClick={handleClickUserInfo}
           open={openAccountMenu}
           key='user-info'
+          domRef={userInfoRef}
         />
       ])
     }
@@ -62,6 +94,7 @@ const LoginNav = ({
         onClick={handleClickUserInfo}
         open={openAccountMenu}
         key='user-info'
+        domRef={userInfoRef}
       />
     )
   }
@@ -70,11 +103,12 @@ const LoginNav = ({
     <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
         <a
-          href={authURLs.href}
+          href='javascript:void(0)'
           onClick={(event) => {
             const retUrl = encodeURIComponent(window.location.href)
-            window.location = authURLs.location.replace('%S', retUrl)
+            window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
             event.preventDefault()
+            return false
           }}
         >
           LOGIN
@@ -97,6 +131,7 @@ const LoginNav = ({
           setOpenAccountMenu(false)
           document.body.style.position = ''
         }}
+        domRef={accountMenuRef}
       />
     </div>
   )

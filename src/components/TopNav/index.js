@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useLayoutEffect, useCallback } fro
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
+import { config } from 'topcoder-react-utils'
 
 import styles from './index.module.scss'
 
@@ -30,7 +31,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
           id: level3.id || id++
         }))
       })),
-      secondaryMenu: ((loggedIn && profileHandle) ? level1.secondaryMenuForLoggedInUser : level1.secondaryMenuForGuest)
+      secondaryMenu: ((loggedIn && profileHandle) ? _.filter(level1.secondaryMenu, item => item && item.logged) : _.filter(level1.secondaryMenu, item => item && !item.logged))
     }))
   menu = menu
     .map(level1 => ({
@@ -43,6 +44,17 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
           : (profileHandle ? `/members/${profileHandle}` : '/')
       }))
     }))
+
+  let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
+  if (cacheMenu && cacheMenu.date + 16000 > (new Date()).getTime()) {
+    let menuItem = _.find(menu, (m) => {
+      return m.id === cacheMenu.id
+    })
+    if (menuItem) {
+      menuItem.subMenu = cacheMenu.subMenu
+    }
+  }
+
   return menu
 }
 
@@ -62,6 +74,14 @@ const TopNav = ({
   loggedIn,
   profileHandle
 }) => {
+  useEffect(() => {
+    const orientationchange = () => {
+      setOpenMore(false)
+      setShowLeftMenu(false)
+    }
+    window.addEventListener('orientationchange', orientationchange)
+    return () => window.removeEventListener('orientationchange', orientationchange)
+  }, [])
   const [cache] = useState({
     refs: {},
     slide: {}
@@ -70,8 +90,10 @@ const TopNav = ({
   const [activeLevel1Id, setActiveLevel1Id] = useState()
   const [activeLevel2Id, setActiveLevel2Id] = useState()
   const [activeLevel3Id, setActiveLevel3Id] = useState()
+  const [isResize, setResize] = useState(false)
   const [showLevel3, setShowLevel3] = useState(false)
   const [forceHideLevel3, setforceHideLevel3] = useState(false)
+  const [searchOpened, setSearchOpened] = useState(false)
 
   const [showChosenArrow, setShowChosenArrow] = useState()
   const [chosenArrowX, setChosenArrowX] = useState()
@@ -102,6 +124,27 @@ const TopNav = ({
     return menu1 && menu1.subMenu && menu1.subMenu.find(level2 => level2.id === level2Id)
   }
 
+  // if click level2 menu from 'more', exchange to the first place
+  const reArrangeLevel2Menu = (level1Id, menuId) => {
+    var menu1 = findLevel1Menu(level1Id)
+    if (menu1 && menu1.subMenu) {
+      let subMenu = menu1.subMenu
+      let pos = _.findIndex(subMenu, (level2) => {
+        return level2.id === menuId
+      })
+      let t = subMenu[0]
+      subMenu[0] = subMenu[pos]
+      subMenu[pos] = t
+
+      pos = _.findIndex(moreMenu, (level2) => {
+        return level2.id === menuId
+      })
+      moreMenu[pos] = t
+      window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, menu1)))
+      setMoreMenu(moreMenu)
+      setChosenArrowPos(menuId)
+    }
+  }
   const activeMenu1 = findLevel1Menu(activeLevel1Id)
   const activeMenu2 = findLevel2Menu(activeLevel1Id, activeLevel2Id)
 
@@ -110,18 +153,20 @@ const TopNav = ({
       if (!cache.refs[menu.id]) return menu
       cache.slide[menu.id] = true
       const el = cache.refs[menu.id]
+      if (!el) return menu
       const rect = el.getBoundingClientRect()
       return {
         ...menu,
-        initialX: rect.x
+        initialX: rect.x || rect.left
       }
     }))
   }, [cache.refs, cache.slide])
 
   const getMenuCenter = useCallback(menuId => {
     const el = cache.refs[menuId]
+    if (!el) return
     const rect = el.getBoundingClientRect()
-    return rect.x + rect.width / 2
+    return (rect.x || rect.left) + rect.width / 2
   }, [cache.refs])
 
   const setChosenArrowPos = useCallback(menuId => {
@@ -135,8 +180,9 @@ const TopNav = ({
     }, 0)
   }
 
-  const handleClickLogo = () => {
-
+  const handleClickLogo = (e) => {
+    e.preventDefault()
+    window.location = loggedIn ? config.URL.HOME : config.URL.BASE
   }
 
   const expandMenu = (menuId, menu2Id) => {
@@ -206,24 +252,32 @@ const TopNav = ({
   const createHandleClickLevel3 = menuId => () => {
     setActiveLevel3Id(menuId)
     setIconSelectPos(menuId)
+
+    let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
+    if (cacheMenu) {
+      window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, cacheMenu, { date: (new Date().getTime()) })))
+    }
   }
 
   const handleClickMore = () => setOpenMore(x => !x)
 
   const handleCloseMore = () => setOpenMore(false)
 
+  const handleSearchPanel = (x) => {
+    setSearchOpened(x)
+    cache.refs.searchInputBox.value = ''
+  }
+
   const createHandleClickMoreItem = menuId => () => {
     setOpenMore(false)
     setActiveLevel2Id(menuId)
     setShowLevel3(true)
     setforceHideLevel3(false)
-    setChosenArrowPos(moreId)
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
+      reArrangeLevel2Menu(activeLevel1Id, menuId)
       const menu = findLevel2Menu(activeLevel1Id, menuId)
       if (menu && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
         // this requires the item element to be mounted first
         setIconSelectPos(menu.subMenu[0].id)
       }
@@ -261,8 +315,9 @@ const TopNav = ({
         if (!cache.slide[menu.id] || !cache.refs[menu.id]) return
         cache.slide[menu.id] = false
         const el = cache.refs[menu.id]
+        if (!el) return
         const rect = el.getBoundingClientRect()
-        const relativeX = menu.initialX - rect.x
+        const relativeX = menu.initialX - (rect.x || rect.left)
         el.style.transform = `translateX(${relativeX}px)`
         setTimeout(() => {
           el.style.transition = 'transform 250ms ease-out'
@@ -304,10 +359,11 @@ const TopNav = ({
         if (!menuEl) return
         const rect = menuEl.getBoundingClientRect()
         if (!prect) {
+          if (!menuEl.parentElement) return
           prect = menuEl.parentElement.getBoundingClientRect()
         }
         // add the item if it's overflowing
-        if (rect.right > prect.right) {
+        if (rect.right > prect.right && rect.right - prect.right > 1) {
           newMoreMenu.unshift(menu)
         } else if (newMoreMenu.length && prect.right - rect.right < 100) {
           // make sure we have space for the 'more' menu
@@ -333,7 +389,7 @@ const TopNav = ({
     const onResize = _.debounce(() => {
       regenerateMoreMenu([])
       // tick to update menu (reposition arrow)
-      setChosenArrowTick(x => x + 1)
+      // setChosenArrowTick(x => x + 1)
     }, 100)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
@@ -343,7 +399,7 @@ const TopNav = ({
     let found = { m1: null, m2: null, m3: null }
 
     // If haven't a path just return
-    if(!path_) return found
+    if (!path_) return found
 
     menuWithId_.forEach(level1 => {
       if (level1.href && path_.indexOf(level1.href) > -1) found = { m1: level1.id, m2: null }
@@ -356,14 +412,14 @@ const TopNav = ({
             } else {
               found = { m1: level1.id, m2: level2.id, m3: level3.id }
             }
-            if(!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
+            if (!activeLevel3Id && level3.collapsed) setforceHideLevel3(true)
           }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
         if (level3.href) {
           // Check if path have parameters
-          const href = level3.href.indexOf("?") > -1 ? level3.href.split("?")[0] : level3.href;
+          const href = level3.href.indexOf('?') > -1 ? level3.href.split('?')[0] : level3.href
           if (path_.indexOf(href) > -1) found = { m1: level1.id, m3: level3.id }
         }
       })
@@ -371,31 +427,47 @@ const TopNav = ({
     return found
   }
 
+  let timeId = 0
+  useEffect(() => {
+    // when scren change size, keep green indicator keep static
+    const onResize = _.debounce(() => {
+      if (timeId) { clearTimeout(timeId) }
+      const { m3 } = getMenuIdsFromPath(menuWithId, path)
+      activeLevel2Id && setChosenArrowPos(activeLevel2Id)
+      setIconSelectPos(m3)
+      setResize(true)
+      timeId = setTimeout(() => {
+        setResize(false)
+        timeId = 0
+      }, 1000)
+    }, 50)
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [getMenuIdsFromPath])
+
   useEffect(() => {
     if (!path || !menuWithId[0]) return
     setLeftNav(menuWithId)
     // always expand menu on challenge list page and challenge details page
     // also in challenge details page, level 3 menu shouldnt be visible    if (!path || !menuWithId[0]) return
     const { m1, m2 } = getMenuIdsFromPath(menuWithId, path)
-    let forceExpand = false
     let forceM2 = null
 
     if (path.indexOf('/challenges') > -1) {
       // If All Challenge page
-      forceExpand = true
       if (path.match(/challenges\/[0-9]+/)) {
         // If Challenge Details page
         setforceHideLevel3(true)
-        forceExpand = true
         forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
       }
-    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/'+profileHandle) > -1) {
+    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
     } else if (path.indexOf('/community/learn') > -1 || path.indexOf('/thrive/tracks') > -1) {
       // Show 3rd level menu to Community [ Overview - How It Works ]
-      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2;
-    } else if(!m2) {
+      forceM2 = getMenuIdsFromPath(menuWithId, '/community').m2
+    } else if (!m2) {
       setShowLevel3(false)
       setforceHideLevel3(true)
     }
@@ -414,6 +486,7 @@ const TopNav = ({
         <MobileNav
           showLeftMenu={showLeftMenu}
           logo={logo}
+          onClickLogo={handleClickLogo}
           rightMenu={rightMenu}
           onClickLeftMenu={handleClickLeftMenu}
         />
@@ -452,12 +525,15 @@ const TopNav = ({
           createSetRef={createSetRef}
           showChosenArrow={showChosenArrow}
           chosenArrowX={chosenArrowX}
+          searchOpened={searchOpened}
+          toggleSearchOpen={handleSearchPanel}
         />
 
         {/* Level 3 menu */}
         <SubNav
           open={forceHideLevel3 ? false : showLevel3}
           menu={activeMenu2 || activeMenu1}
+          isResize={isResize}
           isSecondaryMenu={!activeMenu2}
           activeChildId={activeLevel3Id}
           showIndicator={showIconSelect}
