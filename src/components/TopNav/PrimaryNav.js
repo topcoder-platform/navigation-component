@@ -31,6 +31,8 @@ const PrimaryNav = ({
   createHandleClickMoreItem,
   createSetRef,
   showChosenArrow,
+  showLevel3,
+  forceHideLevel3,
   chosenArrowX,
   searchOpened,
   toggleSearchOpen
@@ -111,7 +113,7 @@ const PrimaryNav = ({
               </div>
             )
           ]))}
-          <ChosenArrow show={showChosenArrow} x={chosenArrowX} />
+          <ChosenArrow show={showChosenArrow && (showLevel3 && !forceHideLevel3)} x={chosenArrowX} />
         </div>
         <div className={styles.primaryNavRight}>
           <ResizeDetector
@@ -197,6 +199,8 @@ PrimaryNav.propTypes = {
   createHandleClickMoreItem: PropTypes.func,
   createSetRef: PropTypes.func,
   showChosenArrow: PropTypes.bool,
+  showLevel3: PropTypes.bool,
+  forceHideLevel3: PropTypes.bool,
   chosenArrowX: PropTypes.number,
   searchOpened: PropTypes.bool,
   toggleSearchOpen: PropTypes.func
