@@ -19,7 +19,7 @@ const SubNav = ({
 }) => (
   <div className={cn(styles.secondaryNav, open && styles.secondaryNavOpen)}>
     <div className={styles.secondaryNavLinkContainer}>
-      {menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => {
+      {menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => {
         const to = _.isEmpty(level3.link) ? level3.href : level3.link
         return (
           <Link

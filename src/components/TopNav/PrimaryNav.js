@@ -71,17 +71,21 @@ const PrimaryNav = ({
                 key={`level2-${i}-container`}
                 ref={createSetRef(`level2Container${i}`)}
               >
-                {level1.subMenu.filter(filterNotInMore).map((level2, i) => (
-                  <a
-                    className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
-                    href={level2.href}
-                    key={`level2-${i}`}
-                    onClick={createHandleClickLevel2(level2.id, true)}
-                    ref={createSetRef(level2.id)}
-                  >
-                    {level2.title}
-                  </a>
-                ))}
+                {level1.subMenu.filter(filterNotInMore).map((level2, i) => {
+                  if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
+                    return (
+                      <a
+                        className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
+                        href={level2.href}
+                        key={`level2-${i}`}
+                        onClick={level2.subMenu && level2.subMenu.length > 0 ? createHandleClickLevel2(level2.id, true) : null}
+                        ref={createSetRef(level2.id)}
+                      >
+                        {level2.title}
+                      </a>
+                    )
+                  }
+                })}
                 {/* The More menu */}
                 {level1.id === activeLevel1Id && moreMenu && moreMenu.length > 0 && (
                   <div className={cn(styles.moreBtnContainer, openMore && styles.moreOpen)}>

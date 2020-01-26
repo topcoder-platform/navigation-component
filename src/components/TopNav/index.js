@@ -532,17 +532,20 @@ const TopNav = ({
         />
 
         {/* Level 3 menu */}
-        <SubNav
-          open={forceHideLevel3 ? false : showLevel3}
-          menu={activeMenu2 || activeMenu1}
-          isResize={isResize}
-          isSecondaryMenu={!activeMenu2}
-          activeChildId={activeLevel3Id}
-          showIndicator={showIconSelect}
-          indicatorX={iconSelectX}
-          createHandleClickItem={createHandleClickLevel3}
-          createSetRef={createSetRef}
-        />
+        {((activeMenu2 && activeMenu2.subMenu && activeMenu2.subMenu.length > 0) ||
+          (!activeMenu2 && activeMenu1 && activeMenu1.secondaryMenu && activeMenu1.secondaryMenu.length > 0)) &&
+          <SubNav
+            open={forceHideLevel3 ? false : showLevel3}
+            menu={activeMenu2 || activeMenu1}
+            isResize={isResize}
+            isSecondaryMenu={!activeMenu2}
+            activeChildId={activeLevel3Id}
+            showIndicator={showIconSelect}
+            indicatorX={iconSelectX}
+            createHandleClickItem={createHandleClickLevel3}
+            createSetRef={createSetRef}
+          />
+        }
 
         {/* Mobile level 2 menu */}
         {showLeftMenu && activeMenu1 && (
