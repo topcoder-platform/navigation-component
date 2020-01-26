@@ -10,25 +10,35 @@ const MobileSubNav = ({ open, menu, isSecondaryMenu, activeChildId, onClick, cre
     className={cn(styles.mobileSubNav, open && styles.mobileSubNavOpen)}
   >
     <div className={styles.mobileSubNavMask} />
-    <button className={styles.mobileSubNavHeader} onClick={onClick}>
-      <span>{menu.title}</span>
-      {open && <IconArrowSmallup />}
-      {!open && <IconArrowSmalldown />}
-    </button>
-    {open && menu && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).length && (
-      <div className={styles.mobileSubNavContent}>
-        {(isSecondaryMenu ? menu.secondaryMenu : menu.subMenu) && (isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => (
-          <a
-            className={cn(styles.mobileSubNavChild, level3.id === activeChildId && styles.mobileSubNavChildOpen)}
-            href={level3.href}
-            key={`level3-${i}`}
-            onClick={createHandleClickItem(level3.id)}
-          >
-            {level3.title}
-          </a>
-        ))}
-      </div>
-    )}
+    {(((!isSecondaryMenu && menu.subMenu && menu.subMenu.length > 0) ||
+      (menu.secondaryMenu && menu.secondaryMenu.length > 0)) &&
+      <>
+        <button className={styles.mobileSubNavHeader} onClick={onClick}>
+          <span>{menu.title}</span>
+          {open ? <IconArrowSmallup /> : <IconArrowSmalldown />}
+        </button>
+        {open && (
+          <div className={styles.mobileSubNavContent}>
+            {(isSecondaryMenu ? menu.secondaryMenu : menu.subMenu).map((level3, i) => (
+              <a
+                className={cn(styles.mobileSubNavChild, level3.id === activeChildId && styles.mobileSubNavChildOpen)}
+                href={level3.href}
+                key={`level3-${i}`}
+                onClick={createHandleClickItem(level3.id)}
+              >
+                {level3.title}
+              </a>
+            ))}
+          </div>
+        )}
+      </>
+    ) ||
+      <>
+        <dev className={styles.mobileSubNavHeader}>
+          <span>{menu.title}</span>
+        </dev>
+      </>
+    }
   </div>
 )
 
