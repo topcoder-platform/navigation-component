@@ -129,6 +129,10 @@ const TopNav = ({
     var menu1 = findLevel1Menu(level1Id)
     if (menu1 && menu1.subMenu) {
       let subMenu = menu1.subMenu
+      // all sub menu are all in 'more'
+      if (subMenu.length === moreMenu.length) {
+        return
+      }
       let pos = _.findIndex(subMenu, (level2) => {
         return level2.id === menuId
       })
