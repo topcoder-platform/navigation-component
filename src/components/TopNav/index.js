@@ -130,7 +130,7 @@ const TopNav = ({
       })
       moreMenu[pos] = t
       window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, menu1)))
-      setMoreMenu(moreMenu)
+      setMoreMenu([...moreMenu])
       setChosenArrowPos(menuId)
     }
   }
@@ -258,13 +258,6 @@ const TopNav = ({
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       reArrangeLevel2Menu(activeLevel1Id, menuId)
-      const menu = findLevel2Menu(activeLevel1Id, menuId)
-      if (menu && menu.subMenu) {
-        // select first level 3 item
-        setActiveLevel3Id(menu.subMenu[0].id)
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[0].id)
-      }
     })
   }
 
