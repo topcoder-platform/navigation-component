@@ -46,7 +46,7 @@ const initMenuId = (menu, profileHandle, loggedIn) => {
     }))
 
   let cacheMenu = JSON.parse(window.localStorage.getItem('__top_nav_bar_state'))
-  if (cacheMenu && cacheMenu.date + 16000 > (new Date()).getTime()) {
+  if (cacheMenu && cacheMenu.date + 32000 > (new Date()).getTime()) {
     let menuItem = _.find(menu, (m) => {
       return m.id === cacheMenu.id
     })
@@ -141,7 +141,7 @@ const TopNav = ({
       })
       moreMenu[pos] = t
       window.localStorage.setItem('__top_nav_bar_state', JSON.stringify(_.assign({}, menu1)))
-      setMoreMenu(moreMenu)
+      setMoreMenu([...moreMenu])
       setChosenArrowPos(menuId)
     }
   }
@@ -316,13 +316,7 @@ const TopNav = ({
     // let the level 3 menu mounted first for sliding indicator to work
     setTimeout(() => {
       reArrangeLevel2Menu(activeLevel1Id, menuId)
-      const menu = findLevel2Menu(activeLevel1Id, menuId)
-      if (menu && menu.subMenu) {
-        // this requires the item element to be mounted first
-        setIconSelectPos(menu.subMenu[0].id)
-      }
     })
-    !showIconSelect && setTimeout(() => setShowIconSelect(true), 300)
   }
 
   const handleClickLeftMenu = () => setShowLeftMenu(x => !x)
@@ -412,7 +406,11 @@ const TopNav = ({
           break
         }
       }
-      newMoreMenu.length && setMoreMenu(newMoreMenu)
+      if (newMoreMenu.length) {
+        setMoreMenu(newMoreMenu)
+      } else {
+        window.localStorage.removeItem('__top_nav_bar_state')
+      }
     }
     setOverflow(true)
     generateMenu()
