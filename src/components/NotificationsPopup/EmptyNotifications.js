@@ -23,7 +23,7 @@ const EmptyNotifications = ({ onClose, emptyTitle, emptyText }) => (
       <div className={cn(styles.txt, styles['center-txt'])}>{emptyText}</div>
     </div>
     <div className={styles['noti-footer']}>
-      <span className={cn(styles.btn, styles['btn-blue'])} role='button'>
+      <span className={cn(styles['btn-empty-noti'])} role='button'>
         Notification Settings
       </span>
     </div>

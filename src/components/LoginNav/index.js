@@ -17,7 +17,10 @@ const LoginNav = ({
   onMenuOpen,
   showNotification,
   profile,
-  authURLs
+  authURLs,
+  markNotificationAsRead,
+  markAllNotificationAsRead,
+  markAllNotificationAsSeen
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
@@ -39,8 +42,7 @@ const LoginNav = ({
     if (showNotification) {
       return ([
         <NotificationButton
-          className={styles.notificationButton}
-          state={notificationButtonState}
+          notifications={notifications || []}
           notificationsPopupOpen={openNotifications}
           onClick={handleClickNotifications}
           key='notification-button'
@@ -83,7 +85,12 @@ const LoginNav = ({
       <NotificationsPopup
         open={openNotifications}
         notifications={notifications}
-        onClose={() => setOpenNotifications(false)}
+        onClose={() => {
+          setOpenNotifications(false)
+          markAllNotificationAsSeen()
+        }}
+        markNotificationAsRead={markNotificationAsRead}
+        markAllNotificationAsRead={markAllNotificationAsRead}
       />
       <AccountMenu
         profile={profile}
@@ -112,7 +119,10 @@ LoginNav.propTypes = {
   showNotification: PropTypes.bool,
   profile: PropTypes.shape(),
   switchText: PropTypes.shape(),
-  authURLs: PropTypes.shape()
+  authURLs: PropTypes.shape(),
+  markNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsSeen: PropTypes.func.isRequired
 }
 
 export default LoginNav

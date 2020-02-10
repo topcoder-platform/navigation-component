@@ -4,169 +4,183 @@ import cn from 'classnames'
 import _ from 'lodash'
 import moment from 'moment'
 import styles from './styles.module.scss'
-
-const LightBar = ({ title, onDismiss }) => (
-  <div className={styles['light-bar']}>
-    {title}
-    <span role='button' className={cn(styles['green-link'], styles['mobile-only'], styles.dismissSection)} onClick={onDismiss}>
-      Dismiss All
-    </span>
-  </div>
-)
-
-LightBar.propTypes = {
-  title: PropTypes.node,
-  onDismiss: PropTypes.func
+import BackArrow from '../../assets/images/left-arrow.svg'
+import GearIcon from '../../assets/images/icon-settings-gear.svg'
+import TickIcon from '../../assets/images/icon-checkmark.svg'
+const eventTypes = {
+  PROJECT: {
+    ACTIVE: 'connect.notification.project.active',
+    COMPLETED: 'connect.notification.project.completed'
+  }
 }
-
-const Category = ({ title, onDismiss }) => (
-  <div className={styles['grey-bar']}>
-    <div className={styles['copyicon-title']}>
-      {title}
+const Item = ({ item, onDismiss, markNotificationAsRead }) =>
+  <div className={styles['noti-item']}>
+    <div className={styles.left}>
+      <p className={styles['txt']}>{item.contents}</p>
+      <span className={styles['time-txt']}>{moment(item.date).fromNow()}</span>
     </div>
-    <div className={cn(styles['right-remove'], styles.dismissCategory)} onClick={onDismiss}>
-      <div className={styles['btn-close']} />
-      <span className={styles['black-txt']}>Dismiss notification</span>
+    <div className={styles.right}>
+      {
+        !item.isRead &&
+        (<div className={cn([styles.point, item.isSeen && styles['point-grey'], !item.isSeen && styles['point-red']])}
+          onClick={() => { markNotificationAsRead(item) }} />)}
     </div>
   </div>
-)
-
-Category.propTypes = {
-  title: PropTypes.node,
-  onDismiss: PropTypes.func
-}
-
-const Item = ({ item, onDismiss }) => (
-  <div className={styles['items']}>
-    <a href={item.href} className={styles['item-content']}>
-      <p className={styles['txt']}>{item.content}</p>
-      <div className={styles['bottom-info']}>
-        {item.tags && item.tags.map(tag => (
-          <span className={styles['blue-squre']} key={tag}>
-            {tag}
-          </span>
-        ))}
-        <span className={styles['time-txt']}>{moment(item.timestamp).fromNow()}</span>
-      </div>
-      <div className={cn(styles['right-remove'], styles.dismissItem)} onClick={onDismiss}>
-        <div className={styles['btn-close']} />
-        <span className={styles['black-txt']}>Dismiss notification</span>
-      </div>
-    </a>
-  </div>
-)
 
 Item.propTypes = {
   item: PropTypes.object,
-  onDismiss: PropTypes.func
+  onDismiss: PropTypes.func,
+  markNotificationAsRead: PropTypes.func.isRequired
 }
 
-const NotificationList = ({ notifications, onDismiss, onSettings, onClose }) => {
-  const categories = _.uniq(
-    (notifications || []).map(noti => noti.category).filter(x => x)
-  ).sort((a, b) => a.localeCompare(b))
+export default class NotificationList extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      completedSection: [],
+      nonCompletedSection: []
+    }
+  }
 
-  const newest = notifications.filter(x => {
-    return x.timestamp > moment().subtract(1, 'day').valueOf()
-  })
-  const earlier = notifications.filter(x => {
-    return x.timestamp < moment().subtract(1, 'day').valueOf()
-  })
-  const sections = [
-    { title: 'New', list: newest },
-    { title: 'Earlier', list: earlier }
-  ]
+  componentDidMount () {
+    const { notifications } = this.props
+    this.setState({
+      completedSection: _.uniq(
+        (notifications || [
 
-  return (
-    <>
-      <div className={styles['noti-header']}>
-        <span
-          className={styles['notification-back-btn']}
-          role='button'
-          onClick={onClose}
-        />
-        <span className={styles['left-noti']}>Notifications</span>
-        <div className={styles.rights}>
-          <span
+        ])).filter(t => t.isComplete)
+    })
+    this.setState({
+      nonCompletedSection: _.uniq(
+        (notifications || [
+
+        ])).filter(t => !t.isComplete)
+    })
+  }
+
+  challenges (list) {
+    list = list || []
+    const challengeTitles = _.uniq(
+      list.map(noti => noti.sourceName).filter(x => x)
+    )
+    var group = challengeTitles.map(title =>
+      ({
+        challengeTitle: title, items: list.filter(t => t.sourceName === title)
+      }))
+
+    return group
+  }
+
+  render () {
+    const { onClose, onSettings, onDismiss, notifications, markNotificationAsRead,
+      markAllNotificationAsRead } = this.props
+    let completedSection = _.filter((notifications || []), t => t.eventType === eventTypes.PROJECT.COMPLETED)
+    let nonCompletedSection = _.filter((notifications || []), t => t.eventType !== eventTypes.PROJECT.COMPLETED)
+    return (
+      <>
+        <div className={styles['noti-header']}>
+          <div
+            className={styles['notification-back-btn']}
             role='button'
-            className={styles['white-link']}
-            onClick={() => onDismiss(notifications)}
+            onClick={onClose}
           >
-            Dismiss All
-          </span>
-          &nbsp;<span className={styles.point} />&nbsp;
-          <span
-            role='button'
-            className={styles['white-link']}
-            onClick={onSettings}
-          >
-            Settings
-          </span>
-        </div>
-        <span
-          role='button'
-          className={styles['btn-setting']}
-        />
-      </div>
-      <div className={styles['noti-body']}>
-        {sections.map(section => (
-          <Fragment key={section.title}>
-            <LightBar
-              title={section.title}
-              onDismiss={() => onDismiss(section.list)}
-            />
-            <div className={styles['lightblue-section']}>
-              {section.list.filter(x => !x.category).map((item, i) => (
-                <Item
-                  item={item}
-                  key={`noti-${i}`}
-                  onDismiss={() => onDismiss([item])}
-                />
-              ))}
+            <BackArrow />
+          </div>
+          <span className={styles['left-noti']}>Notifications</span>
+          <div className={styles.rights}>
+            <span
+              role='button'
+              className={styles['white-link']}
+              onClick={() => markAllNotificationAsRead()}
+            >
+              Mark All as Read
+            </span>
+            &nbsp;<span className={styles.point} />&nbsp;
+            <span
+              role='button'
+              className={styles['white-link']}
+              onClick={onSettings}
+            >
+              Settings
+            </span>
+          </div>
+          <div className={styles['notification-left-btn-mobile']}>
+            <div
+              className={styles['notification-back-btn']}
+              role='button'
+              onClick={markAllNotificationAsRead}
+            >
+              <TickIcon />
             </div>
-            {categories.map(category => {
-              const items = section.list.filter(x => x.category === category)
-              if (!items.length) return null
-              return (
-                <div className={styles['greybar-section']} key={category}>
-                  <Category
-                    title={`${category} (${items.length})`}
-                    onDismiss={() => onDismiss(items)}
-                  />
-                  {items.map((item, i) => (
-                    <Item
-                      item={item}
-                      key={`noti-${i}`}
-                      onDismiss={() => onDismiss([item])}
-                    />
-                  ))}
-                </div>
-              )
-            })}
-          </Fragment>
-        ))}
-        <div className={cn(styles['end-message'], styles.center)}>
-          You have no more notifications
+            <div
+              role='button'
+              className={styles['btn-setting']}
+            >
+              <GearIcon />
+            </div>
+          </div>
         </div>
-      </div>
-    </>
-  )
+        <div className={styles['noti-body']}>
+          <Fragment key='nonComplete'>
+            {
+              this.challenges(nonCompletedSection).map((challenge, challengeIdx) =>
+                (
+                  <Fragment key={`nonComplete-${challengeIdx}`}>
+                    <div key={`noti-${challengeIdx}`} className={styles['challenge-title']}>
+                      <span>{challenge.challengeTitle}</span>
+                    </div>
+                    {challenge.items.map((item, itemIdx) =>
+                      (<Item
+                        item={item}
+                        markNotificationAsRead={markNotificationAsRead}
+                        key={`noti-${challengeIdx}-${itemIdx}`}
+                        onDismiss={() => onDismiss([item])}
+                      />))}
+                  </Fragment>
+                ))
+            }
+          </Fragment>
+          <div className={styles['completed-header']}>Completed Challenges</div>
+          <Fragment key='completed'>
+            {
+              this.challenges(completedSection).map((challenge, challengeIdx) =>
+                (
+                  <div key={`noti-completed-${challengeIdx}`} className={cn([styles['challenge-title'], styles['completed-challenge']])}>
+                    <span>{challenge.challengeTitle}</span>
+                  </div>
+                ))
+            }
+          </Fragment>
+          <div className={styles.viewAllNotifications}>
+            <a href='#'>View all Notifications</a>
+          </div>
+        </div>
+      </>
+    )
+  }
 }
 
 NotificationList.defaultProps = {
   notifications: [],
-  onDismiss: () => null
+  onDismiss: () => null,
+  markAllNotificationAsRead: () => null,
+  markNotificationAsRead: () => null
 }
 
 NotificationList.propTypes = {
   /**
    * Array of Notifications, each with properties:
    *
-   *   - content {string|node}
-   *   - href {string} href for the item's wrapper anchor
-   *   - category {array}
-   *   - tags {array}
-   *   - timestamp {number}
+   *   - id {number} message identifier
+   *   - sourceId {number} identifies the associated challenge
+   *   - sourceName {string} challenge title
+   *   - eventType {string} indicates if challenge is active(connect.notification.project.active)
+   *       or completed(connect.notification.project.completed)
+   *   - date {date} when notification was raised
+   *   - isRead {boolean} indicates if is read
+   *   - isSeen {boolean} indicates if is seen
+   *   - contents {string} message
+   *
   */
   notifications: PropTypes.array,
 
@@ -180,7 +194,8 @@ NotificationList.propTypes = {
   /** Called on Settings button click */
   onSettings: PropTypes.func,
 
-  onClose: PropTypes.func
-}
+  onClose: PropTypes.func,
 
-export default NotificationList
+  markNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsRead: PropTypes.func.isRequired
+}

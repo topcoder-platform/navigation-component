@@ -5,16 +5,20 @@ import styles from './styles.module.scss'
 import EmptyNotifications from './EmptyNotifications'
 import NotificationList from './NotificationList'
 
-const NotificationsPopup = ({ open, onClose, emptyTitle, emptyText, notifications }) => (
-  <div className={cn(styles['notifications-panel'], open && styles.open)}>
-    <div className={styles.backdrop} onClick={onClose} />
-    {notifications && notifications.length > 0 ? (
-      <NotificationList notifications={notifications} onClose={onClose} />
-    ) : (
-      <EmptyNotifications emptyTitle={emptyTitle} emptyText={emptyText} onClose={onClose} />
-    )}
-  </div>
-)
+const NotificationsPopup = ({ open, onClose, emptyTitle,
+  emptyText, notifications, markNotificationAsRead, markAllNotificationAsRead }) =>
+  (
+    <div className={cn(styles['notifications-panel'], open && styles.open)}>
+      <div className={styles.backdrop} onClick={onClose} />
+      {notifications && notifications.length > 0 ? (
+        <NotificationList notifications={notifications}
+          markNotificationAsRead={markNotificationAsRead}
+          markAllNotificationAsRead={markAllNotificationAsRead}
+          onClose={onClose} />
+      ) : (<EmptyNotifications emptyTitle={emptyTitle} emptyText={emptyText}
+        onClose={onClose} />)}
+    </div>
+  )
 
 NotificationsPopup.defaultProps = {
   emptyTitle: 'Good job! You’re all caught up',
@@ -41,7 +45,9 @@ NotificationsPopup.propTypes = {
    *   - tags {array}
    *   - timestamp {number}
   */
-  notifications: PropTypes.array
+  notifications: PropTypes.array,
+  markNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsRead: PropTypes.func.isRequired
 }
 
 export default NotificationsPopup

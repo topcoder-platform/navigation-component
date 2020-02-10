@@ -1,23 +1,45 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
+import IconBellEmpty from '../../assets/images/icon-bell-grey.svg'
 import IconBell from '../../assets/images/icon-bell.svg'
 import styles from './styles.module.scss'
+import _ from 'lodash'
 
-const NotificationButton = ({ className, state, onClick, notificationsPopupOpen }) => (
+const getNotificationButtonState = (notifications) => {
+  console.log('got')
+  console.log(_.countBy(notifications || [], n => !n.seen))
+  if (notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) {
+    console.log('returing : new')
+
+    return 'new'
+  }
+  if (notifications.length === 0) {
+    console.log('returing : none')
+
+    return 'none'
+  } else {
+    console.log('returing : seen')
+
+    return 'seen'
+  }
+}
+
+const NotificationButton = ({ onClick, notificationsPopupOpen, notifications }) => (
   <div
-    className={cn(styles.notificationButton, styles[state], notificationsPopupOpen && styles.isNotificationsPopupOpen, className)}
+    className={cn([styles.notificationButton,
+      notificationsPopupOpen && styles.isNotificationsPopupOpen,
+      styles[getNotificationButtonState(notifications)]])}
     onClick={onClick}
   >
-    <IconBell />
+    {(!_.isEmpty(notifications || []) ? <IconBell /> : <IconBellEmpty />)}
   </div>
 )
 
 NotificationButton.propTypes = {
-  className: PropTypes.string,
-  state: PropTypes.oneOf(['none', 'new', 'seen']),
   onClick: PropTypes.func,
-  notificationsPopupOpen: PropTypes.bool
+  notificationsPopupOpen: PropTypes.bool,
+  notifications: PropTypes.array
 }
 
 export default NotificationButton

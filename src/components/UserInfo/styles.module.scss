@@ -80,3 +80,9 @@
     }
   }
 }
+
+@include mobile {
+    .userInfoContainer {
+      margin-left: 5px;
+  }
+}

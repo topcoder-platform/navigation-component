@@ -29,18 +29,15 @@
   .noti-header {
     background-color: $turquoise-dark;
     border-radius: 10px 10px 0 0;
-    padding: 10px 20px 10px;
-    height: 30px;
+    padding: 17px 20px;
+    height: 50px;
     position: sticky;
     top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .notification-back-btn {
-      @include mobile-only;
-    }
+    
     .left-noti {
-      background: url(#{$img-path}/icon-bell.svg) left center no-repeat;
       background-size: 16px;
       padding-left: 26px;
       color: $white;
@@ -49,7 +46,6 @@
       text-align: left;
     }
     .rights {
-      @include hide-mobile;
 
       .white-link {
         color: $white;
@@ -72,14 +68,16 @@
         vertical-align: middle;
       }
     }
-
-    .btn-setting {
-      @include mobile-only;
+    .notification-left-btn-mobile {
+      display: none;
     }
   }
   .noti-body {
-    max-height: 378px;
+    max-height: 800px;
     overflow: scroll;
+    scrollbar-width: 7px;
+    scrollbar-color: $gray-90;
+    
     &.center {
       text-align: center;
     }
@@ -128,6 +126,105 @@
       padding-right: 20px;
       padding-top: 2px;
     }
+    .challenge-title {
+      background-color: $gray-04;
+      color: $gray-90;
+      font-size: 14px;
+      @include Roboto-Bold;
+      font-weight: 500;
+      line-height: 22px;
+      padding-left: 20px;
+      margin-top: -2px;
+      position: sticky;
+      position: -webkit-sticky;
+      top: 0;
+      z-index: 2;
+      padding: 5px 20px;
+    }
+    .completed-challenge {
+      display: flex;
+      justify-content: space-between;
+      background-color: $gray-04;
+      font-size: 14px;
+      @include Roboto-Bold;
+      font-weight: 500;
+      line-height: 22px;
+      padding: 5px 20px;
+      margin-top: 5px;
+      // position: sticky;
+      // position: -webkit-sticky;
+      top: 0;
+      z-index: 2;
+      .dismiss-challenge {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+        margin:0;
+        padding:0;
+        overflow:hidden;
+        background: $gray-03;
+        border-radius:2px;
+        border:solid 2px #FFF;
+        transition: all .3s ease-out;
+        cursor:pointer;
+        // content: "><";//\00d7"; 
+        // color: $red;//
+        width: 10px;
+        height: 10px;
+        // cursor: pointer;
+
+        b {
+          display:block;
+          position:absolute;
+          height:0;
+          width:0;
+          padding:0;
+          margin:0;
+          border:solid 5px rgba(255,255,255,0);
+        }
+      }
+
+    }
+    .completed-header {
+        background-color: $gray-06;
+        text-transform: uppercase;
+        color: $gray-90;
+        font-size: 14px;
+        @include Roboto-Bold;
+        line-height: 22px;
+        padding-top: 15px;
+        padding-bottom: 13px;
+        padding-left: 20px;
+        page-break-after: auto;
+        margin-top: -2px;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .viewAllNotifications {
+      background-color: $gray-04;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      page-break-after: auto;
+      margin-top: 5px;
+      position: sticky;
+      position: -webkit-sticky;
+      top: 0;
+      z-index: 2;
+      text-align: center;
+      border-radius: 0 0 10px 10px;
+      height: 42px;
+      a {
+        margin: auto;
+        color: #0D61BF;
+        font-size: 14px;
+        @include Roboto-Regular;
+        line-height: 22px;
+        text-decoration: underline;
+        padding: 0 ;
+      }
+    }
     .greybar-section {
       &:last-child {
         .items {
@@ -143,6 +240,7 @@
       background-color: $white;
       padding-top: 5px;
     }
+
     .right-remove {
       position: absolute;
       right: 1px;
@@ -194,6 +292,50 @@
         }
       }
     }
+    .noti-item {
+      background-color: $white;
+      padding: 5px 20px;
+      display: flex;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        flex-direction: column;
+        padding-left: 50px;
+        .txt {
+          margin: 0;
+          color: $gray-90;
+          font-size: 14px;
+          @include Roboto-Regular;
+          line-height: 22px;
+        }
+        .time-txt { 
+          display: inline-block;
+          vertical-align: middle;
+          color: $gray-03;
+          font-size: 12px;
+          @include Roboto-Regular;
+          line-height: 20px;
+        }
+      }
+      .right {
+        .point {
+          width: 10px;
+          height: 10px;
+          background-color: $white;
+          border-radius: 100%;
+          display: inline-block;
+          vertical-align: middle;
+          cursor: pointer;
+        }
+        .point-red {
+          background-color: $red;
+        }
+        .point-grey {
+          background-color: $gray-10;
+        }
+      }
+    }
+
     .items {
       padding: 0 30px;
       &:hover {
@@ -274,6 +416,20 @@
   .noti-footer {
     text-align: center;
     padding: 15px 0 45px 0;
+    .btn-empty-noti {
+      background-color: $white;
+      border: 1px solid $turquoise-super-dark;
+      border-radius: 15px;
+      width: 187px;
+      height: 30px;
+      color: $green-dark;
+      @include Roboto-Bold;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      line-height: 30px;
+      text-align: left;
+      padding: 9px;
+    }
   }
   .end-message {
     background-color: $gray-neutral-light;
@@ -330,16 +486,23 @@
       border-radius: 0;
       padding-left: 10px;
       padding-right: 10px;
+      .rights {
+        display: none;
+      }
+      .notification-left-btn-mobile {
+        display: flex;
+      }
+
       .notification-back-btn {
         width: 50px;
         height: 50px;
-        background: url(#{$img-path}/left-arrow.svg) center center no-repeat;
-        margin-left: -8px;
+        padding: 12px;
+
       }
       .btn-setting {
         width: 50px;
         height: 50px;
-        background: url(#{$img-path}/icon-settings-gear.svg) center center no-repeat;
+        padding: 12px;
       }
       .left-noti {
         margin-left: 0;
