@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 import BackArrow from '../../assets/images/left-arrow.svg'
 import GearIcon from '../../assets/images/icon-settings-gear.svg'
 import TickIcon from '../../assets/images/icon-checkmark.svg'
+import NotificationIcon from '../../assets/images/icon-bell.svg'
 const eventTypes = {
   PROJECT: {
     ACTIVE: 'connect.notification.project.active',
@@ -73,20 +74,29 @@ export default class NotificationList extends React.Component {
 
   render () {
     const { onClose, onSettings, onDismiss, notifications, markNotificationAsRead,
-      markAllNotificationAsRead } = this.props
+      markAllNotificationAsRead, dismissChallengeNotifications } = this.props
     let completedSection = _.filter((notifications || []), t => t.eventType === eventTypes.PROJECT.COMPLETED)
     let nonCompletedSection = _.filter((notifications || []), t => t.eventType !== eventTypes.PROJECT.COMPLETED)
     return (
       <>
         <div className={styles['noti-header']}>
-          <div
-            className={styles['notification-back-btn']}
-            role='button'
-            onClick={onClose}
-          >
-            <BackArrow />
+          <div className={styles['lefts']}>
+            <div
+              className={styles['notification-icon']}
+            >
+              <NotificationIcon />
+            </div>
+            <div
+              className={styles['notification-left-btn-mobile']}
+              role='button'
+              onClick={onClose}
+            >
+              <BackArrow />
+            </div>
+            <span className={styles['noti-title']}>Notifications</span>
           </div>
-          <span className={styles['left-noti']}>Notifications</span>
+          <span className={styles['noti-title-mobileonly']}>Notifications</span>
+
           <div className={styles.rights}>
             <span
               role='button'
@@ -104,9 +114,9 @@ export default class NotificationList extends React.Component {
               Settings
             </span>
           </div>
-          <div className={styles['notification-left-btn-mobile']}>
+          <div className={styles['rights-mobile']}>
             <div
-              className={styles['notification-back-btn']}
+              className={styles['btn-tick']}
               role='button'
               onClick={markAllNotificationAsRead}
             >
@@ -147,13 +157,19 @@ export default class NotificationList extends React.Component {
                 (
                   <div key={`noti-completed-${challengeIdx}`} className={cn([styles['challenge-title'], styles['completed-challenge']])}>
                     <span>{challenge.challengeTitle}</span>
+                    <div className={styles['dismiss-challenge']} onClick={c => {
+                      const challegeId = challenge && challenge.items && challenge.items.length && challenge.items[0].sourceId
+                      if (challegeId) {
+                        dismissChallengeNotifications(challegeId)
+                      }
+                    }}>&times;</div>
                   </div>
                 ))
             }
           </Fragment>
-          <div className={styles.viewAllNotifications}>
-            <a href='#'>View all Notifications</a>
-          </div>
+        </div>
+        <div className={styles['view-all-notifications']}>
+          <a href='#'>View all Notifications</a>
         </div>
       </>
     )
@@ -197,5 +213,6 @@ NotificationList.propTypes = {
   onClose: PropTypes.func,
 
   markNotificationAsRead: PropTypes.func.isRequired,
-  markAllNotificationAsRead: PropTypes.func.isRequired
+  markAllNotificationAsRead: PropTypes.func.isRequired,
+  dismissChallengeNotifications: PropTypes.func.isRequired
 }

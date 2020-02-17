@@ -79,14 +79,15 @@
     }
   }
 
+  .notifications-mobile {
+    @include mobile-only;
+  }
+
   .menu {
     @include not-mobile {
       padding: 15px 0 25px 0;
     }
 
-    .notification-mobile {
-      @include mobile-only;
-    }
 
     a {
       height: 50px;
@@ -186,6 +187,50 @@
       }
     }
 
+    .notifications-mobile {
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .noti-left {
+
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+    
+        .bell-icon {
+          margin: 0 10px 0 22px;
+        }
+
+        .red-number {
+          color: $red;
+          margin: 0 10px;
+        }
+      }
+
+      .icon-open-noti {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      a {
+        color: $white;
+        font-size: 14px;
+        line-height: 30px;
+      }
+    }
+    .noti-separator {
+      background: $gray-05;
+      width: calc(100% - 46px);
+      height: 1px;
+      align-self: center;
+      padding: 0 $base-unit * 4;
+    }
+
     .menu {
       display: flex;
       flex-direction: column;
@@ -200,8 +245,7 @@
         padding: 0 $base-unit * 4;
       }
 
-      a,
-      .notification-mobile {
+      a {
         color: $gray-90;
         height: 40px;
         display: flex;
@@ -237,7 +281,6 @@
           }
         }
       }
-
     }
   }
 }

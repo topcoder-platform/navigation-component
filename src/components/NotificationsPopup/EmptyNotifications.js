@@ -2,27 +2,34 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import styles from './styles.module.scss'
+import NotificationIcon from '../../assets/images/icon-bell.svg'
+import BackArrow from '../../assets/images/left-arrow.svg'
+import NotificationIconBig from '../../assets/images/bell-big.svg'
 
 const EmptyNotifications = ({ onClose, emptyTitle, emptyText }) => (
   <>
     <div className={styles['noti-header']}>
-      <span
-        className={styles['notification-back-btn']}
-        role='button'
-        onClick={onClose}
-      />
-      <span className={styles['left-noti']}>Notifications</span>
-      <div className={styles.rights}>
-        <span className={styles['white-link']} role='button'>Settings</span>
+      <div className={styles['lefts']}>
+        <div
+          className={styles['notification-icon']}
+        >
+          <NotificationIcon />
+        </div>
+        <div
+          className={styles['notification-left-btn-mobile']}
+          role='button'
+          onClick={onClose}
+        >
+          <BackArrow />
+        </div>
+        <span className={styles['noti-title']}>Notifications</span>
       </div>
-      <span className={styles['btn-setting']} role='button' />
+      <span className={cn(styles['noti-empty-title-mobileonly'])}>Notifications</span>
     </div>
-    <div className={cn(styles['noti-body'], styles.center)}>
-      <i className={cn(styles.icons, styles['icon-bell'])} />
-      <h4 className={styles.titles}>{emptyTitle}</h4>
+    <div className={cn(styles['noti-body'], styles['noti-body-empty'], styles.center)}>
+      <NotificationIconBig className={styles['big-icon-bell']} />
+      <div className={styles['empty-title']}>{emptyTitle}</div>
       <div className={cn(styles.txt, styles['center-txt'])}>{emptyText}</div>
-    </div>
-    <div className={styles['noti-footer']}>
       <span className={cn(styles['btn-empty-noti'])} role='button'>
         Notification Settings
       </span>
@@ -34,9 +41,8 @@ EmptyNotifications.defaultProps = {
   emptyTitle: 'Good job! You’re all caught up',
   emptyText: (
     <div>
-      Join challenges and check your notification settings if
-      you don’t receive notifications. We’re actively adding
-      new notifications. Read our <a href='/' className={styles.blueLink}>blog post</a> for more info
+      Join challenges and check your notification settings if you don’t
+      receive notifications. We’re actively adding new notifications.
     </div>
   )
 }

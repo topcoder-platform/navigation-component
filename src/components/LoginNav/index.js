@@ -6,6 +6,7 @@ import NotificationButton from '../NotificationButton'
 import NotificationsPopup from '../NotificationsPopup'
 import UserInfo from '../UserInfo'
 import AccountMenu from '../AccountMenu'
+import _ from 'lodash'
 
 const LoginNav = ({
   loggedIn,
@@ -20,7 +21,8 @@ const LoginNav = ({
   authURLs,
   markNotificationAsRead,
   markAllNotificationAsRead,
-  markAllNotificationAsSeen
+  markAllNotificationAsSeen,
+  dismissChallengeNotifications
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
@@ -49,7 +51,7 @@ const LoginNav = ({
         />,
         <UserInfo
           profile={profile}
-          newNotifications={notificationButtonState === 'new'}
+          newNotifications={(notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) && 'new'}
           onClick={handleClickUserInfo}
           open={openAccountMenu}
           key='user-info'
@@ -60,7 +62,7 @@ const LoginNav = ({
     return (
       <UserInfo
         profile={profile}
-        newNotifications={notificationButtonState === 'new'}
+        newNotifications={(notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) && 'new'}
         onClick={handleClickUserInfo}
         open={openAccountMenu}
         key='user-info'
@@ -91,6 +93,7 @@ const LoginNav = ({
         }}
         markNotificationAsRead={markNotificationAsRead}
         markAllNotificationAsRead={markAllNotificationAsRead}
+        dismissChallengeNotifications={dismissChallengeNotifications}
       />
       <AccountMenu
         profile={profile}
@@ -122,7 +125,8 @@ LoginNav.propTypes = {
   authURLs: PropTypes.shape(),
   markNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsRead: PropTypes.func.isRequired,
-  markAllNotificationAsSeen: PropTypes.func.isRequired
+  markAllNotificationAsSeen: PropTypes.func.isRequired,
+  dismissChallengeNotifications: PropTypes.func.isRequired
 }
 
 export default LoginNav

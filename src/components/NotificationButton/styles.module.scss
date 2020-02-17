@@ -1,11 +1,12 @@
 @import "../../assets/sass/_global/variables";
+@import "../../assets/sass/_global/utils";
 
 .notificationButton {
+  @include hide-mobile;
   position: relative;
-  width: 30px;
-  height: 30px;
-  padding-top: 3px;
-  padding-left: 7px;
+  width: 36px;
+  height: 36px;
+  padding: 5px;
 
   img {
     display: block;
@@ -37,5 +38,5 @@
    {
     background-color: $gray-hover-profile-icon;
     border-radius: 50%;
-  }  
+  }
 }

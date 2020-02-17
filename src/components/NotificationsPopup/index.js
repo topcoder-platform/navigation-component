@@ -6,7 +6,7 @@ import EmptyNotifications from './EmptyNotifications'
 import NotificationList from './NotificationList'
 
 const NotificationsPopup = ({ open, onClose, emptyTitle,
-  emptyText, notifications, markNotificationAsRead, markAllNotificationAsRead }) =>
+  emptyText, notifications, markNotificationAsRead, markAllNotificationAsRead, dismissChallengeNotifications }) =>
   (
     <div className={cn(styles['notifications-panel'], open && styles.open)}>
       <div className={styles.backdrop} onClick={onClose} />
@@ -14,6 +14,7 @@ const NotificationsPopup = ({ open, onClose, emptyTitle,
         <NotificationList notifications={notifications}
           markNotificationAsRead={markNotificationAsRead}
           markAllNotificationAsRead={markAllNotificationAsRead}
+          dismissChallengeNotifications={dismissChallengeNotifications}
           onClose={onClose} />
       ) : (<EmptyNotifications emptyTitle={emptyTitle} emptyText={emptyText}
         onClose={onClose} />)}
@@ -22,13 +23,11 @@ const NotificationsPopup = ({ open, onClose, emptyTitle,
 
 NotificationsPopup.defaultProps = {
   emptyTitle: 'Good job! You’re all caught up',
-  emptyText: (
-    <div>
-      Join challenges and check your notification settings if
-      you don’t receive notifications. We’re actively adding
-      new notifications. Read our <a href='/' className={styles.blueLink}>blog post</a> for more info
-    </div>
-  )
+  emptyText: <div>
+    Join challenges and check your notification settings if you don’t
+    receive notifications. We’re actively adding new notifications.
+  </div>
+
 }
 
 NotificationsPopup.propTypes = {
@@ -47,7 +46,8 @@ NotificationsPopup.propTypes = {
   */
   notifications: PropTypes.array,
   markNotificationAsRead: PropTypes.func.isRequired,
-  markAllNotificationAsRead: PropTypes.func.isRequired
+  markAllNotificationAsRead: PropTypes.func.isRequired,
+  dismissChallengeNotifications: PropTypes.func.isRequired
 }
 
 export default NotificationsPopup
