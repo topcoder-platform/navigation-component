@@ -485,6 +485,17 @@ const TopNav = ({
   }, [getMenuIdsFromPath])
 
   useEffect(() => {
+    // when scren change size, keep green indicator keep static
+    const onResize = _.debounce(() => {
+      const { m3 } = getMenuIdsFromPath(menuWithId, path)
+      setIconSelectPos(m3)
+    }, 30)
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [getMenuIdsFromPath])
+
+  useEffect(() => {
     if (!path || !menuWithId[0]) return
     setLeftNav(menuWithId)
     // always expand menu on challenge list page and challenge details page
