@@ -129,6 +129,11 @@ const TopNav = ({
     var menu1 = findLevel1Menu(level1Id)
     if (menu1 && menu1.subMenu) {
       let subMenu = menu1.subMenu
+      // all sub menu are all in 'more'
+      if (subMenu.length === moreMenu.length) {
+        setChosenArrowPos('more')
+        return
+      }
       let pos = _.findIndex(subMenu, (level2) => {
         return level2.id === menuId
       })
@@ -172,6 +177,21 @@ const TopNav = ({
   const setChosenArrowPos = useCallback(menuId => {
     setChosenArrowX(getMenuCenter(menuId))
   }, [setChosenArrowX, getMenuCenter])
+
+  useEffect(() => {
+    // after page first view, when all submenus show in 'more' menu, set chosenArrow below 'more' menu
+    const { m1 } = getMenuIdsFromPath(menuWithId, path)
+    var menu1 = findLevel1Menu(m1)
+    if (menu1 && menu1.subMenu) {
+      let subMenu = menu1.subMenu
+      // all sub menu are all in 'more'
+      if (subMenu.length === moreMenu.length) {
+        setTimeout(() => {
+          setChosenArrowPos('more')
+        })
+      }
+    }
+  }, [(moreMenu || []).length])
 
   const setIconSelectPos = menuId => {
     // wait for menuId element to get positioned in its place
