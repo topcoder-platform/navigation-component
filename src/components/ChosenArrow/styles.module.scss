@@ -5,10 +5,6 @@
   bottom: -1px;
   left: -20px;
   z-index: 1;
-  -webkit-transition: -webkit-transform 0.5s;
-  transition: transform 0.5s;
-  -webkit-transition-timing-function: cubic-bezier(1, 0.01, 0, 1.22);
-  transition-timing-function: cubic-bezier(1, 0.01, 0, 1.22);
 
   svg {
     display: block;
