@@ -169,7 +169,7 @@ export default class NotificationList extends React.Component {
           </Fragment>
         </div>
         <div className={styles['view-all-notifications']}>
-          <a href='#'>View all Notifications</a>
+          <a href='/notifications'>View all Notifications</a>
         </div>
       </>
     )
