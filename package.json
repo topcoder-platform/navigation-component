@@ -30,7 +30,7 @@
     "build:prod": "./node_modules/.bin/webpack --env=production --progress --profile --colors --display-optimization-bailout",
     "clean": "rimraf dist"
   },
-  "version": "1000.1.0",
+  "version": "1000.1.2",
   "dependencies": {
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
