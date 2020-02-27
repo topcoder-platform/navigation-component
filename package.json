@@ -14,9 +14,10 @@
     "Component",
     "Navigation"
   ],
-  "license": "UNLICENSED",
+  "license": "ISC",
+  "author": "sushilshinde",
   "main": "index.js",
-  "name": "navigation-component",
+  "name": "topcoder-navigation-component",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/topcoder-platform/navigation-component.git"
