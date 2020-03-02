@@ -100,7 +100,7 @@ const LoginNav = ({
         open={openAccountMenu}
         menu={accountMenu}
         switchText={switchText}
-        numNotifications={(notifications || []).length}
+        numNotifications={_.filter((notifications || []), n => n.isSeen === false).length}
         onClickNotifications={handleClickNotifications}
         onSwitch={onSwitch}
         onClose={() => {

@@ -7,6 +7,7 @@ import IconAvatar from '../../assets/images/img-vic-tor-avatar.svg'
 import IconCloseDark from '../../assets/images/icon-close-dark.svg'
 import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
 import IconNotificationsRed from '../../assets/images/icon-bell-red.svg'
+import IconNotificationsGrey from '../../assets/images/icon-bell-grey.svg'
 import IconRightArrow from '../../assets/images/right-arrow.svg'
 import styles from './styles.module.scss'
 import moment from 'moment'
@@ -99,10 +100,15 @@ class AccountMenu extends React.Component {
                 onClick={onClickNotifications}
               >
                 <div className={styles['noti-left']}>
-                  <IconNotificationsRed className={styles['bell-icon']} />
+                  {numNotifications > 0
+                    ? <IconNotificationsRed className={styles['bell-icon']} />
+                    : <IconNotificationsGrey className={styles['bell-icon']} />
+                  }
                   <div>
                     <span className={styles['notifications-title']}>Notifications</span>
-                    <span className={styles['red-number']}>{'(' + numNotifications + ')'}</span>
+                    {numNotifications > 0 &&
+                      <span className={styles['red-number']}>{'(' + numNotifications + ')'}</span>
+                    }
                   </div>
                 </div>
                 <span role='button' className={styles['icon-open-noti']}>
