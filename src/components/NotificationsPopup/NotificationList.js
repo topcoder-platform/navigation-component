@@ -77,6 +77,7 @@ export default class NotificationList extends React.Component {
       markAllNotificationAsRead, dismissChallengeNotifications } = this.props
     let completedSection = _.filter((notifications || []), t => t.eventType === eventTypes.PROJECT.COMPLETED)
     let nonCompletedSection = _.filter((notifications || []), t => t.eventType !== eventTypes.PROJECT.COMPLETED)
+    const unreadCount = _.filter((notifications || []), t => t.isRead === false).length
     return (
       <>
         <div className={styles['noti-header']}>
@@ -100,8 +101,8 @@ export default class NotificationList extends React.Component {
           <div className={styles.rights}>
             <span
               role='button'
-              className={styles['white-link']}
-              onClick={() => markAllNotificationAsRead()}
+              className={cn(styles['white-link'], unreadCount <= 0 && styles['disabled'])}
+              onClick={unreadCount > 0 ? () => markAllNotificationAsRead() : null}
             >
               Mark All as Read
             </span>
@@ -116,9 +117,9 @@ export default class NotificationList extends React.Component {
           </div>
           <div className={styles['rights-mobile']}>
             <div
-              className={styles['btn-tick']}
+              className={cn(styles['btn-tick'], unreadCount <= 0 && styles['disabled'])}
               role='button'
-              onClick={markAllNotificationAsRead}
+              onClick={unreadCount > 0 ? markAllNotificationAsRead : null}
             >
               <TickIcon />
             </div>
