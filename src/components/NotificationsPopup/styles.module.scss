@@ -40,7 +40,6 @@
     .lefts {
       display: flex;
 
-
       .notification-icon {
         @include hide-mobile;
       }
@@ -66,7 +65,7 @@
       color: $white;
       font-size: 20px;
       @include Roboto-Regular;
-      text-align: right;
+      text-align: center;
       @include mobile-only;
     }
     .noti-empty-title-mobileonly {
@@ -105,9 +104,6 @@
     .rights-mobile {
       display: none;
     }
-    // .notification-back-btn {
-    //   @include mobile-only;
-    // }
   }
   .noti-body {
     max-height: 800px;
@@ -499,14 +495,18 @@
     .noti-header {
       height: 60px;
       border-radius: 0;
+      align-items: inherit;
       .lefts {
         align-content: stretch;
+        flex: 1;
       }
       .rights {
         display: none;
       }
       .rights-mobile {
         display: flex;
+        flex: 1;
+        justify-content: flex-end;
       }
       
       .btn-tick {
