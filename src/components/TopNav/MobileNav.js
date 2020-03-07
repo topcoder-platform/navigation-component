@@ -4,7 +4,6 @@ import styles from './MobileNav.module.scss'
 import IconClose from '../../assets/images/icon-close.svg'
 import IconMenu from '../../assets/images/icon-menu.svg'
 import IconMagnifyingGlass from '../../assets/images/magnifying_glass.svg'
-import { config } from 'topcoder-react-utils'
 
 const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, onClickLogo, rightMenu }) => (<div>
   <div className={styles.mobileNav}>
@@ -34,7 +33,7 @@ const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, onClickLogo, rightMenu
       <input
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
-            window.location = `${config.URL.BASE}/search/members?q=${
+            window.location = `${window.origin}/search/members?q=${
               encodeURIComponent(event.target.value)
             }`
           }
