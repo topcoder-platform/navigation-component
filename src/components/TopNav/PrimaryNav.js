@@ -7,9 +7,6 @@ import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
 import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
 import MagnifyingGlass from '../../assets/images/magnifying_glass.svg'
 import styles from './PrimaryNav.module.scss'
-import { config } from 'topcoder-react-utils'
-
-const BASE_URL = config.URL.BASE
 
 const PrimaryNav = ({
   collapsed,
@@ -169,7 +166,7 @@ const PrimaryNav = ({
           ref={createSetRef('searchInputBox')}
           onKeyPress={(event) => {
             if (event.key === 'Enter') {
-              window.location = `${BASE_URL}/search/members?q=${
+              window.location = `${window.origin}/search/members?q=${
                 encodeURIComponent(event.target.value)
               }`
             }
