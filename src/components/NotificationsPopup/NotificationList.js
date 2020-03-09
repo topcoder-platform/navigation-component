@@ -48,7 +48,6 @@ export default class NotificationList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      completedSection: [],
       nonCompletedSection: [],
       unreadCount: 0
     }
@@ -65,8 +64,7 @@ export default class NotificationList extends React.Component {
 
   render () {
     const { onClose, onSettings, notifications, onDismiss, unReadNotifications,
-      markNotificationAsRead, markAllNotificationAsRead,
-      dismissChallengeNotifications, auth } = this.props
+      markNotificationAsRead, markAllNotificationAsRead, auth } = this.props
 
     return (
       <>
@@ -126,7 +124,7 @@ export default class NotificationList extends React.Component {
           </div>
         </div>
         <div className={styles['noti-body']}>
-          <Fragment key='nonComplete'>
+          <Fragment>
             {
               this.challenges(_.uniq((notifications || [])).filter(t => !eventTypes.PROJECT.COMPLETED.includes(t.eventType))).map((challenge, challengeIdx) =>
                 (
@@ -143,23 +141,6 @@ export default class NotificationList extends React.Component {
                         onDismiss={() => onDismiss([item])}
                       />))}
                   </Fragment>
-                ))
-            }
-          </Fragment>
-          <div className={styles['completed-header']}>Completed Challenges</div>
-          <Fragment key='completed'>
-            {
-              this.challenges(_.uniq((notifications || [])).filter(t => eventTypes.PROJECT.COMPLETED.includes(t.eventType))).map((challenge, challengeIdx) =>
-                (
-                  <div key={`noti-completed-${challengeIdx}`} className={cn([styles['challenge-title'], styles['completed-challenge']])}>
-                    <span>{challenge.challengeTitle}</span>
-                    <div className={styles['dismiss-challenge']} onClick={c => {
-                      const challegeId = challenge && challenge.items && challenge.items.length && challenge.items[0].sourceId
-                      if (challegeId) {
-                        dismissChallengeNotifications(challegeId, auth.tokenV3)
-                      }
-                    }}>&times;</div>
-                  </div>
                 ))
             }
           </Fragment>
@@ -211,6 +192,5 @@ NotificationList.propTypes = {
   onClose: PropTypes.func,
   unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
-  markAllNotificationAsRead: PropTypes.func.isRequired,
-  dismissChallengeNotifications: PropTypes.func.isRequired
+  markAllNotificationAsRead: PropTypes.func.isRequired
 }
