@@ -8,13 +8,20 @@ import BackArrow from '../../assets/images/left-arrow.svg'
 import GearIcon from '../../assets/images/icon-settings-gear.svg'
 import TickIcon from '../../assets/images/icon-checkmark.svg'
 import NotificationIcon from '../../assets/images/icon-bell.svg'
+
+// TODO: We change this later based on API event mapping
 const eventTypes = {
   PROJECT: {
-    ACTIVE: 'connect.notification.project.active',
-    COMPLETED: 'connect.notification.project.completed'
+    ACTIVE: [
+      'challenge.notification.events',
+      'submission.notification.create'
+    ],
+    BROADCAST: 'admin.notifications.broadcast',
+    COMPLETED: 'challenge.notification.completed'
   }
 }
-const Item = ({ item, onDismiss, markNotificationAsRead }) =>
+
+const Item = ({ item, auth, onDismiss, markNotificationAsRead }) =>
   <div className={styles['noti-item']}>
     <div className={styles.left}>
       <p className={styles['txt']}>{item.contents}</p>
@@ -24,12 +31,15 @@ const Item = ({ item, onDismiss, markNotificationAsRead }) =>
       {
         !item.isRead &&
         (<div className={cn([styles.point, item.isSeen && styles['point-grey'], !item.isSeen && styles['point-red']])}
-          onClick={() => { markNotificationAsRead(item) }} />)}
+          onClick={() => {
+            markNotificationAsRead(item, auth.tokenV3)
+          }} />)}
     </div>
   </div>
 
 Item.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
+  auth: PropTypes.shape().isRequired,
   onDismiss: PropTypes.func,
   markNotificationAsRead: PropTypes.func.isRequired
 }
@@ -39,45 +49,25 @@ export default class NotificationList extends React.Component {
     super(props)
     this.state = {
       completedSection: [],
-      nonCompletedSection: []
+      nonCompletedSection: [],
+      unreadCount: 0
     }
-  }
-
-  componentDidMount () {
-    const { notifications } = this.props
-    this.setState({
-      completedSection: _.uniq(
-        (notifications || [
-
-        ])).filter(t => t.isComplete)
-    })
-    this.setState({
-      nonCompletedSection: _.uniq(
-        (notifications || [
-
-        ])).filter(t => !t.isComplete)
-    })
   }
 
   challenges (list) {
     list = list || []
-    const challengeTitles = _.uniq(
-      list.map(noti => noti.sourceName).filter(x => x)
-    )
-    var group = challengeTitles.map(title =>
+    const challengeTitles = _.uniq(list.map(noti => noti.sourceName).filter(x => x))
+    return challengeTitles.map(title =>
       ({
         challengeTitle: title, items: list.filter(t => t.sourceName === title)
       }))
-
-    return group
   }
 
   render () {
-    const { onClose, onSettings, onDismiss, notifications, markNotificationAsRead,
-      markAllNotificationAsRead, dismissChallengeNotifications } = this.props
-    let completedSection = _.filter((notifications || []), t => t.eventType === eventTypes.PROJECT.COMPLETED)
-    let nonCompletedSection = _.filter((notifications || []), t => t.eventType !== eventTypes.PROJECT.COMPLETED)
-    const unreadCount = _.filter((notifications || []), t => t.isRead === false).length
+    const { onClose, onSettings, notifications, onDismiss, unReadNotifications,
+      markNotificationAsRead, markAllNotificationAsRead,
+      dismissChallengeNotifications, auth } = this.props
+
     return (
       <>
         <div className={styles['noti-header']}>
@@ -101,8 +91,10 @@ export default class NotificationList extends React.Component {
           <div className={styles.rights}>
             <span
               role='button'
-              className={cn(styles['white-link'], unreadCount <= 0 && styles['disabled'])}
-              onClick={unreadCount > 0 ? () => markAllNotificationAsRead() : null}
+              className={cn(styles['white-link'], !unReadNotifications && styles['disabled'])}
+              onClick={() => {
+                unReadNotifications && markAllNotificationAsRead(auth.tokenV3)
+              }}
             >
               Mark All as Read
             </span>
@@ -117,9 +109,11 @@ export default class NotificationList extends React.Component {
           </div>
           <div className={styles['rights-mobile']}>
             <div
-              className={cn(styles['btn-tick'], unreadCount <= 0 && styles['disabled'])}
+              className={cn(styles['btn-tick'], !unReadNotifications && styles['disabled'])}
               role='button'
-              onClick={unreadCount > 0 ? markAllNotificationAsRead : null}
+              onClick={() => {
+                unReadNotifications && markAllNotificationAsRead(auth.tokenV3)
+              }}
             >
               <TickIcon />
             </div>
@@ -134,7 +128,7 @@ export default class NotificationList extends React.Component {
         <div className={styles['noti-body']}>
           <Fragment key='nonComplete'>
             {
-              this.challenges(nonCompletedSection).map((challenge, challengeIdx) =>
+              this.challenges(_.uniq((notifications || [])).filter(t => !eventTypes.PROJECT.COMPLETED.includes(t.eventType))).map((challenge, challengeIdx) =>
                 (
                   <Fragment key={`nonComplete-${challengeIdx}`}>
                     <div key={`noti-${challengeIdx}`} className={styles['challenge-title']}>
@@ -143,6 +137,7 @@ export default class NotificationList extends React.Component {
                     {challenge.items.map((item, itemIdx) =>
                       (<Item
                         item={item}
+                        auth={auth}
                         markNotificationAsRead={markNotificationAsRead}
                         key={`noti-${challengeIdx}-${itemIdx}`}
                         onDismiss={() => onDismiss([item])}
@@ -154,14 +149,14 @@ export default class NotificationList extends React.Component {
           <div className={styles['completed-header']}>Completed Challenges</div>
           <Fragment key='completed'>
             {
-              this.challenges(completedSection).map((challenge, challengeIdx) =>
+              this.challenges(_.uniq((notifications || [])).filter(t => eventTypes.PROJECT.COMPLETED.includes(t.eventType))).map((challenge, challengeIdx) =>
                 (
                   <div key={`noti-completed-${challengeIdx}`} className={cn([styles['challenge-title'], styles['completed-challenge']])}>
                     <span>{challenge.challengeTitle}</span>
                     <div className={styles['dismiss-challenge']} onClick={c => {
                       const challegeId = challenge && challenge.items && challenge.items.length && challenge.items[0].sourceId
                       if (challegeId) {
-                        dismissChallengeNotifications(challegeId)
+                        dismissChallengeNotifications(challegeId, auth.tokenV3)
                       }
                     }}>&times;</div>
                   </div>
@@ -179,12 +174,14 @@ export default class NotificationList extends React.Component {
 
 NotificationList.defaultProps = {
   notifications: [],
+  auth: null,
   onDismiss: () => null,
   markAllNotificationAsRead: () => null,
   markNotificationAsRead: () => null
 }
 
 NotificationList.propTypes = {
+  auth: PropTypes.shape(),
   /**
    * Array of Notifications, each with properties:
    *
@@ -212,7 +209,7 @@ NotificationList.propTypes = {
   onSettings: PropTypes.func,
 
   onClose: PropTypes.func,
-
+  unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsRead: PropTypes.func.isRequired,
   dismissChallengeNotifications: PropTypes.func.isRequired

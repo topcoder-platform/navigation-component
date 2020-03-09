@@ -5,14 +5,17 @@ import styles from './styles.module.scss'
 import EmptyNotifications from './EmptyNotifications'
 import NotificationList from './NotificationList'
 
-const NotificationsPopup = ({ open, onClose, emptyTitle,
-  emptyText, notifications, markNotificationAsRead, markAllNotificationAsRead, dismissChallengeNotifications }) =>
+const NotificationsPopup = ({ open, onClose, emptyTitle, markNotificationAsRead,
+  emptyText, notifications, unReadNotifications,
+  markAllNotificationAsRead, dismissChallengeNotifications, auth }) =>
   (
     <div className={cn(styles['notifications-panel'], open && styles.open)}>
       <div className={styles.backdrop} onClick={onClose} />
       {notifications && notifications.length > 0 ? (
         <NotificationList notifications={notifications}
           markNotificationAsRead={markNotificationAsRead}
+          auth={auth}
+          unReadNotifications={unReadNotifications}
           markAllNotificationAsRead={markAllNotificationAsRead}
           dismissChallengeNotifications={dismissChallengeNotifications}
           onClose={onClose} />
@@ -35,6 +38,7 @@ NotificationsPopup.propTypes = {
   onClose: PropTypes.func,
   emptyTitle: PropTypes.node,
   emptyText: PropTypes.node,
+  auth: PropTypes.shape(),
 
   /**
    * Array of Notifications, each with properties:
@@ -45,6 +49,7 @@ NotificationsPopup.propTypes = {
    *   - timestamp {number}
   */
   notifications: PropTypes.array,
+  unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsRead: PropTypes.func.isRequired,
   dismissChallengeNotifications: PropTypes.func.isRequired

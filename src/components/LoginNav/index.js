@@ -10,7 +10,6 @@ import _ from 'lodash'
 
 const LoginNav = ({
   loggedIn,
-  notificationButtonState,
   notifications,
   accountMenu,
   switchText,
@@ -19,6 +18,7 @@ const LoginNav = ({
   showNotification,
   profile,
   authURLs,
+  auth,
   markNotificationAsRead,
   markAllNotificationAsRead,
   markAllNotificationAsSeen,
@@ -40,6 +40,14 @@ const LoginNav = ({
     setOpenAccountMenu(x => !x)
   }
 
+  // process seenNotifications
+  const seenNotifications = _.filter((notifications || []), t => !t.isSeen && !t.isRead)
+    .map(opt => opt.id)
+    .join('-')
+
+  // process unReadNotifications
+  const unReadNotifications = _.filter((notifications || []), t => t.isRead === false).length > 0
+
   const renderLoginPanel = () => {
     if (showNotification) {
       return ([
@@ -51,7 +59,7 @@ const LoginNav = ({
         />,
         <UserInfo
           profile={profile}
-          newNotifications={(notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) && 'new'}
+          newNotifications={!!seenNotifications}
           onClick={handleClickUserInfo}
           open={openAccountMenu}
           key='user-info'
@@ -62,7 +70,7 @@ const LoginNav = ({
     return (
       <UserInfo
         profile={profile}
-        newNotifications={(notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) && 'new'}
+        newNotifications={!!seenNotifications}
         onClick={handleClickUserInfo}
         open={openAccountMenu}
         key='user-info'
@@ -88,9 +96,12 @@ const LoginNav = ({
         open={openNotifications}
         notifications={notifications}
         onClose={() => {
+          seenNotifications &&
+            markAllNotificationAsSeen(seenNotifications, auth.tokenV3)
           setOpenNotifications(false)
-          markAllNotificationAsSeen()
         }}
+        auth={auth}
+        unReadNotifications={unReadNotifications}
         markNotificationAsRead={markNotificationAsRead}
         markAllNotificationAsRead={markAllNotificationAsRead}
         dismissChallengeNotifications={dismissChallengeNotifications}
@@ -100,7 +111,7 @@ const LoginNav = ({
         open={openAccountMenu}
         menu={accountMenu}
         switchText={switchText}
-        numNotifications={_.filter((notifications || []), n => n.isSeen === false).length}
+        numNotifications={_.filter((notifications || []), n => !n.isSeen && !n.isRead).length}
         onClickNotifications={handleClickNotifications}
         onSwitch={onSwitch}
         onClose={() => {
@@ -114,13 +125,13 @@ const LoginNav = ({
 
 LoginNav.propTypes = {
   loggedIn: PropTypes.bool,
-  notificationButtonState: PropTypes.string,
   notifications: PropTypes.array,
   accountMenu: PropTypes.array,
   onSwitch: PropTypes.func,
   onMenuOpen: PropTypes.func,
   showNotification: PropTypes.bool,
   profile: PropTypes.shape(),
+  auth: PropTypes.shape(),
   switchText: PropTypes.shape(),
   authURLs: PropTypes.shape(),
   markNotificationAsRead: PropTypes.func.isRequired,
