@@ -99,7 +99,7 @@ export default class NotificationList extends React.Component {
   isLink (item) {
     const ret = (eventTypes.PROJECT.ACTIVE.includes(item.eventType) ||
       eventTypes.PROJECT.COMPLETED.includes(item.eventType)) &&
-      item.sourceId
+      item.sourceId > 0
     return ret
   }
 
