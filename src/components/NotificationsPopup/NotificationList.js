@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
 import moment from 'moment'
+import { Link } from 'topcoder-react-utils'
 import styles from './styles.module.scss'
 import BackArrow from '../../assets/images/left-arrow.svg'
 import GearIcon from '../../assets/images/icon-settings-gear.svg'
@@ -21,27 +22,60 @@ const eventTypes = {
   }
 }
 
-const Item = ({ item, auth, onDismiss, markNotificationAsRead }) =>
-  <div className={styles['noti-item']}>
-    <div className={styles.left}>
-      <p className={styles['txt']}>{item.contents}</p>
-      <span className={styles['time-txt']}>{moment(item.date).fromNow()}</span>
-    </div>
-    <div className={styles.right}>
-      {
-        !item.isRead &&
-        (<div className={cn([styles.point, item.isSeen && styles['point-grey'], !item.isSeen && styles['point-red']])}
-          onClick={() => {
-            markNotificationAsRead(item, auth.tokenV3)
-          }} />)}
-    </div>
-  </div>
+// Dynamic element, to select between Link and Div
+const ConditionalWrapper = ({
+  condition, renderLink, renderDiv, children
+}) => (
+  condition ? renderLink(children) : renderDiv(children)
+)
+
+const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
+  <ConditionalWrapper
+    condition={
+      (eventTypes.PROJECT.ACTIVE.includes(item.eventType) ||
+      eventTypes.PROJECT.COMPLETED.includes(item.eventType)) &&
+      item.sourceId
+    }
+    renderLink={children => (
+      <Link
+        to={`/challenges/${item.sourceId}`}
+        className={styles['noti-item']}
+        onClick={() => !item.isRead && markNotificationAsRead(item, auth.tokenV3)}
+      >
+        {children}
+      </Link>
+    )}
+    renderDiv={children => (
+      <div className={styles['noti-item']}>
+        {children}
+      </div>
+    )}
+  >
+    <Fragment>
+      <div className={styles.left}>
+        <p className={styles['txt']}>{item.contents}</p>
+        <span className={styles['time-txt']}>{moment(item.date).fromNow()}</span>
+      </div>
+      <div className={styles.right}>
+        {
+          !item.isRead &&
+          (<div className={cn([styles.point, item.isSeen && styles['point-grey'], !item.isSeen && styles['point-red']])}
+            onClick={() => {
+              if (!isLink) {
+                markNotificationAsRead(item, auth.tokenV3)
+              }
+            }}
+          />)}
+      </div>
+    </Fragment>
+  </ConditionalWrapper>
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
   auth: PropTypes.shape().isRequired,
   onDismiss: PropTypes.func,
-  markNotificationAsRead: PropTypes.func.isRequired
+  markNotificationAsRead: PropTypes.func.isRequired,
+  isLink: PropTypes.bool.isRequired
 }
 
 export default class NotificationList extends React.Component {
@@ -60,6 +94,13 @@ export default class NotificationList extends React.Component {
       ({
         challengeTitle: title, items: list.filter(t => t.sourceName === title)
       }))
+  }
+
+  isLink (item) {
+    const ret = (eventTypes.PROJECT.ACTIVE.includes(item.eventType) ||
+      eventTypes.PROJECT.COMPLETED.includes(item.eventType)) &&
+      item.sourceId
+    return ret
   }
 
   render () {
@@ -139,6 +180,7 @@ export default class NotificationList extends React.Component {
                         markNotificationAsRead={markNotificationAsRead}
                         key={`noti-${challengeIdx}-${itemIdx}`}
                         onDismiss={() => onDismiss([item])}
+                        isLink={this.isLink(item)}
                       />))}
                   </Fragment>
                 ))
@@ -146,7 +188,7 @@ export default class NotificationList extends React.Component {
           </Fragment>
         </div>
         <div className={styles['view-all-notifications']}>
-          <a href='/notifications'>View all Notifications</a>
+          <Link to='/notifications'>View all Notifications</Link>
         </div>
       </>
     )
