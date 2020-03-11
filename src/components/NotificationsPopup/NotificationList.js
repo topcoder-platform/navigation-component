@@ -15,11 +15,11 @@ const eventTypes = {
   PROJECT: {
     ACTIVE: [
       'challenge.notification.events',
-      'submission.notification.create'
+      'notifications.autopilot.events'
     ],
-    BROADCAST: 'admin.notifications.broadcast',
     COMPLETED: 'challenge.notification.completed'
-  }
+  },
+  BROADCAST: 'admin.notification.broadcast'
 }
 
 // Dynamic element, to select between Link and Div
@@ -167,7 +167,12 @@ export default class NotificationList extends React.Component {
         <div className={styles['noti-body']}>
           <Fragment>
             {
-              this.challenges(_.uniq((notifications || [])).filter(t => !eventTypes.PROJECT.COMPLETED.includes(t.eventType))).map((challenge, challengeIdx) =>
+              this.challenges(
+                _.uniq((notifications || [])).filter(t =>
+                  eventTypes.PROJECT.ACTIVE.includes(t.eventType) ||
+                  eventTypes.BROADCAST.includes(t.eventType)
+                )
+              ).map((challenge, challengeIdx) =>
                 (
                   <Fragment key={`nonComplete-${challengeIdx}`}>
                     <div key={`noti-${challengeIdx}`} className={styles['challenge-title']}>
