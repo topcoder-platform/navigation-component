@@ -60,10 +60,11 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
         {
           !item.isRead &&
           (<div className={cn([styles.point, item.isSeen && styles['point-grey'], !item.isSeen && styles['point-red']])}
-            onClick={() => {
-              if (!isLink) {
-                markNotificationAsRead(item, auth.tokenV3)
-              }
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              e.nativeEvent.stopImmediatePropagation()
+              markNotificationAsRead(item, auth.tokenV3)
             }}
           />)}
       </div>
