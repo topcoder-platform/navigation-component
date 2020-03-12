@@ -7,7 +7,7 @@ import styles from './styles.module.scss'
 import _ from 'lodash'
 
 const getNotificationButtonState = (notifications) => {
-  if (notifications && _.countBy(notifications || [], n => !n.isSeen).true > 0) {
+  if (notifications && _.countBy(notifications || [], n => !n.isSeen && !n.isRead).true > 0) {
     return 'new'
   }
   if (notifications.length === 0) {

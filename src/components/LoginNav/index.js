@@ -46,7 +46,7 @@ const LoginNav = ({
     .join('-')
 
   // process unReadNotifications
-  const unReadNotifications = _.filter((notifications || []), t => t.isRead === false).length > 0
+  const unReadNotifications = _.filter((notifications || []), t => !t.isRead).length > 0
 
   const renderLoginPanel = () => {
     if (showNotification) {
