@@ -138,6 +138,9 @@ export default class NotificationList extends React.Component {
             >
               Mark All as Read
             </span>
+            {/*
+              * Disabled until Settings page is ready
+              *
             &nbsp;<span className={styles.point} />&nbsp;
             <span
               role='button'
@@ -146,6 +149,7 @@ export default class NotificationList extends React.Component {
             >
               Settings
             </span>
+            */}
           </div>
           <div className={styles['rights-mobile']}>
             <div
