@@ -150,7 +150,7 @@
         margin: 15px auto 25px auto;
       }
       a {
-        color: #0D61BF;
+        color: $blue-link;
         text-decoration: underline;
         cursor: pointer;
       }
@@ -383,7 +383,7 @@
     height: 42px;
     a {
       margin: auto;
-      color: #0D61BF;
+      color: $blue-link;
       font-size: 14px;
       @include Roboto-Regular;
       line-height: 22px;
