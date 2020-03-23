@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
+import { Link } from 'topcoder-react-utils'
 import styles from './styles.module.scss'
 import NotificationIcon from '../../assets/images/icon-bell.svg'
 import BackArrow from '../../assets/images/left-arrow.svg'
@@ -31,7 +32,7 @@ const EmptyNotifications = ({ onClose, emptyTitle, emptyText }) => (
       <div className={styles['empty-title']}>{emptyTitle}</div>
       <div className={cn(styles.txt, styles['center-txt'])}>{emptyText}</div>
       <span className={cn(styles['btn-empty-noti'])} role='button'>
-        Notification Settings
+        <Link to='/settings/preferences'>Notification Settings</Link>
       </span>
     </div>
   </>
