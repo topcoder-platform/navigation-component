@@ -105,7 +105,7 @@ export default class NotificationList extends React.Component {
   }
 
   render () {
-    const { onClose, onSettings, notifications, onDismiss, unReadNotifications,
+    const { onClose, notifications, onDismiss, unReadNotifications,
       markNotificationAsRead, markAllNotificationAsRead, auth } = this.props
 
     return (
@@ -142,9 +142,8 @@ export default class NotificationList extends React.Component {
             <span
               role='button'
               className={styles['white-link']}
-              onClick={onSettings}
             >
-              Settings
+              <Link to='/settings/preferences'>Settings</Link>
             </span>
           </div>
           <div className={styles['rights-mobile']}>
@@ -233,10 +232,6 @@ NotificationList.propTypes = {
    * @param items {array} Items to be dismissed
    */
   onDismiss: PropTypes.func,
-
-  /** Called on Settings button click */
-  onSettings: PropTypes.func,
-
   onClose: PropTypes.func,
   unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
