@@ -30,9 +30,13 @@ const EmptyNotifications = ({ onClose, emptyTitle, emptyText }) => (
       <NotificationIconBig className={styles['big-icon-bell']} />
       <div className={styles['empty-title']}>{emptyTitle}</div>
       <div className={cn(styles.txt, styles['center-txt'])}>{emptyText}</div>
+      {/*
+        * Disabled until Settings page is ready
+        *
       <span className={cn(styles['btn-empty-noti'])} role='button'>
-        Notification Settings
+        Check Your Notifications Settings
       </span>
+      */}
     </div>
   </>
 )

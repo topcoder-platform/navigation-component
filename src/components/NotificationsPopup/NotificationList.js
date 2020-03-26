@@ -6,7 +6,7 @@ import moment from 'moment'
 import { Link } from 'topcoder-react-utils'
 import styles from './styles.module.scss'
 import BackArrow from '../../assets/images/left-arrow.svg'
-import GearIcon from '../../assets/images/icon-settings-gear.svg'
+// import GearIcon from '../../assets/images/icon-settings-gear.svg'
 import TickIcon from '../../assets/images/icon-checkmark.svg'
 import NotificationIcon from '../../assets/images/icon-bell.svg'
 
@@ -166,12 +166,16 @@ export default class NotificationList extends React.Component {
             >
               <TickIcon />
             </div>
+            {/*
+              * Disabled until Settings page is ready
+              *
             <div
               role='button'
               className={styles['btn-setting']}
             >
               <GearIcon />
             </div>
+            */}
           </div>
         </div>
         <div className={styles['noti-body']}>
