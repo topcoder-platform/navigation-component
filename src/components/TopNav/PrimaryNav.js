@@ -4,11 +4,9 @@ import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
 import ChosenArrow from '../ChosenArrow'
 import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
+import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
 import MagnifyingGlass from '../../assets/images/magnifying_glass.svg'
 import styles from './PrimaryNav.module.scss'
-import { config } from 'topcoder-react-utils'
-
-const BASE_URL = config.URL.BASE
 
 const PrimaryNav = ({
   collapsed,
@@ -30,6 +28,8 @@ const PrimaryNav = ({
   createHandleClickMoreItem,
   createSetRef,
   showChosenArrow,
+  showLevel3,
+  forceHideLevel3,
   chosenArrowX,
   searchOpened,
   toggleSearchOpen
@@ -44,7 +44,7 @@ const PrimaryNav = ({
         <div className={styles.primaryNav} ref={createSetRef('primaryNav')}>
           <a
             className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
-            onClick={onClickLogo}
+            onClick={(e) => onClickLogo(e)}
             href='/'
           >
             {logo}
@@ -53,7 +53,7 @@ const PrimaryNav = ({
             <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
             /* Level 1 menu item */
             <a
-              className={cn(styles.primaryLevel1, !activeLevel2Id && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
+              className={cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
               href={level1.href}
               key={`level1-${i}`}
               onClick={createHandleClickLevel1(level1.id, true)}
@@ -68,17 +68,21 @@ const PrimaryNav = ({
                 key={`level2-${i}-container`}
                 ref={createSetRef(`level2Container${i}`)}
               >
-                {level1.subMenu.filter(filterNotInMore).map((level2, i) => (
-                  <a
-                    className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
-                    href={level2.href}
-                    key={`level2-${i}`}
-                    onClick={createHandleClickLevel2(level2.id, true)}
-                    ref={createSetRef(level2.id)}
-                  >
-                    {level2.title}
-                  </a>
-                ))}
+                {level1.subMenu.filter(filterNotInMore).map((level2, i) => {
+                  if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
+                    return (
+                      <a
+                        className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
+                        href={level2.href}
+                        key={`level2-${i}`}
+                        onClick={level2.subMenu && level2.subMenu.length > 0 ? createHandleClickLevel2(level2.id, true) : null}
+                        ref={createSetRef(level2.id)}
+                      >
+                        {level2.title}
+                      </a>
+                    )
+                  }
+                })}
                 {/* The More menu */}
                 {level1.id === activeLevel1Id && moreMenu && moreMenu.length > 0 && (
                   <div className={cn(styles.moreBtnContainer, openMore && styles.moreOpen)}>
@@ -90,7 +94,8 @@ const PrimaryNav = ({
                     >
                       <div className={styles.moreBtnMask} />
                       <span>More</span>
-                      <IconArrowSmalldown />
+                      {openMore && <IconArrowSmallup />}
+                      {!openMore && <IconArrowSmalldown />}
                     </button>
                     <div className={styles.moreContentContainer}>
                       {moreMenu.map((menu, i) => (
@@ -109,7 +114,7 @@ const PrimaryNav = ({
               </div>
             )
           ]))}
-          <ChosenArrow show={showChosenArrow} x={chosenArrowX} />
+          <ChosenArrow show={showChosenArrow && (showLevel3 && !forceHideLevel3)} x={chosenArrowX} />
         </div>
         <div className={styles.primaryNavRight}>
           <ResizeDetector
@@ -117,7 +122,7 @@ const PrimaryNav = ({
             onResize={onRightMenuResize}
           />
           {rightMenu && (
-            <div className={styles.primaryLevel1}>
+            <div className={cn(styles.primaryLevel1, styles.rightMenuPrimaryLevel1)}>
               {rightMenu}
             </div>
           )}
@@ -161,7 +166,7 @@ const PrimaryNav = ({
           ref={createSetRef('searchInputBox')}
           onKeyPress={(event) => {
             if (event.key === 'Enter') {
-              window.location = `${BASE_URL}/search/members?q=${
+              window.location = `${window.origin}/search/members?q=${
                 encodeURIComponent(event.target.value)
               }`
             }
@@ -195,6 +200,8 @@ PrimaryNav.propTypes = {
   createHandleClickMoreItem: PropTypes.func,
   createSetRef: PropTypes.func,
   showChosenArrow: PropTypes.bool,
+  showLevel3: PropTypes.bool,
+  forceHideLevel3: PropTypes.bool,
   chosenArrowX: PropTypes.number,
   searchOpened: PropTypes.bool,
   toggleSearchOpen: PropTypes.func

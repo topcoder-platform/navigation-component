@@ -4,9 +4,8 @@ import styles from './MobileNav.module.scss'
 import IconClose from '../../assets/images/icon-close.svg'
 import IconMenu from '../../assets/images/icon-menu.svg'
 import IconMagnifyingGlass from '../../assets/images/magnifying_glass.svg'
-import { config } from 'topcoder-react-utils'
 
-const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (<div>
+const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, onClickLogo, rightMenu }) => (<div>
   <div className={styles.mobileNav}>
     <div className={styles.leftMenuContainer}>
       <button className={styles.menuBtn} onClick={onClickLeftMenu}>
@@ -17,7 +16,9 @@ const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (<div>
         )}
       </button>
     </div>
-    <a href='/'>
+    <a
+      onClick={(e) => onClickLogo(e)}
+      href='/'>
       {logo}
     </a>
     {rightMenu && (
@@ -32,7 +33,7 @@ const MobileNav = ({ showLeftMenu, onClickLeftMenu, logo, rightMenu }) => (<div>
       <input
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
-            window.location = `${config.URL.BASE}/search/members?q=${
+            window.location = `${window.origin}/search/members?q=${
               encodeURIComponent(event.target.value)
             }`
           }
@@ -49,6 +50,7 @@ MobileNav.propTypes = {
   showLeftMenu: PropTypes.bool,
   onClickLeftMenu: PropTypes.func,
   logo: PropTypes.node,
+  onClickLogo: PropTypes.func,
   rightMenu: PropTypes.node
 }
 
