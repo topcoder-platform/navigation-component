@@ -1,11 +1,14 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { Link } from 'topcoder-react-utils'
 import IconAvatar from '../../assets/images/ico-user-default.svg'
 import IconCloseDark from '../../assets/images/icon-close-dark.svg'
 import IconSwitchBusiness from '../../assets/images/icon-switch-business.svg'
+import IconNotificationsRed from '../../assets/images/icon-bell-red.svg'
+import IconNotificationsGrey from '../../assets/images/icon-bell-grey.svg'
+import IconRightArrow from '../../assets/images/right-arrow.svg'
 import styles from './styles.module.scss'
 import moment from 'moment'
 
@@ -43,7 +46,7 @@ class AccountMenu extends React.Component {
 
   render () {
     const {
-      onClose, open, menu, switchText, onSwitch, profile, domRef
+      onClose, open, menu, switchText, onSwitch, profile, domRef, numNotifications, onClickNotifications
     } = this.props
 
     return (
@@ -90,6 +93,34 @@ class AccountMenu extends React.Component {
             </div>
           )
         }
+        {
+          !_.isEmpty(profile) && (
+            <Fragment>
+              <div
+                role='button'
+                className={styles['notifications-mobile']}
+                onClick={onClickNotifications}
+              >
+                <div className={styles['noti-left']}>
+                  {numNotifications > 0
+                    ? <IconNotificationsRed className={styles['bell-icon']} />
+                    : <IconNotificationsGrey className={styles['bell-icon']} />
+                  }
+                  <div>
+                    <span className={styles['notifications-title']}>Notifications</span>
+                    {numNotifications > 0 &&
+                      <span className={styles['red-number']}>{'(' + numNotifications + ')'}</span>
+                    }
+                  </div>
+                </div>
+                <span role='button' className={styles['icon-open-noti']}>
+                  <IconRightArrow />
+                </span>
+              </div>
+              <span className={styles['noti-separator']} />
+            </Fragment>
+          )
+        }
 
         <div className={styles.menu}>
 
@@ -100,13 +131,13 @@ class AccountMenu extends React.Component {
           ))}
 
         </div>
-      </div>
+      </div >
     )
   }
 }
 
 AccountMenu.defaultProps = {
-  numNotifications: 35
+  numNotifications: 0
 }
 
 AccountMenu.propTypes = {
@@ -116,7 +147,9 @@ AccountMenu.propTypes = {
   switchText: PropTypes.shape(),
   onSwitch: PropTypes.func,
   profile: PropTypes.shape(),
-  domRef: PropTypes.shape()
+  domRef: PropTypes.shape(),
+  numNotifications: PropTypes.number,
+  onClickNotifications: PropTypes.func.isRequired
 }
 
 export default AccountMenu

@@ -6,10 +6,10 @@ import NotificationButton from '../NotificationButton'
 import NotificationsPopup from '../NotificationsPopup'
 import UserInfo from '../UserInfo'
 import AccountMenu from '../AccountMenu'
+import _ from 'lodash'
 
 const LoginNav = ({
   loggedIn,
-  notificationButtonState,
   notifications,
   accountMenu,
   switchText,
@@ -17,7 +17,12 @@ const LoginNav = ({
   onMenuOpen,
   showNotification,
   profile,
-  authURLs
+  authURLs,
+  auth,
+  markNotificationAsRead,
+  markAllNotificationAsRead,
+  markAllNotificationAsSeen,
+  dismissChallengeNotifications
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
@@ -66,19 +71,26 @@ const LoginNav = ({
     setOpenAccountMenu(x => !x)
   }
 
+  // process seenNotifications
+  const seenNotifications = _.filter((notifications || []), t => !t.isSeen && !t.isRead)
+    .map(opt => opt.id)
+    .join('-')
+
+  // process unReadNotifications
+  const unReadNotifications = _.filter((notifications || []), t => !t.isRead).length > 0
+
   const renderLoginPanel = () => {
     if (showNotification) {
       return ([
         <NotificationButton
-          className={styles.notificationButton}
-          state={notificationButtonState}
+          notifications={notifications || []}
           notificationsPopupOpen={openNotifications}
           onClick={handleClickNotifications}
           key='notification-button'
         />,
         <UserInfo
           profile={profile}
-          newNotifications={notificationButtonState === 'new'}
+          newNotifications={!!seenNotifications}
           onClick={handleClickUserInfo}
           open={openAccountMenu}
           key='user-info'
@@ -90,7 +102,7 @@ const LoginNav = ({
     return (
       <UserInfo
         profile={profile}
-        newNotifications={notificationButtonState === 'new'}
+        newNotifications={!!seenNotifications}
         onClick={handleClickUserInfo}
         open={openAccountMenu}
         key='user-info'
@@ -117,14 +129,23 @@ const LoginNav = ({
       <NotificationsPopup
         open={openNotifications}
         notifications={notifications}
-        onClose={() => setOpenNotifications(false)}
+        onClose={() => {
+          seenNotifications &&
+            markAllNotificationAsSeen(seenNotifications, auth.tokenV3)
+          setOpenNotifications(false)
+        }}
+        auth={auth}
+        unReadNotifications={unReadNotifications}
+        markNotificationAsRead={markNotificationAsRead}
+        markAllNotificationAsRead={markAllNotificationAsRead}
+        dismissChallengeNotifications={dismissChallengeNotifications}
       />
       <AccountMenu
         profile={profile}
         open={openAccountMenu}
         menu={accountMenu}
         switchText={switchText}
-        numNotifications={(notifications || []).length}
+        numNotifications={_.filter((notifications || []), n => !n.isSeen && !n.isRead).length}
         onClickNotifications={handleClickNotifications}
         onSwitch={onSwitch}
         onClose={() => {
@@ -139,15 +160,19 @@ const LoginNav = ({
 
 LoginNav.propTypes = {
   loggedIn: PropTypes.bool,
-  notificationButtonState: PropTypes.string,
   notifications: PropTypes.array,
   accountMenu: PropTypes.array,
   onSwitch: PropTypes.func,
   onMenuOpen: PropTypes.func,
   showNotification: PropTypes.bool,
   profile: PropTypes.shape(),
+  auth: PropTypes.shape(),
   switchText: PropTypes.shape(),
-  authURLs: PropTypes.shape()
+  authURLs: PropTypes.shape(),
+  markNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsRead: PropTypes.func.isRequired,
+  markAllNotificationAsSeen: PropTypes.func.isRequired,
+  dismissChallengeNotifications: PropTypes.func.isRequired
 }
 
 export default LoginNav

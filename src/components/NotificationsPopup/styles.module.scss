@@ -16,7 +16,7 @@
   z-index: 100;
   cursor: default;
 
-  [role="button"] {
+  [role="button"]:not(.disabled) {
     cursor: pointer;
   }
 
@@ -29,27 +29,56 @@
   .noti-header {
     background-color: $turquoise-dark;
     border-radius: 10px 10px 0 0;
-    padding: 10px 20px 10px;
-    height: 30px;
+    padding: 17px 20px;
+    height: 50px;
     position: sticky;
     top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .notification-back-btn {
+
+    .lefts {
+      display: flex;
+
+      .notification-icon {
+        @include hide-mobile;
+      }
+
+      .notification-left-btn-mobile {
+        @include mobile-only;
+      }
+
+      .noti-title {
+        background-size: 16px;
+        color: $white;
+        font-size: 16px;
+        @include Roboto-Bold;
+        text-align: left;
+        padding-left: 10px;
+        @include hide-mobile;
+      }
+    }
+    
+    .noti-title-mobileonly {
+      flex-basis: 50%;
+      background-size: 20px;
+      color: $white;
+      font-size: 20px;
+      @include Roboto-Regular;
+      text-align: center;
       @include mobile-only;
     }
-    .left-noti {
-      background: url(#{$img-path}/icon-bell.svg) left center no-repeat;
-      background-size: 16px;
-      padding-left: 26px;
+    .noti-empty-title-mobileonly {
+      flex-basis: 50%;
+      margin-right: 60px;
+      background-size: 20px;
       color: $white;
-      font-size: 16px;
-      @include Roboto-Bold;
+      font-size: 20px;
+      @include Roboto-Regular;
       text-align: left;
+      @include mobile-only;
     }
     .rights {
-      @include hide-mobile;
 
       .white-link {
         color: $white;
@@ -60,6 +89,9 @@
         text-align: right;
         &:hover {
           opacity: 0.75;
+        }
+        &.disabled {
+          opacity: 0.50;
         }
       }
 
@@ -72,16 +104,25 @@
         vertical-align: middle;
       }
     }
-
-    .btn-setting {
-      @include mobile-only;
+    .rights-mobile {
+      display: none;
     }
   }
   .noti-body {
-    max-height: 378px;
+    max-height: 800px;
     overflow: scroll;
+    scrollbar-width: 7px;
+    scrollbar-color: $gray-90;
+
+    &.noti-body-empty {
+      padding-bottom: 50px;
+     }
+    
     &.center {
       text-align: center;
+    }
+    .big-icon-bell {
+      margin: 50px auto;
     }
     .icon-bell {
       background: url(#{$img-path}/bell-big.svg)center center no-repeat;
@@ -90,26 +131,28 @@
       height: 80px;
       margin: 50px 0 10px;
     }
-    .titles {
+    .empty-title {
       color: $gray-90;
-      font-size: 30px;
-      @include Barlow-Condensed-SemiBold;
-      line-height: 40px;
-      margin: 23px 0 -8px 0;
+      font-size: 24px;
+      font-family: Barlow;
+      line-height: 26px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
     .txt {
       margin: 0;
       color: $gray-90;
       font-size: 14px;
       @include Roboto-Regular;
-      line-height: 20px;
+      line-height: 22px;
       &.center-txt {
         text-align: center;
-        padding: 19px 60px 12px 60px;
+        margin: 15px auto 25px auto;
       }
-      .blue-link {
-        color: $blue;
-        font-size: 14px;
+      a {
+        color: $blue-link;
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
     .light-bar {
@@ -124,10 +167,20 @@
       position: sticky;
       position: -webkit-sticky;
       top: 0;
-      z-index: 2;
       padding-right: 20px;
       padding-top: 2px;
     }
+    .challenge-title {
+      background-color: $gray-04;
+      color: $gray-90;
+      font-size: 14px;
+      @include Roboto-Bold;
+      font-weight: 500;
+      line-height: 22px;
+      padding-left: 20px;
+      margin-top: -2px;
+      padding: 5px 20px;
+    }    
     .greybar-section {
       &:last-child {
         .items {
@@ -143,6 +196,7 @@
       background-color: $white;
       padding-top: 5px;
     }
+
     .right-remove {
       position: absolute;
       right: 1px;
@@ -194,6 +248,50 @@
         }
       }
     }
+    .noti-item {
+      background-color: $white;
+      padding: 5px 20px;
+      display: flex;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        flex-direction: column;
+        padding-left: 30px;
+        .txt {
+          margin: 0;
+          color: $gray-90;
+          font-size: 14px;
+          @include Roboto-Regular;
+          line-height: 22px;
+        }
+        .time-txt { 
+          display: inline-block;
+          vertical-align: middle;
+          color: $gray-03;
+          font-size: 12px;
+          @include Roboto-Regular;
+          line-height: 20px;
+        }
+      }
+      .right {
+        .point {
+          width: 10px;
+          height: 10px;
+          background-color: $white;
+          border-radius: 100%;
+          display: inline-block;
+          vertical-align: middle;
+          cursor: pointer;
+        }
+        .point-red {
+          background-color: $red;
+        }
+        .point-grey {
+          background-color: $gray-10;
+        }
+      }
+    }
+
     .items {
       padding: 0 30px;
       &:hover {
@@ -271,9 +369,31 @@
       }
     }
   }
+  .view-all-notifications {
+    display: grid;
+    background-color: $gray-04;
+    page-break-after: auto;
+    position: relative;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+    height: 42px;
+    a {
+      margin: auto;
+      color: $blue-link;
+      font-size: 14px;
+      @include Roboto-Regular;
+      line-height: 22px;
+      text-decoration: underline;
+      padding: 0 ;
+    }
+  }
   .noti-footer {
     text-align: center;
-    padding: 15px 0 45px 0;
+    margin: 0 auto 50px auto;
   }
   .end-message {
     background-color: $gray-neutral-light;
@@ -298,8 +418,31 @@
 
   .noti-body {
     flex: 1;
-    max-height: none;
+    max-height: calc(100% - 82px);
+    &.noti-body-empty {
+      padding-bottom: 50px;
+      max-height: calc(100% - 40px);
+     }
+    .btn-empty-noti {
+      text-transform: uppercase;
+      background-color: $white;
+      border: 1px solid $turquoise-super-dark;
+      border-radius: 15px;
+      width: 187px;
+      height: 30px;
+      color: $green-dark;
+      @include Roboto-Bold;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      line-height: 30px;
+      text-align: left;
+      padding: 9px;
+    }
   }
+
+  
+    flex: 1;
+    
 }
 
 @include mobile {
@@ -309,6 +452,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    max-height: none;
     z-index: 100;
 
     width: 100%;
@@ -326,20 +470,30 @@
     }
 
     .noti-header {
-      height: 40px;
+      height: 60px;
       border-radius: 0;
-      padding-left: 10px;
-      padding-right: 10px;
-      .notification-back-btn {
-        width: 50px;
-        height: 50px;
-        background: url(#{$img-path}/left-arrow.svg) center center no-repeat;
-        margin-left: -8px;
+      align-items: inherit;
+      .lefts {
+        align-content: stretch;
+        flex: 1;
+      }
+      .rights {
+        display: none;
+      }
+      .rights-mobile {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+      }
+      .btn-tick {
+        margin: auto 0px;
+        // margin-right: 20px;
+        &.disabled {
+          opacity: 0.50;
+        }
       }
       .btn-setting {
-        width: 50px;
-        height: 50px;
-        background: url(#{$img-path}/icon-settings-gear.svg) center center no-repeat;
+        margin: auto 0px;
       }
       .left-noti {
         margin-left: 0;
@@ -348,11 +502,16 @@
       }
     }
     .noti-body {
+      max-height: calc(100%-102px);
       &.center {
         .txt {
           padding: 19px 20px 12px 21px;
         }
       }
+      &.noti-body-empty {
+        padding-bottom: 50px;
+        max-height: calc(100%-60px);
+       }
       .items {
         padding: 0 10px 0 20px;
         .item-content {
@@ -361,6 +520,7 @@
           }
         }
       }
+
       .right-remove {
         right: 5px;
         .black-txt {
