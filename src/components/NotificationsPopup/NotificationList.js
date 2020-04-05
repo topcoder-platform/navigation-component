@@ -44,9 +44,9 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
         onClick={() => {
           if (!item.isRead) {
             markNotificationAsRead(item, auth.tokenV3)
-            tracking.event('Click', 'Mark Notification As Read', 'Popup')
+            tracking.event('Click', 'Mark Notification As Read', 'Dropdown')
           }
-          tracking.event('Click', 'Notification Item', 'Details Page')
+          tracking.event('Click', 'Notification Event', item.sourceId)
         }}
       >
         {children}
@@ -77,7 +77,7 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
               e.stopPropagation()
               e.nativeEvent.stopImmediatePropagation()
               markNotificationAsRead(item, auth.tokenV3)
-              tracking.event('Click', 'Mark Notification As Read', 'Popup')
+              tracking.event('Click', 'Mark Notification As Read', 'Dropdown')
             }}
           />)}
       </div>
@@ -148,7 +148,7 @@ export default class NotificationList extends React.Component {
               onClick={() => {
                 if (unReadNotifications) {
                   markAllNotificationAsRead(auth.tokenV3)
-                  tracking.event('Click', 'Mark All Notifications As Read', 'Popup')
+                  tracking.event('Click', 'Mark All Notifications As Read', 'Dropdown')
                 }
               }}
             >
@@ -174,7 +174,7 @@ export default class NotificationList extends React.Component {
               onClick={() => {
                 if (unReadNotifications) {
                   markAllNotificationAsRead(auth.tokenV3)
-                  tracking.event('Click', 'Mark All Notifications As Read', 'Popup')
+                  tracking.event('Click', 'Mark All Notifications As Read', 'Dropdown')
                 }
               }}
             >
@@ -223,7 +223,7 @@ export default class NotificationList extends React.Component {
         <div className={styles['view-all-notifications']}>
           <Link
             to='/notifications'
-            onClick={() => tracking.event('Click', 'View All Notifications', 'Popup')}
+            onClick={() => tracking.event('Click', 'View All Notifications', 'Dropdown')}
           >View all Notifications</Link>
         </div>
       </>
