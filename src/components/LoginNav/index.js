@@ -88,7 +88,7 @@ const LoginNav = ({
           notificationsPopupOpen={openNotifications}
           onClick={() => {
             handleClickNotifications()
-            tracking.event('Click', 'Open Notifications Popup', window.location.pathname)
+            tracking.event('Click', 'Open Notifications Dropdown', window.location.pathname)
           }}
           key='notification-button'
         />,
@@ -136,7 +136,7 @@ const LoginNav = ({
         onClose={() => {
           if (seenNotifications) {
             markAllNotificationAsSeen(seenNotifications, auth.tokenV3)
-            tracking.event('Auto Action', 'Mark All Notifications As Seen', 'Popup Closed')
+            tracking.event('Auto Action', 'Mark All Notifications As Seen', 'Dropdown Closed')
           }
           setOpenNotifications(false)
         }}
