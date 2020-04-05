@@ -46,7 +46,7 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
             markNotificationAsRead(item, auth.tokenV3)
             tracking.event('Click', 'Mark Notification As Read', 'Dropdown')
           }
-          tracking.event('Click', 'Notification Event', item.sourceId)
+          tracking.event('Click', 'Notification Event', String(item.sourceId))
         }}
       >
         {children}
