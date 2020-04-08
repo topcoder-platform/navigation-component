@@ -250,38 +250,34 @@ const TopNav = ({
   }, [activeLevel1Id, activeLevel2Id, path])
 
   const isLevel3ExactPath = (menuWithId_, path_) => {
-    let found = { exact: false }
+    let exact = false
 
     // If haven't a path just return
-    if (!path_) return found
+    if (!path_) return exact
 
     menuWithId_.forEach(level1 => {
       level1.subMenu && level1.subMenu.forEach(level2 => {
         level2.subMenu && level2.subMenu.forEach(level3 => {
-          if (level3.href && path_.indexOf(level3.href) > -1) {
-            if (found.exact) {
-              if (level3.href === path_) found = { exact: true }
-            } else {
-              found = { exact: path_.endsWith(level3.href) }
-            }
+          if (level3.href && level3.href === path_) {
+            exact = true
+            return exact
           }
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
-        if (level3.href) {
-          // Check if path have parameters
-          const href = level3.href.indexOf('?') > -1 ? level3.href.split('?')[0] : level3.href
-          if (path_.indexOf(href) > -1) found = { exact: path_.endsWith(href) }
+        if (level3.href && level3.href === path_) {
+          exact = true
+          return exact
         }
       })
     })
-    return found
+    return exact
   }
 
   useEffect(() => {
     if (!path || !menuWithId) return
     // check if current path is an exact matches with level3 href
-    const { exact } = isLevel3ExactPath(menuWithId, path)
+    const exact = isLevel3ExactPath(menuWithId, path)
     if (!exact) {
       setActiveLevel3Id(undefined)
       setIconSelectPos(undefined)
@@ -455,10 +451,8 @@ const TopNav = ({
         })
       })
       level1.secondaryMenu && level1.secondaryMenu.forEach(level3 => {
-        if (level3.href) {
-          // Check if path have parameters
-          const href = level3.href.indexOf('?') > -1 ? level3.href.split('?')[0] : level3.href
-          if (path_.indexOf(href) > -1) found = { m1: level1.id, m3: level3.id }
+        if (level3.href && level3.href === path_) {
+          found = { m1: level1.id, m3: level3.id }
         }
       })
     })
