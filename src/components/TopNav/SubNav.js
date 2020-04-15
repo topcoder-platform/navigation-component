@@ -12,6 +12,7 @@ const SubNav = ({
   isSecondaryMenu,
   isResize,
   activeChildId,
+  exact,
   showIndicator,
   indicatorX,
   createHandleClickItem,
@@ -23,7 +24,11 @@ const SubNav = ({
         const to = _.isEmpty(level3.link) ? level3.href : level3.link
         return (
           <Link
-            className={cn(styles.secondaryNavItem, level3.id === activeChildId && styles.secondaryNavItemOpen)}
+            className={cn(
+              styles.secondaryNavItem,
+              level3.id === activeChildId && styles.secondaryNavItemOpen,
+              (level3.id === activeChildId && exact) && styles.secondaryNavItemActive
+            )}
             key={`level3-${i}`}
             to={to}
             onClick={!level3.openNewTab && createHandleClickItem(level3.id)}
@@ -44,6 +49,7 @@ SubNav.propTypes = {
   isResize: PropTypes.bool,
   isSecondaryMenu: PropTypes.bool,
   activeChildId: PropTypes.any,
+  exact: PropTypes.bool,
   showIndicator: PropTypes.bool,
   indicatorX: PropTypes.number,
   createHandleClickItem: PropTypes.func,
