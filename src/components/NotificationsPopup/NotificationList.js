@@ -4,6 +4,7 @@ import cn from 'classnames'
 import _ from 'lodash'
 import moment from 'moment'
 import { Link } from 'topcoder-react-utils'
+import { tracking } from 'topcoder-react-lib'
 import styles from './styles.module.scss'
 import BackArrow from '../../assets/images/left-arrow.svg'
 // import GearIcon from '../../assets/images/icon-settings-gear.svg'
@@ -40,7 +41,13 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
       <Link
         to={`/challenges/${item.sourceId}`}
         className={styles['noti-item']}
-        onClick={() => !item.isRead && markNotificationAsRead(item, auth.tokenV3)}
+        onClick={() => {
+          if (!item.isRead) {
+            markNotificationAsRead(item, auth.tokenV3)
+            tracking.event('Click', 'Mark Notification As Read', 'Dropdown')
+          }
+          tracking.event('Click', 'Notification Event', String(item.sourceId))
+        }}
       >
         {children}
       </Link>
@@ -70,6 +77,7 @@ const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
               e.stopPropagation()
               e.nativeEvent.stopImmediatePropagation()
               markNotificationAsRead(item, auth.tokenV3)
+              tracking.event('Click', 'Mark Notification As Read', 'Dropdown')
             }}
           />)}
       </div>
@@ -138,7 +146,10 @@ export default class NotificationList extends React.Component {
               role='button'
               className={cn(styles['white-link'], !unReadNotifications && styles['disabled'])}
               onClick={() => {
-                unReadNotifications && markAllNotificationAsRead(auth.tokenV3)
+                if (unReadNotifications) {
+                  markAllNotificationAsRead(auth.tokenV3)
+                  tracking.event('Click', 'Mark All Notifications As Read', 'Dropdown')
+                }
               }}
             >
               Mark All as Read
@@ -161,7 +172,10 @@ export default class NotificationList extends React.Component {
               className={cn(styles['btn-tick'], !unReadNotifications && styles['disabled'])}
               role='button'
               onClick={() => {
-                unReadNotifications && markAllNotificationAsRead(auth.tokenV3)
+                if (unReadNotifications) {
+                  markAllNotificationAsRead(auth.tokenV3)
+                  tracking.event('Click', 'Mark All Notifications As Read', 'Dropdown')
+                }
               }}
             >
               <TickIcon />
@@ -207,7 +221,10 @@ export default class NotificationList extends React.Component {
           </Fragment>
         </div>
         <div className={styles['view-all-notifications']}>
-          <Link to='/notifications'>View all Notifications</Link>
+          <Link
+            to='/notifications'
+            onClick={() => tracking.event('Click', 'View All Notifications', 'Dropdown')}
+          >View all Notifications</Link>
         </div>
       </>
     )

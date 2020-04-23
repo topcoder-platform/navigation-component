@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { tracking } from 'topcoder-react-lib'
 import styles from './styles.module.scss'
 
 import NotificationButton from '../NotificationButton'
@@ -85,7 +86,10 @@ const LoginNav = ({
         <NotificationButton
           notifications={notifications || []}
           notificationsPopupOpen={openNotifications}
-          onClick={handleClickNotifications}
+          onClick={() => {
+            handleClickNotifications()
+            tracking.event('Click', 'Open Notifications Dropdown', window.location.pathname)
+          }}
           key='notification-button'
         />,
         <UserInfo
@@ -130,8 +134,10 @@ const LoginNav = ({
         open={openNotifications}
         notifications={notifications}
         onClose={() => {
-          seenNotifications &&
+          if (seenNotifications) {
             markAllNotificationAsSeen(seenNotifications, auth.tokenV3)
+            tracking.event('Auto Action', 'Mark All Notifications As Seen', 'Dropdown Closed')
+          }
           setOpenNotifications(false)
         }}
         auth={auth}
