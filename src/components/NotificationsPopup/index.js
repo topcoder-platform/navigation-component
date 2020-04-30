@@ -7,7 +7,7 @@ import NotificationList from './NotificationList'
 
 const NotificationsPopup = ({ open, onClose, emptyTitle, markNotificationAsRead,
   emptyText, notifications, unReadNotifications,
-  markAllNotificationAsRead, dismissChallengeNotifications, auth }) =>
+  markAllNotificationAsRead, dismissChallengeNotifications, auth, tracking }) =>
   (
     <div className={cn(styles['notifications-panel'], open && styles.open)}>
       <div className={styles.backdrop} onClick={onClose} />
@@ -18,7 +18,8 @@ const NotificationsPopup = ({ open, onClose, emptyTitle, markNotificationAsRead,
           unReadNotifications={unReadNotifications}
           markAllNotificationAsRead={markAllNotificationAsRead}
           dismissChallengeNotifications={dismissChallengeNotifications}
-          onClose={onClose} />
+          onClose={onClose}
+          tracking={tracking} />
       ) : (<EmptyNotifications emptyTitle={emptyTitle} emptyText={emptyText}
         onClose={onClose} />)}
     </div>
@@ -52,7 +53,8 @@ NotificationsPopup.propTypes = {
   unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsRead: PropTypes.func.isRequired,
-  dismissChallengeNotifications: PropTypes.func.isRequired
+  dismissChallengeNotifications: PropTypes.func.isRequired,
+  tracking: PropTypes.shape().isRequired
 }
 
 export default NotificationsPopup

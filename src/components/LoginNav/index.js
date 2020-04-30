@@ -145,6 +145,7 @@ const LoginNav = ({
         markNotificationAsRead={markNotificationAsRead}
         markAllNotificationAsRead={markAllNotificationAsRead}
         dismissChallengeNotifications={dismissChallengeNotifications}
+        tracking={tracking}
       />
       <AccountMenu
         profile={profile}
