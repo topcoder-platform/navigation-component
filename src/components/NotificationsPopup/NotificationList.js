@@ -214,6 +214,7 @@ export default class NotificationList extends React.Component {
                         key={`noti-${challengeIdx}-${itemIdx}`}
                         onDismiss={() => onDismiss([item])}
                         isLink={this.isLink(item)}
+                        tracking={tracking}
                       />))}
                   </Fragment>
                 ))
