@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { tracking } from 'topcoder-react-lib'
 import styles from './styles.module.scss'
 
 import NotificationButton from '../NotificationButton'
@@ -23,7 +22,8 @@ const LoginNav = ({
   markNotificationAsRead,
   markAllNotificationAsRead,
   markAllNotificationAsSeen,
-  dismissChallengeNotifications
+  dismissChallengeNotifications,
+  tracking
 }) => {
   const [openNotifications, setOpenNotifications] = useState()
   const [openAccountMenu, setOpenAccountMenu] = useState()
@@ -178,7 +178,8 @@ LoginNav.propTypes = {
   markNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsRead: PropTypes.func.isRequired,
   markAllNotificationAsSeen: PropTypes.func.isRequired,
-  dismissChallengeNotifications: PropTypes.func.isRequired
+  dismissChallengeNotifications: PropTypes.func.isRequired,
+  tracking: PropTypes.shape().isRequired
 }
 
 export default LoginNav

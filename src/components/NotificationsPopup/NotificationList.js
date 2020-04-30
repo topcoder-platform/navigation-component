@@ -4,7 +4,6 @@ import cn from 'classnames'
 import _ from 'lodash'
 import moment from 'moment'
 import { Link } from 'topcoder-react-utils'
-import { tracking } from 'topcoder-react-lib'
 import styles from './styles.module.scss'
 import BackArrow from '../../assets/images/left-arrow.svg'
 // import GearIcon from '../../assets/images/icon-settings-gear.svg'
@@ -30,7 +29,7 @@ const ConditionalWrapper = ({
   condition ? renderLink(children) : renderDiv(children)
 )
 
-const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink }) =>
+const Item = ({ item, auth, onDismiss, markNotificationAsRead, isLink, tracking }) =>
   <ConditionalWrapper
     condition={
       (eventTypes.PROJECT.ACTIVE.includes(item.eventType) ||
@@ -89,7 +88,8 @@ Item.propTypes = {
   auth: PropTypes.shape().isRequired,
   onDismiss: PropTypes.func,
   markNotificationAsRead: PropTypes.func.isRequired,
-  isLink: PropTypes.bool.isRequired
+  isLink: PropTypes.bool.isRequired,
+  tracking: PropTypes.shape().isRequired
 }
 
 export default class NotificationList extends React.Component {
@@ -119,7 +119,7 @@ export default class NotificationList extends React.Component {
 
   render () {
     const { onClose, notifications, onDismiss, unReadNotifications,
-      markNotificationAsRead, markAllNotificationAsRead, auth } = this.props
+      markNotificationAsRead, markAllNotificationAsRead, auth, tracking } = this.props
 
     return (
       <>
@@ -267,5 +267,6 @@ NotificationList.propTypes = {
   onClose: PropTypes.func,
   unReadNotifications: PropTypes.bool,
   markNotificationAsRead: PropTypes.func.isRequired,
-  markAllNotificationAsRead: PropTypes.func.isRequired
+  markAllNotificationAsRead: PropTypes.func.isRequired,
+  tracking: PropTypes.shape().isRequired
 }
