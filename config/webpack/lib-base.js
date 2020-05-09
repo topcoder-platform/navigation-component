@@ -55,7 +55,6 @@ module.exports = function configFactory (ops) {
       'redux-promise',
       'shortid',
       'topcoder-react-utils',
-      'topcoder-react-lib',
       'url-parse'
     ],
     mode: ops.mode,
