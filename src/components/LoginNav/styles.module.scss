@@ -11,3 +11,38 @@
     @include hide-mobile;
   }
 }
+
+.loginBtn {
+  color: $white;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  margin-right: 0;
+}
+
+.signupBtn {
+  background-color: $white;
+  border-radius: 15px;
+  width: 82px;
+  padding-right: 0;
+  height: 30px;
+  padding-left: 18px;
+  margin-left: 6px;
+
+  &:before {
+    display: none;
+  }
+}
+
+.signupTxt {
+  color: $green-dark;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 30px;
+  text-align: left;
+  display: block;
+}
