@@ -118,17 +118,31 @@ const LoginNav = ({
   return (
     <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
-        <a
-          href='javascript:void(0)'
-          onClick={(event) => {
-            const retUrl = encodeURIComponent(window.location.href)
-            window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
-            event.preventDefault()
-            return false
-          }}
-        >
+        <React.Fragment>
+          <a
+            className={styles.loginBtn}
+            href='javascript:void(0)'
+            onClick={(event) => {
+              const retUrl = encodeURIComponent(window.location.href)
+              window.location = authURLs.location.replace('%S', retUrl)
+              event.preventDefault()
+              return false
+            }}
+          >
           LOGIN
-        </a>
+          </a>
+          <a
+            href='javascript:void(0)'
+            className={styles.signupBtn}
+            onClick={(event) => {
+              window.location = authURLs.href
+              event.preventDefault()
+              return false
+            }}
+          >
+            <div className={styles.signupTxt}>SIGNUP</div>
+          </a>
+        </React.Fragment>
       )}
       <NotificationsPopup
         open={openNotifications}
