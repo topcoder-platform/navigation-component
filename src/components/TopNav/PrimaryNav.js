@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import ResizeDetector from 'react-resize-detector'
+import { Link } from 'topcoder-react-utils'
 import ChosenArrow from '../ChosenArrow'
 import IconArrowSmalldown from '../../assets/images/arrow-small-down.svg'
 import IconArrowSmallup from '../../assets/images/arrow-small-up.svg'
@@ -42,25 +43,25 @@ const PrimaryNav = ({
     <div>
       <div className={cn(styles.primaryNavContainer, showLeftMenu && styles.primaryNavContainerOpen)}>
         <div className={styles.primaryNav} ref={createSetRef('primaryNav')}>
-          <a
+          <Link
             className={cn(styles.tcLogo, collapsed && styles.tcLogoPush)}
             onClick={(e) => onClickLogo(e)}
-            href='/'
+            to='/'
           >
             {logo}
-          </a>
+          </Link>
           {menu.map((level1, i) => ([
             <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
             /* Level 1 menu item */
-            <a
+            <Link
               className={cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
-              href={level1.href}
+              to={level1.href}
               key={`level1-${i}`}
               onClick={createHandleClickLevel1(level1.id, true)}
               ref={createSetRef(level1.id)}
             >
               {level1.title}
-            </a>,
+            </Link>,
             /* Level 2 menu */
             level1.subMenu && (
               <div
@@ -71,15 +72,15 @@ const PrimaryNav = ({
                 {level1.subMenu.filter(filterNotInMore).map((level2, i) => {
                   if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
                     return (
-                      <a
+                      <Link
                         className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
-                        href={level2.href}
+                        to={level2.href}
                         key={`level2-${i}`}
                         onClick={level2.subMenu && level2.subMenu.length > 0 ? createHandleClickLevel2(level2.id, true) : null}
                         ref={createSetRef(level2.id)}
                       >
                         {level2.title}
-                      </a>
+                      </Link>
                     )
                   }
                 })}
@@ -99,14 +100,14 @@ const PrimaryNav = ({
                     </button>
                     <div className={styles.moreContentContainer}>
                       {moreMenu.map((menu, i) => (
-                        <a
+                        <Link
                           className={cn(styles.primaryLevel2, menu.id === activeLevel2Id && styles.primaryLevel2Open)}
-                          href={menu.href}
+                          to={menu.href}
                           key={`more-item-${i}`}
                           onClick={createHandleClickMoreItem(menu.id)}
                         >
                           {menu.title}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
