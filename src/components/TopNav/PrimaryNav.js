@@ -50,71 +50,102 @@ const PrimaryNav = ({
           >
             {logo}
           </Link>
-          {menu.map((level1, i) => ([
-            <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
-            /* Level 1 menu item */
-            <Link
-              className={cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly)}
-              to={level1.href}
-              key={`level1-${i}`}
-              onClick={createHandleClickLevel1(level1.id, true)}
-              ref={createSetRef(level1.id)}
-            >
-              {level1.title}
-            </Link>,
-            /* Level 2 menu */
-            level1.subMenu && (
-              <div
-                className={cn(styles.primaryLevel2Container, level1.id === activeLevel1Id && styles.primaryLevel2ContainerOpen)}
-                key={`level2-${i}-container`}
-                ref={createSetRef(`level2Container${i}`)}
-              >
-                {level1.subMenu.filter(filterNotInMore).map((level2, i) => {
-                  if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
-                    return (
-                      <Link
-                        className={cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open)}
-                        to={level2.href}
-                        key={`level2-${i}`}
-                        onClick={level2.subMenu && level2.subMenu.length > 0 ? createHandleClickLevel2(level2.id, true) : null}
-                        ref={createSetRef(level2.id)}
+          {menu.map((level1, i) => {
+            const level1Params = {
+              className: cn(styles.primaryLevel1, (!activeLevel2Id || showLeftMenu) && level1.id === activeLevel1Id && styles.primaryLevel1Open, level1.mobileOnly && styles.mobileOnly),
+              key: `level1-${i}`,
+              onClick: createHandleClickLevel1(level1.id, true)
+            }
+            return ([
+              <span className={styles.primaryLevel1Separator} key={`separator-${i}`} />,
+              /* Level 1 menu item */
+              level1.href
+                ? <Link
+                  {...level1Params}
+                  to={level1.href}
+                >
+                  {level1.title}
+                </Link>
+                : <span
+                  {...level1Params}
+                  ref={createSetRef(level1.id)}
+                >
+                  {level1.title}
+                </span>,
+              /* Level 2 menu */
+              level1.subMenu && (
+                <div
+                  className={cn(styles.primaryLevel2Container, level1.id === activeLevel1Id && styles.primaryLevel2ContainerOpen)}
+                  key={`level2-${i}-container`}
+                  ref={createSetRef(`level2Container${i}`)}
+                >
+                  {level1.subMenu.filter(filterNotInMore).map((level2, i) => {
+                    const level2Params = {
+                      className: cn(styles.primaryLevel2, level2.id === activeLevel2Id && styles.primaryLevel2Open),
+                      key: `level2-${i}`,
+                      onClick: level2.subMenu && level2.subMenu.length > 0 ? createHandleClickLevel2(level2.id, true) : undefined
+                    }
+                    if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
+                      return (
+                        level2.href
+                          ? <Link
+                            {...level2Params}
+                            to={level2.href}
+                          >
+                            {level2.title}
+                          </Link>
+                          : <span
+                            {...level2Params}
+                            ref={createSetRef(level2.id)}
+                          >
+                            {level2.title}
+                          </span>
+                      )
+                    }
+                  })}
+                  {/* The More menu */}
+                  {level1.id === activeLevel1Id && moreMenu && moreMenu.length > 0 && (
+                    <div className={cn(styles.moreBtnContainer, openMore && styles.moreOpen)}>
+                      <div className={styles.backdrop} onClick={onCloseMore} />
+                      <button
+                        className={cn(styles.primaryLevel2, styles.moreBtn)}
+                        onClick={handleClickMore}
+                        ref={createSetRef(moreId)}
                       >
-                        {level2.title}
-                      </Link>
-                    )
-                  }
-                })}
-                {/* The More menu */}
-                {level1.id === activeLevel1Id && moreMenu && moreMenu.length > 0 && (
-                  <div className={cn(styles.moreBtnContainer, openMore && styles.moreOpen)}>
-                    <div className={styles.backdrop} onClick={onCloseMore} />
-                    <button
-                      className={cn(styles.primaryLevel2, styles.moreBtn)}
-                      onClick={handleClickMore}
-                      ref={createSetRef(moreId)}
-                    >
-                      <div className={styles.moreBtnMask} />
-                      <span>More</span>
-                      {openMore && <IconArrowSmallup />}
-                      {!openMore && <IconArrowSmalldown />}
-                    </button>
-                    <div className={styles.moreContentContainer}>
-                      {moreMenu.map((menu, i) => (
-                        <Link
-                          className={cn(styles.primaryLevel2, menu.id === activeLevel2Id && styles.primaryLevel2Open)}
-                          to={menu.href}
-                          key={`more-item-${i}`}
-                          onClick={createHandleClickMoreItem(menu.id)}
-                        >
-                          {menu.title}
-                        </Link>
-                      ))}
+                        <div className={styles.moreBtnMask} />
+                        <span>More</span>
+                        {openMore && <IconArrowSmallup />}
+                        {!openMore && <IconArrowSmalldown />}
+                      </button>
+                      <div className={styles.moreContentContainer}>
+                        {moreMenu.map((menu, i) => {
+                          const menuParams = {
+                            className: cn(styles.primaryLevel2, menu.id === activeLevel2Id && styles.primaryLevel2Open),
+                            key: `more-item-${i}`,
+                            onClick: createHandleClickMoreItem(menu.id)
+                          }
+                          return (
+                            menu.href
+                              ? <Link
+                                {...menuParams}
+                                to={menu.href}
+                              >
+                                {menu.title}
+                              </Link>
+                              : <span
+                                {...menuParams}
+                              >
+                                {menu.title}
+                              </span>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )
-          ]))}
+                  )}
+                </div>
+              )
+            ])
+          })}
           <ChosenArrow show={showChosenArrow && (showLevel3 && !forceHideLevel3)} x={chosenArrowX} />
         </div>
         <div className={styles.primaryNavRight}>
