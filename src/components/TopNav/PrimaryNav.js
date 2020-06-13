@@ -63,6 +63,7 @@ const PrimaryNav = ({
                 ? <Link
                   {...level1Params}
                   to={level1.href}
+                  innerRef={createSetRef(level1.id)}
                 >
                   {level1.title}
                 </Link>
@@ -91,6 +92,7 @@ const PrimaryNav = ({
                           ? <Link
                             {...level2Params}
                             to={level2.href}
+                            innerRef={createSetRef(level2.id)}
                           >
                             {level2.title}
                           </Link>
