@@ -31,7 +31,7 @@ const SubNav = ({
             )}
             key={`level3-${i}`}
             to={to}
-            onClick={!level3.openNewTab && createHandleClickItem(level3.id)}
+            onClick={!level3.openNewTab ? createHandleClickItem(level3.id) : undefined}
             openNewTab={level3.openNewTab}
           >
             <span ref={createSetRef(level3.id)}>{level3.title}</span>

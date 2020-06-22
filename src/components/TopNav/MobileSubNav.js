@@ -34,9 +34,9 @@ const MobileSubNav = ({ open, menu, isSecondaryMenu, activeChildId, onClick, cre
       </>
     ) ||
       <>
-        <dev className={styles.mobileSubNavHeader}>
+        <div className={styles.mobileSubNavHeader}>
           <span>{menu.title}</span>
-        </dev>
+        </div>
       </>
     }
   </div>
