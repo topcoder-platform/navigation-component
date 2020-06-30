@@ -72,7 +72,8 @@ const TopNav = ({
   setOpenMore,
   openMore,
   loggedIn,
-  profileHandle
+  profileHandle,
+  logoLink
 }) => {
   useEffect(() => {
     const orientationchange = () => {
@@ -183,7 +184,11 @@ const TopNav = ({
 
   const handleClickLogo = (e) => {
     e.preventDefault()
-    window.location = loggedIn ? config.URL.HOME : config.URL.BASE
+    if (logoLink) {
+      window.location = logoLink
+    } else {
+      window.location = loggedIn ? config.URL.HOME : config.URL.BASE
+    }
   }
 
   const expandMenu = (menuId, menu2Id) => {
@@ -594,7 +599,9 @@ TopNav.propTypes = {
 
   loggedIn: PropTypes.bool,
 
-  profileHandle: PropTypes.string
+  profileHandle: PropTypes.string,
+
+  logoLink: PropTypes.string
 }
 
 export default TopNav
