@@ -459,10 +459,10 @@ const TopNav = ({
 
     if (path.indexOf('/challenges') > -1) {
       // If All Challenge page
-      if (path.match(/challenges\/[0-9]+/)) {
+      if (path.match(/challenges\/[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}|\d{5,8}/)) {
         // If Challenge Details page
         setforceHideLevel3(true)
-        forceM2 = getMenuIdsFromPath(menuWithId, '/challenges').m2
+        forceM2 = getMenuIdsFromPath(menuWithId, path).m2
       }
     } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
       // If My Dashboard and My Profile page
