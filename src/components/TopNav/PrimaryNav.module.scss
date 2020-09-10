@@ -75,10 +75,10 @@
   width: 1px;
   background: $gray-70;
 
-  @include mobile-only;
-
-  &:first-of-type {
-    display: none;
+  @include mobile {
+    &:first-of-type {
+      display: none;
+    }
   }
 }
 
@@ -95,17 +95,20 @@
     margin: 0 $base-unit * 4;
   }
 
-  &::before {
-    content: "";
-    position: absolute;
-    display: block;
-    left: -$base-unit * 6;
-    top: 0;
-    width: 1px;
-    height: 100%;
-    background: $gray-70;
-
-    @include hide-mobile;
+  &.rightMenuPrimaryLevel1 {
+    &::before {
+      cursor: default;
+      content: "";
+      position: absolute;
+      display: block;
+      left: -$base-unit * 6;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: $gray-70;
+  
+      @include hide-mobile;
+    }
   }
 
   &.primaryLevel1Open {
@@ -114,20 +117,20 @@
 }
 
 .primaryLevel2Container {
-  display: flex;
   white-space: nowrap;
   width: 0;
   opacity: 0;
-  overflow: hidden;
-
-  @include hide-mobile;
+  overflow: hidden; 
 
   &.primaryLevel2ContainerOpen {
+    display: flex;
     overflow: unset;
     margin-right: auto;    
     width: auto;
     opacity: 1;
     transition: opacity 400ms ease-in 100ms;
+
+    @include hide-mobile;
   }
 
   .moreInit & {
@@ -226,6 +229,87 @@
 
     img {
       @include transformVertical;
+    }
+  }
+}
+
+.searchIcon {
+  cursor: pointer;
+  display: inline-block;
+  height: 32px;
+  margin: 11px 20px 11px 0px;
+  padding-left: 12px;
+  position: relative;
+  border-left: 1px solid $gray-50;
+  width: 36px;
+
+  svg {
+    height: 18px;
+    margin-top: 7px;
+    width: 18px;
+    path {
+      fill: $white;
+    }
+  }
+
+  &:global.opened {
+    path {
+      fill: $turquoise;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 6px 5px 0;
+      border-color: $turquoise transparent transparent transparent;
+      position: absolute;
+      left: 60%;
+      bottom: -3px;
+      margin-left: -6px;
+      background-color: transparent;
+    }
+  }
+}
+
+.searchField {
+  background: $black;
+  height: 0;
+  margin-top: -10px;
+  opacity: 0.98;
+  overflow: hidden;
+  padding: 0 48px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  transition: all 0.25s ease-in-out;
+  z-index: 10;
+
+  &:global.opened {
+    height: 128px;
+    padding: 48px;
+    transition: all 0.25s ease-in-out;
+  }
+
+  &:global.closed {
+    display: none;
+  }
+
+  input,
+  input:active,
+  input:focus,
+  input:hover {
+    border: none;
+    border-bottom: 1px solid $white;
+    box-shadow: none;
+    font-size: 22px;
+    outline: none;
+    padding-bottom: 3px;
+
+    &::placeholder {
+      color: $gray-15;
     }
   }
 }

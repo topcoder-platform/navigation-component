@@ -1,12 +1,29 @@
-export AccountMenu from './components/AccountMenu'
-export CheckBox from './components/CheckBox'
-export ChosenArrow from './components/ChosenArrow'
-export DropdownBox from './components/DropdownBox'
-export IconSelect from './components/IconSelect'
-export LoginNav from './components/LoginNav'
-export NotificationButton from './components/NotificationButton'
-export NotificationSettings from './components/NotificationSettings'
-export NotificationsPopup from './components/NotificationsPopup'
-export SwitchBox from './components/SwitchBox'
-export TopNav from './components/TopNav'
-export UserInfo from './components/UserInfo'
+const AccountMenu = require('./components/AccountMenu').default
+const CheckBox = require('./components/CheckBox').default
+const ChosenArrow = require('./components/ChosenArrow').default
+const DropdownBox = require('./components/DropdownBox').default
+const IconSelect = require('./components/IconSelect').default
+const LoginNav = require('./components/LoginNav').default
+const NotificationButton = require('./components/NotificationButton').default
+const NotificationSettings = require('./components/NotificationSettings').default
+const NotificationsPopup = require('./components/NotificationsPopup').default
+const SwitchBox = require('./components/SwitchBox').default
+const TopNav = require('./components/TopNav').default
+const UserInfo = require('./components/UserInfo').default
+
+require('./assets/sass/style.scss')
+
+module.exports = {
+  AccountMenu,
+  CheckBox,
+  ChosenArrow,
+  DropdownBox,
+  IconSelect,
+  LoginNav,
+  NotificationButton,
+  NotificationSettings,
+  NotificationsPopup,
+  SwitchBox,
+  TopNav,
+  UserInfo
+}

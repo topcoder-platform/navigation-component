@@ -4,9 +4,9 @@
 .mobileNav {
   height: 60px;
   background: $gray-90;
-  padding: 0 $base-unit * 4 0 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
   align-items: center;
 
   @include mobile-only;
@@ -17,6 +17,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
 
     .menuBtn {
       @include button-reset;
@@ -35,5 +38,51 @@
     color: $white;
     font-size: 16px;
     line-height: 30px;
+    padding-right: $base-unit * 4;
+    position: absolute;
+    right: 0;
+  }
+}
+
+.icon {
+  @include mobile-only;
+  left: 18px;
+  position: absolute;
+  top: 16px;
+}
+
+.search {
+  @include mobile-only;
+  padding: 6px 12px 0;
+  position: relative;
+
+  input {
+    background: none;
+    border: 1px solid $gray-50;
+    box-shadow: none;
+    color: $white;
+    font: 16px "Roboto", Helvetica, Arial, sans-serif !important;
+    height: 32px;
+    outline: none;
+    padding-left: 30px !important;
+
+    &::placeholder {
+      color: $gray-50;
+    }
+
+    &:hover {
+      border: 1px solid $gray-50;
+    }
+
+    &:focus {
+      border: 1px solid $blue;
+    }
+  }
+
+  input:active,
+  input:focus,
+  input:hover {
+    box-shadow: none;
+    outline: none;
   }
 }

@@ -44,6 +44,7 @@
     bottom: 0;
     left: 0;
     z-index: -1;
+    cursor: default;
   }
 }
 
@@ -72,4 +73,9 @@
 
 .hide-not-mobile {
   @include hide-not-mobile;
+}
+
+@mixin not-clickable {
+  pointer-events: none;
+  cursor: default;
 }

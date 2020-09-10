@@ -2,15 +2,26 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './styles.module.scss'
 
-const IconSelect = ({ show, x }) => (
-  <span
+const IconSelect = ({ show, x, isResize }) => {
+  let styleObj = {
+    transform: `translateX(${x}px)`
+
+  }
+  // is window is on resize, stop animation
+  if (isResize) {
+    styleObj['transition'] = 'auto'
+    styleObj['-webkit-transition'] = 'auto'
+  }
+  return <span
     className={styles.iconSelect}
-    style={{ transform: `translateX(calc(${x}px - 50%))` }}
+    style={styleObj}
     hidden={!show}
   />
-)
+}
 
 IconSelect.propTypes = {
+  // screen is changing size
+  isResize: PropTypes.bool,
   /** Show or hide the icon */
   show: PropTypes.bool,
   /** The x position of the arrow. Generally this will be the center of the target */

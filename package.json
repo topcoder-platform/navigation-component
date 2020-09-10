@@ -6,23 +6,24 @@
   "scripts": {
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "build": "npm run build:lib && npm run build:dist && npm run build:dist:min",
-    "build:lib": "node build.js",
-    "build:lib:watch": "nodemon -w src/ -w build.js -e js,scss --exec 'npm run build:lib'",
-    "build:dist": "webpack --config webpack.config.dist.js --progress --colors",
-    "build:dist:min": "webpack --config webpack.config.dist.js --mode production --output-filename navigation-component.min.js --progress --colors",
-    "docs": "nodemon -w src -w styleguide.config.js -e js,jsx,md node_modules/.bin/styleguidist build",
-    "docs:build": "node node_modules/.bin/styleguidist build",
-    "docs:serve": "browser-sync docs --files docs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean && npm run build:dev && npm run build:prod",
+    "build:dev": "webpack --env=development --progress --profile --colors --display-optimization-bailout --bail",
+    "build:prod": "./node_modules/.bin/webpack --env=production --progress --profile --colors --display-optimization-bailout",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.6",
+    "babel-plugin-inline-react-svg": "^1.1.0",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-react-css-modules": "^5.2.6",
+    "babel-plugin-react-hot-loader": "^3.0.0-beta.6",
     "browser-sync": "^2.26.5",
     "colors": "^1.3.3",
     "css-loader": "^2.1.1",
@@ -34,24 +35,36 @@
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-standard": "^4.0.0",
+    "file-loader": "^3.0.1",
+    "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-scss": "^2.0.0",
+    "react-hot-loader": "^4.8.8",
     "react-styleguidist": "^9.0.9",
+    "resolve-url-loader": "^3.1.0",
     "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "webpack": "^4.31.0",
+    "svg-inline-loader": "^0.8.0",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   },
   "peerDependencies": {
     "react": "^16.8.6"
   },
   "engines": {
-    "node": ">=10.14.0"
+    "node": "^8.11.2",
+    "npm": "^5.6.0"
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
-    "react-resize-detector": "^4.1.3"
+    "react-resize-detector": "^4.1.3",
+    "topcoder-react-utils": "^0.7.9"
   }
 }

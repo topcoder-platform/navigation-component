@@ -32,6 +32,7 @@ $themes: (
     iconDarkDisplay: none,
     iconLightDisplay: block,
     arrowBackground: $gray-neutral-light,
+    beforeBackground: $turquoise
   ),
   dark: (
     secondaryBackgroundColor: $gray-60,
@@ -42,5 +43,6 @@ $themes: (
     iconDarkDisplay: block,
     iconLightDisplay: none,
     arrowBackground: $gray-60,
+    beforeBackground: $white
   ),
 );

@@ -1,8 +1,0 @@
-node_modules/
-/src/
-
-.*
-
-build.js
-package-lock.json
-webpack.config.*

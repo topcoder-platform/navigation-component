@@ -31,7 +31,7 @@
     align-items: center;
 
     &:not(.header-mobile) {
-      background: $turquoise-dark;
+      background: $turquoise-super-dark;
       color: $white;
       height: 90px;
       @include not-mobile {
@@ -57,23 +57,30 @@
 
     .avatar {
       margin-right: 10px;
+      border-radius: 50%;
     }
   }
 
   .switch-to-business-container {
     background: $gray-90;
-    color: $white;
-    font-size: 14px;
-    line-height: 30px;
     height: 50px;
     display: flex;
     align-items: center;
 
-    @include hide-mobile;
 
     .switch-icon {
       margin: 0 10px 0 22px;
     }
+
+    a {
+      color: $white;
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
+
+  .notifications-mobile {
+    @include mobile-only;
   }
 
   .menu {
@@ -81,9 +88,6 @@
       padding: 15px 0 25px 0;
     }
 
-    .notification-mobile {
-      @include mobile-only;
-    }
 
     a {
       height: 50px;
@@ -148,6 +152,7 @@
       .left-content {
         display: flex;
         align-items: center;
+        margin-bottom: 2px;
 
         img {
           border: 3px solid $gray-15;
@@ -158,6 +163,7 @@
         .handle-container {
           display: flex;
           flex-direction: column;
+          padding-top: 15px;
         }
 
         .handle {
@@ -166,7 +172,9 @@
         }
 
         .description {
-          font-size: 12;
+          @include Roboto-Regular;
+          font-size: 12px;
+          color: $gray-joining-date;
         }
       }
 
@@ -179,21 +187,65 @@
       }
     }
 
+    .notifications-mobile {
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .noti-left {
+
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+    
+        .bell-icon {
+          margin: 0 10px 0 22px;
+        }
+
+        .red-number {
+          color: $red;
+          margin: 0 10px;
+        }
+      }
+
+      .icon-open-noti {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      a {
+        color: $white;
+        font-size: 14px;
+        line-height: 30px;
+      }
+    }
+    .noti-separator {
+      background: $gray-05;
+      width: calc(100% - 46px);
+      height: 1px;
+      align-self: center;
+      padding: 0 $base-unit * 4;
+    }
+
     .menu {
       display: flex;
       flex-direction: column;
+      margin-top: 15px;
 
       .separator {
         background: $gray-05;
-        width: calc(100% - 80px);
+        width: calc(100% - 46px);
         margin: $base-unit * 3 0;
         height: 1px;
         align-self: center;
         padding: 0 $base-unit * 4;
       }
 
-      a,
-      .notification-mobile {
+      a {
         color: $gray-90;
         height: 40px;
         display: flex;

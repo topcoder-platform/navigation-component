@@ -5,14 +5,16 @@
   border-radius: 15px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   .avatarContainer {
     position: relative;
-    
+
     .avatar {
       width: 30px;
       height: 30px;
       display: block;
+      border-radius: 50%;
     }
 
     &.newNotifications::after {
@@ -77,5 +79,11 @@
     .dropdownIcon {
       transform: rotate(180deg);
     }
+  }
+}
+
+@include mobile {
+    .userInfoContainer {
+      margin-left: 5px;
   }
 }

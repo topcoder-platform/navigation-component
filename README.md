@@ -1,38 +1,46 @@
 # Topcoder Navigation React
 
-## Demo
 
 ### Build the components
 
 Enter `navigation-component` and run:
 
 - `npm install`
-- `npm run build:lib`
+- `npm run build`
 
-### Run the demo
+Due to this repo is not npm package, so keep `dist` folder for other project use it
 
-Run the following in the `navigation-component-demo` folder:
-
-- `yarn`
-- `yarn start`
-
-### Troubleshooting
-
-If you encounter invalid hook call error while running the demo, then:
-
-  - delete navigation-component-demo/node_modules/navigation-component/node_modules/react
-  - delete navigation-component-demo/node_modules/navigation-component/node_modules/react-dom
-
-and try again.
 
 ## Getting Started
 
 ### Install
 
 ```
-npm i -D navigation-component
+npm install git@github.com:username/navigation-component.git#develop --save
 ```
 
-### Assets
+### Usage
+- Example
+```
+import { TopNav } from 'navigation-component'
+```
 
-Copy `dist/font` and `dist/img` to web server root folder. You can put them nested in sub folder, but be sure to update `$font-path` and `$img-path` SASS variables in the `src/assets/sass/_global/_variables.scss`.
+### Development
+
+```shell
+Install dependencies
+$ npm install
+
+# Run build
+$ npm run build
+
+#Go to other project which depends on the navigation-component, config its package.json so that the 'navigation-component' points to the local folder path of navigation-component:
+
+# "dependencies": {
+#  "navigation-component": "<local-path-to-navigation-component>",
+#   ......
+# }
+
+# If you faced React Hook errors. Please remove 'node_modules', 'src' folder when you try it
+
+```

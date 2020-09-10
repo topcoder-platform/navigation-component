@@ -1,7 +1,2 @@
-dist/
 node_modules/
-
-/*/
-!/src
-
-/index.js
+#dist/

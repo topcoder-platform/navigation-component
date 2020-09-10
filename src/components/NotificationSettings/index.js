@@ -128,14 +128,14 @@ const NotificationSettings = ({ open, settings, theme, onChange, onClose, onSave
 
       <div className={styles['header-nav-ui']}>
         <div className={styles['settings-nav']}>
-          <img className={styles['tc-logo']} src='/img/tc-logo.svg' alt='logo' />
+          <img className={styles['tc-logo']} src='../../assets/images/tc-logo.svg' alt='logo' />
           <span className={styles['title']}>Topcoder Settings</span>
           <span
             role='button'
             className={styles['close-btn']}
             onClick={onClose}
           >
-            <img src='/img/icon-close.svg' alt='close' />
+            <img src='../../assets/images/icon-close.svg' alt='close' />
           </span>
         </div>
       </div>
