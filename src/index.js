@@ -1,15 +1,15 @@
-const AccountMenu = require('./components/AccountMenu').default
-const CheckBox = require('./components/CheckBox').default
-const ChosenArrow = require('./components/ChosenArrow').default
-const DropdownBox = require('./components/DropdownBox').default
-const IconSelect = require('./components/IconSelect').default
-const LoginNav = require('./components/LoginNav').default
-const NotificationButton = require('./components/NotificationButton').default
-const NotificationSettings = require('./components/NotificationSettings').default
-const NotificationsPopup = require('./components/NotificationsPopup').default
-const SwitchBox = require('./components/SwitchBox').default
-const TopNav = require('./components/TopNav').default
-const UserInfo = require('./components/UserInfo').default
+import AccountMenu from './components/AccountMenu'
+import CheckBox from './components/CheckBox'
+import ChosenArrow from './components/ChosenArrow'
+import DropdownBox from './components/DropdownBox'
+import IconSelect from './components/IconSelect'
+import LoginNav from './components/LoginNav'
+import NotificationButton from './components/NotificationButton'
+import NotificationSettings from './components/NotificationSettings'
+import NotificationsPopup from './components/NotificationsPopup'
+import SwitchBox from './components/SwitchBox'
+import TopNav from './components/TopNav'
+import UserInfo from './components/UserInfo'
 
 require('./assets/sass/style.scss')
 
