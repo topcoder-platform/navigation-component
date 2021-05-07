@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect, useLayoutEffect, useCallback } fro
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
-import { config } from 'topcoder-react-utils'
 
 import styles from './index.module.scss'
 
@@ -12,6 +11,12 @@ import MobileMenu from './MobileMenu'
 import PrimaryNav from './PrimaryNav'
 import SubNav from './SubNav'
 
+const config = {
+  URL: {
+    HOME: '',
+    BASE: ''
+  }
+}
 const moreId = 'more'
 
 let id = 1

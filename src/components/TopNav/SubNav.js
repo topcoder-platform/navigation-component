@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import IconSelect from '../IconSelect'
-import { Link } from 'topcoder-react-utils'
+import Link from '../Link'
 import styles from './SubNav.module.scss'
 
 const SubNav = ({
