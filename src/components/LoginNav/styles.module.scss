@@ -11,3 +11,29 @@
     @include hide-mobile;
   }
 }
+
+.signup {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 20px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: 0.5s;
+  white-space: nowrap;
+  background: #fff;
+  border-radius: 20px;
+  color: #229174;
+  padding: 0 15px;
+
+  @include hide-mobile;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    color: #229174;
+  }
+}

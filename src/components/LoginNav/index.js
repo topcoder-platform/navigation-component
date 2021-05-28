@@ -118,17 +118,32 @@ const LoginNav = ({
   return (
     <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
-        <a
-          href='javascript:void(0)'
-          onClick={(event) => {
-            const retUrl = encodeURIComponent(window.location.href)
-            window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
-            event.preventDefault()
-            return false
-          }}
-        >
-          LOGIN
-        </a>
+        <>
+          <a
+            href='javascript:void(0)'
+            onClick={(event) => {
+              const retUrl = encodeURIComponent(window.location.href)
+              window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
+              event.preventDefault()
+              return false
+            }}
+          >
+            LOG IN
+          </a>
+          <a
+            className={styles.signup}
+            id='button_signup'
+            href='javascript:void(0)'
+            onClick={(event) => {
+              const retUrl = 'https://www.topcoder.com/start&mode=signUp'
+              window.location = authURLs.location.replace('%S', retUrl)
+              event.preventDefault()
+              return false
+            }}
+          >
+            SIGN UP
+          </a>
+        </>
       )}
       <NotificationsPopup
         open={openNotifications}
