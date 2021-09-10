@@ -464,7 +464,7 @@ const TopNav = ({
         setforceHideLevel3(true)
         forceM2 = getMenuIdsFromPath(menuWithId, path).m2
       }
-    } else if (path.indexOf('/my-dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
+    } else if (path.indexOf('/dashboard') > -1 || path.indexOf('/members/' + profileHandle) > -1) {
       // If My Dashboard and My Profile page
       setShowLevel3(true)
     } else if (path.indexOf('/community/learn') > -1 || path.indexOf('/thrive/tracks') > -1) {
