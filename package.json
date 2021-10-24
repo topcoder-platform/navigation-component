@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react-resize-detector": "^4.1.3",
