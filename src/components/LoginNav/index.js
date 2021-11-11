@@ -135,7 +135,7 @@ const LoginNav = ({
             id='button_signup'
             href='javascript:void(0)'
             onClick={(event) => {
-              const retUrl = 'https://platform.topcoder.com/onboard'
+              const retUrl = 'https://platform.topcoder.com/onboard&mode=signUp'
               window.location = authURLs.location.replace('%S', retUrl)
               event.preventDefault()
               return false
