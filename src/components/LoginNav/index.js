@@ -115,6 +115,8 @@ const LoginNav = ({
     )
   }
 
+  const regSource = window.location.pathname.split('/')[1];
+
   return (
     <div className={styles.loginContainer}>
       {loggedIn ? renderLoginPanel() : (
@@ -136,7 +138,7 @@ const LoginNav = ({
             href='javascript:void(0)'
             onClick={(event) => {
               const retUrl = encodeURIComponent(window.location.href)
-              window.location = `${authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')}&mode=signUp`
+              window.location = `${authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')}&mode=signUp&regSource=${regSource}`
               event.preventDefault()
               return false
             }}
