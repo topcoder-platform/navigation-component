@@ -125,7 +125,7 @@ const LoginNav = ({
             href='javascript:void(0)'
             onClick={(event) => {
               const retUrl = encodeURIComponent(window.location.href)
-              window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?')
+              window.location = authURLs.location.replace('%S', retUrl).replace('member?', '#!/member?') + `&regSource=${regSource}`
               event.preventDefault()
               return false
             }}
