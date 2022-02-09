@@ -93,6 +93,7 @@ const PrimaryNav = ({
                             {...level2Params}
                             to={level2.href}
                             innerRef={createSetRef(level2.id)}
+                            openNewTab={level2.openNewTab}
                           >
                             {level2.title}
                           </Link>
