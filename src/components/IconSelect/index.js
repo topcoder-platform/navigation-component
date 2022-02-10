@@ -10,7 +10,7 @@ const IconSelect = ({ show, x, isResize }) => {
   // is window is on resize, stop animation
   if (isResize) {
     styleObj['transition'] = 'auto'
-    styleObj['-webkit-transition'] = 'auto'
+    styleObj['WebkitTransition'] = 'auto'
   }
   return <span
     className={styles.iconSelect}

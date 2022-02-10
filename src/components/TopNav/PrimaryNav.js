@@ -89,14 +89,14 @@ const PrimaryNav = ({
                     if ((level2.subMenu && level2.subMenu.length > 0) || level2.href) {
                       return (
                         level2.href
-                          ? <Link
+                          ? <a
                             {...level2Params}
-                            to={level2.href}
-                            innerRef={createSetRef(level2.id)}
-                            openNewTab={level2.openNewTab}
+                            href={level2.href}
+                            ref={createSetRef(level2.id)}
+                            target={level2.openNewTab ? '_blank' : ''}
                           >
                             {level2.title}
-                          </Link>
+                          </a>
                           : <span
                             {...level2Params}
                             ref={createSetRef(level2.id)}
@@ -130,8 +130,10 @@ const PrimaryNav = ({
                           return (
                             menu.href
                               ? <Link
-                                {...menuParams}
+                                className={styles.primaryLevel2}
+                                key={`more-item-${i}`}
                                 to={menu.href}
+                                openNewTab={menu.openNewTab}
                               >
                                 {menu.title}
                               </Link>

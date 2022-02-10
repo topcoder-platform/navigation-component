@@ -174,6 +174,10 @@
     justify-content: center;
     align-items: center;
 
+    svg {
+      padding-left: 5px;
+    }
+
     .moreBtnMask {
       position: absolute;
       left: 0;
@@ -230,6 +234,11 @@
     img {
       @include transformVertical;
     }
+  }
+
+  .primaryLevel2,
+  a.primaryLevel2 {
+    margin: 0;
   }
 }
 
