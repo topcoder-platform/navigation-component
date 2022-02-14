@@ -13,6 +13,7 @@ const MobileMenu = ({ menu, activeChildId, createHandleClickItem }) => (
             href={level2.href}
             key={`level2-${i}`}
             onClick={level2.subMenu && level2.subMenu.length > 0 ? createHandleClickItem(level2.id) : null}
+            target={level2.openNewTab ? '_blank' : ''}
           >
             {level2.title}
           </a>
